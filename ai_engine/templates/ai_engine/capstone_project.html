@@ -1,0 +1,333 @@
+{% comment %}ai_engine/templates/ai_engine/capstone_project.html{% endcomment %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Final Project — {{ course.title }}</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0d1117; --surface: #161b22; --border: #30363d;
+      --accent: #58a6ff; --success: #3fb950; --warn: #e3a800;
+      --danger: #f85149; --text: #e6edf3; --muted: #8b949e;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 2rem 1rem; }
+    .container { max-width: 860px; margin: 0 auto; }
+
+    /* ── Page header ── */
+    .page-header { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 2rem; margin-bottom: 1.5rem; }
+    .breadcrumb { font-size: .78rem; color: var(--muted); margin-bottom: 1rem; display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
+    .breadcrumb a { color: var(--accent); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+    .page-badge { display: inline-block; padding: .35rem .85rem; background: rgba(188,140,255,.15); color: #bc8cff; border-radius: 8px; font-size: .75rem; font-weight: 600; margin-bottom: .85rem; }
+    .page-header h1 { font-size: 1.75rem; margin-bottom: .5rem; }
+    .page-header p { color: var(--muted); font-size: .9rem; line-height: 1.65; }
+
+    /* ── Status banner ── */
+    .status-banner { border-radius: 12px; padding: 1.1rem 1.4rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: .85rem; font-weight: 600; font-size: .9rem; }
+    .status-banner.pending  { background: rgba(227,168,0,.08);  border: 1px solid rgba(227,168,0,.25);  color: var(--warn); }
+    .status-banner.approved { background: rgba(63,185,80,.08);  border: 1px solid rgba(63,185,80,.25);  color: var(--success); }
+    .status-banner.rejected { background: rgba(248,81,73,.08);  border: 1px solid rgba(248,81,73,.25);  color: var(--danger); }
+    .status-icon { font-size: 1.4rem; }
+
+    /* ── Cards ── */
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.75rem; margin-bottom: 1.5rem; }
+    .card h2 { font-size: 1.1rem; margin-bottom: 1.25rem; display: flex; align-items: center; gap: .5rem; }
+    .card h2 span { font-size: 1.2rem; }
+
+    /* Project brief */
+    .brief-section { margin-bottom: 1.25rem; }
+    .brief-label { font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--accent); margin-bottom: .45rem; }
+    .brief-text { color: var(--muted); font-size: .9rem; line-height: 1.7; }
+    pre.brief-text { white-space: pre-wrap; word-break: break-word; font-family: 'DM Sans', sans-serif; }
+
+    /* Tips list */
+    .tips-list { list-style: none; padding: 0; }
+    .tips-list li { padding: .55rem 0 .55rem 1.4rem; position: relative; color: var(--muted); font-size: .88rem; border-bottom: 1px solid rgba(255,255,255,.04); }
+    .tips-list li:last-child { border-bottom: none; }
+    .tips-list li:before { content: "→"; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+
+    /* Submission form */
+    .form-group { margin-bottom: 1.25rem; }
+    .form-group label { display: block; font-size: .82rem; font-weight: 600; color: var(--text); margin-bottom: .45rem; }
+    .form-group .hint { font-size: .76rem; color: var(--muted); margin-top: .35rem; }
+    textarea, input[type="url"] {
+      width: 100%; background: var(--bg); border: 1px solid var(--border);
+      border-radius: 8px; color: var(--text); font-family: 'DM Sans', sans-serif;
+      font-size: .9rem; padding: .85rem 1rem; outline: none; transition: border-color .2s;
+    }
+    textarea { resize: vertical; min-height: 160px; line-height: 1.65; }
+    textarea:focus, input[type="url"]:focus { border-color: var(--accent); }
+    .char-count { font-size: .75rem; color: var(--muted); text-align: right; margin-top: .3rem; }
+
+    /* Submission review (after submitting) */
+    .review-field { margin-bottom: 1.1rem; padding-bottom: 1.1rem; border-bottom: 1px solid var(--border); }
+    .review-field:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .review-label { font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-bottom: .4rem; }
+    .review-value { font-size: .9rem; color: var(--text); line-height: 1.65; word-break: break-word; }
+    .review-value a { color: var(--accent); text-decoration: none; }
+    .review-value a:hover { text-decoration: underline; }
+
+    /* Rejection feedback */
+    .rejection-box { background: rgba(248,81,73,.06); border: 1px solid rgba(248,81,73,.2); border-radius: 10px; padding: 1.1rem 1.25rem; margin-bottom: 1.5rem; }
+    .rejection-box h3 { color: var(--danger); font-size: .9rem; margin-bottom: .5rem; }
+    .rejection-box p { color: var(--muted); font-size: .85rem; line-height: 1.6; }
+
+    /* Buttons */
+    .btn { padding: .8rem 1.75rem; border-radius: 8px; font-weight: 600; font-size: .9rem; cursor: pointer; border: none; transition: all .2s; display: inline-flex; align-items: center; gap: .5rem; text-decoration: none; }
+    .btn-primary { background: var(--accent); color: #0d1117; }
+    .btn-primary:hover { opacity: .88; }
+    .btn-secondary { background: rgba(88,166,255,.12); color: var(--accent); }
+    .btn-secondary:hover { background: rgba(88,166,255,.22); }
+    .btn-success { background: var(--success); color: #0d1117; }
+    .btn-success:hover { opacity: .88; }
+    .btn-sm { padding: .5rem 1rem; font-size: .82rem; }
+    .btn-row { display: flex; gap: 1rem; margin-top: 1.5rem; flex-wrap: wrap; align-items: center; }
+    .btn[disabled] { opacity: .45; cursor: not-allowed; pointer-events: none; }
+
+    /* Progress steps */
+    .progress-steps { display: flex; gap: 0; margin-bottom: 2rem; }
+    .step { flex: 1; text-align: center; position: relative; }
+    .step:not(:last-child):after { content: ''; position: absolute; top: 16px; left: 50%; width: 100%; height: 2px; background: var(--border); z-index: 0; }
+    .step.done:not(:last-child):after { background: var(--success); }
+    .step-circle { width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--border); background: var(--bg); display: flex; align-items: center; justify-content: center; font-size: .8rem; font-weight: 700; margin: 0 auto .5rem; position: relative; z-index: 1; }
+    .step.done .step-circle { background: var(--success); border-color: var(--success); color: #0d1117; }
+    .step.active .step-circle { background: var(--accent); border-color: var(--accent); color: #0d1117; }
+    .step-label { font-size: .72rem; color: var(--muted); font-weight: 600; }
+    .step.active .step-label { color: var(--accent); }
+    .step.done .step-label { color: var(--success); }
+
+    /* Toast */
+    #toast { position: fixed; bottom: 1.5rem; right: 1.5rem; background: var(--success); color: #0d1117; padding: .75rem 1.25rem; border-radius: 10px; font-weight: 600; font-size: .88rem; opacity: 0; transform: translateY(10px); transition: all .3s; pointer-events: none; z-index: 999; }
+    #toast.show { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 600px) {
+      .progress-steps { flex-direction: column; gap: .5rem; }
+      .step:not(:last-child):after { display: none; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Breadcrumb + Header -->
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="{% url 'ai_engine:dashboard' %}">Dashboard</a>
+      <span>›</span>
+      <a href="{% url 'ai_engine:course_detail' course.id %}">{{ course.title }}</a>
+      <span>›</span>
+      <span>Final Project</span>
+    </div>
+    <div class="page-badge">🎓 Capstone Project</div>
+    <h1>{{ capstone.title }}</h1>
+    <p>{{ capstone.description }}</p>
+  </div>
+
+  <!-- Progress Steps -->
+  <div class="progress-steps">
+    <div class="step done">
+      <div class="step-circle">✓</div>
+      <div class="step-label">Modules</div>
+    </div>
+    <div class="step {% if submission %}done{% else %}active{% endif %}">
+      <div class="step-circle">{% if submission %}✓{% else %}2{% endif %}</div>
+      <div class="step-label">Submit</div>
+    </div>
+    <div class="step {% if submission.status == 'approved' %}done{% endif %}">
+      <div class="step-circle">{% if submission.status == 'approved' %}✓{% else %}3{% endif %}</div>
+      <div class="step-label">Review</div>
+    </div>
+    <div class="step {% if submission.status == 'approved' %}active{% endif %}">
+      <div class="step-circle">🏆</div>
+      <div class="step-label">Complete</div>
+    </div>
+  </div>
+
+  <!-- Submission status banner -->
+  {% if submission %}
+    {% if submission.status == 'pending' %}
+    <div class="status-banner pending">
+      <span class="status-icon">⏳</span>
+      <div>
+        <div>Submission under review</div>
+        <div style="font-weight:400;font-size:.82rem;margin-top:.2rem;opacity:.8;">Your project has been submitted and is awaiting review.</div>
+      </div>
+    </div>
+    {% elif submission.status == 'approved' %}
+    <div class="status-banner approved">
+      <span class="status-icon">🎉</span>
+      <div>
+        <div>Project approved — course complete!</div>
+        <div style="font-weight:400;font-size:.82rem;margin-top:.2rem;opacity:.8;">Congratulations on completing the course.</div>
+      </div>
+    </div>
+    {% elif submission.status == 'rejected' %}
+    <div class="rejection-box">
+      <h3>❌ Submission needs revision</h3>
+      <p>Your submission was returned for improvements. Review the feedback below and resubmit.</p>
+      {% if submission.feedback %}
+      <p style="margin-top:.65rem;color:var(--text);">{{ submission.feedback }}</p>
+      {% endif %}
+    </div>
+    {% endif %}
+  {% endif %}
+
+  <!-- Project Brief -->
+  <div class="card">
+    <h2><span>📋</span> Project Brief</h2>
+
+    {% if capstone.description %}
+    <div class="brief-section">
+      <div class="brief-label">Overview</div>
+      <div class="brief-text">{{ capstone.description }}</div>
+    </div>
+    {% endif %}
+
+    {% if capstone.requirements %}
+    <div class="brief-section">
+      <div class="brief-label">Requirements</div>
+      <pre class="brief-text">{{ capstone.requirements }}</pre>
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- Tips -->
+  <div class="card">
+    <h2><span>💡</span> Tips for a Strong Submission</h2>
+    <ul class="tips-list">
+      <li>Clearly explain your goal and what success looks like before diving in</li>
+      <li>Document your approach step-by-step — reviewers value process as much as outcome</li>
+      <li>Include a GitHub link, live demo, or screenshots where relevant</li>
+      <li>Describe any challenges you faced and how you solved them</li>
+      <li>Relate your work back to what you learned in the course modules</li>
+    </ul>
+  </div>
+
+  <!-- Previous submission review (read-only, if already submitted) -->
+  {% if submission and submission.status != 'rejected' %}
+  <div class="card">
+    <h2><span>📄</span> Your Submission</h2>
+    <div class="review-field">
+      <div class="review-label">Project Description / Work</div>
+      <div class="review-value">{{ submission.submission_text }}</div>
+    </div>
+    {% if submission.project_url %}
+    <div class="review-field">
+      <div class="review-label">Project URL</div>
+      <div class="review-value"><a href="{{ submission.project_url }}" target="_blank" rel="noopener">{{ submission.project_url }} ↗</a></div>
+    </div>
+    {% endif %}
+    {% if submission.notes %}
+    <div class="review-field">
+      <div class="review-label">Additional Notes</div>
+      <div class="review-value">{{ submission.notes }}</div>
+    </div>
+    {% endif %}
+    <div class="review-field">
+      <div class="review-label">Submitted</div>
+      <div class="review-value">{{ submission.created_at|date:"N j, Y, P" }}</div>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Submit / Resubmit Form -->
+  {% if can_submit %}
+  <div class="card">
+    <h2>
+      <span>🚀</span>
+      {% if submission.status == 'rejected' %}Resubmit Your Project{% else %}Submit Your Project{% endif %}
+    </h2>
+
+    {# ✅ FIX: was {% url 'submit_capstone_project' capstone.id %} — missing ai_engine: namespace #}
+    <form method="POST" action="{% url 'ai_engine:submit_capstone_project' capstone.id %}" id="submit-form">
+      {% csrf_token %}
+
+      <div class="form-group">
+        <label for="submission_text">Project Description / Work <span style="color:var(--danger)">*</span></label>
+        <textarea
+          id="submission_text"
+          name="submission_text"
+          placeholder="Describe your project — your approach, key decisions, outcomes, and what you learned…"
+          required
+          oninput="updateCharCount()"
+        >{% if submission %}{{ submission.submission_text }}{% endif %}</textarea>
+        <div class="char-count" id="char-count">0 characters</div>
+        <div class="hint">Aim for at least 200 characters. Be specific about what you built and how.</div>
+      </div>
+
+      <div class="form-group">
+        <label for="project_url">Project URL <span style="color:var(--muted);font-weight:400">(optional)</span></label>
+        <input
+          type="url"
+          id="project_url"
+          name="project_url"
+          placeholder="https://github.com/username/project"
+          value="{% if submission %}{{ submission.project_url }}{% endif %}"
+        />
+        <div class="hint">GitHub repo, live demo, Colab notebook, or any public link to your work.</div>
+      </div>
+
+      <div class="form-group">
+        <label for="notes">Additional Notes <span style="color:var(--muted);font-weight:400">(optional)</span></label>
+        <textarea
+          id="notes"
+          name="notes"
+          placeholder="Any additional context, challenges you faced, or comments for the reviewer…"
+          style="min-height:100px"
+        >{% if submission %}{{ submission.notes }}{% endif %}</textarea>
+      </div>
+
+      <div class="btn-row">
+        <button type="submit" class="btn btn-success" id="submit-btn">
+          🚀 {% if submission.status == 'rejected' %}Resubmit Project{% else %}Submit Project{% endif %}
+        </button>
+        <a href="{% url 'ai_engine:course_detail' course.id %}" class="btn btn-secondary">← Back to Course</a>
+      </div>
+    </form>
+  </div>
+  {% else %}
+  <!-- Not submittable — show back button -->
+  <div class="btn-row">
+    <a href="{% url 'ai_engine:course_detail' course.id %}" class="btn btn-secondary">← Back to Course</a>
+    {% if submission.status == 'approved' %}
+    <a href="{% url 'ai_engine:dashboard' %}" class="btn btn-primary">🏠 Go to Dashboard</a>
+    {% endif %}
+  </div>
+  {% endif %}
+
+</div><!-- /container -->
+
+<div id="toast">✅ Submitting…</div>
+
+<script>
+  // Character count for main textarea
+  function updateCharCount() {
+    const ta  = document.getElementById('submission_text');
+    const cc  = document.getElementById('char-count');
+    const btn = document.getElementById('submit-btn');
+    if (!ta || !cc) return;
+    const len = ta.value.length;
+    cc.textContent = len + (len === 1 ? ' character' : ' characters');
+    cc.style.color = len < 50 ? 'var(--danger)' : len < 200 ? 'var(--warn)' : 'var(--success)';
+    if (btn) btn.disabled = len < 10;
+  }
+
+  // Run on load to populate count for resubmit case
+  updateCharCount();
+
+  // Toast on submit
+  const form = document.getElementById('submit-form');
+  if (form) {
+    form.addEventListener('submit', function() {
+      const t = document.getElementById('toast');
+      t.classList.add('show');
+      const btn = document.getElementById('submit-btn');
+      if (btn) { btn.disabled = true; btn.textContent = 'Submitting…'; }
+    });
+  }
+</script>
+</body>
+</html>

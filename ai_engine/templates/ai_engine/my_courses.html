@@ -1,0 +1,137 @@
+{% comment %}templates/ai_engine/my_courses.html{% endcomment %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Courses — AI Learning Platform</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg:      #0d1117;
+      --surface: #161b22;
+      --border:  #30363d;
+      --accent:  #58a6ff;
+      --accent2: #bc8cff;
+      --success: #3fb950;
+      --text:    #e6edf3;
+      --muted:   #8b949e;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 2rem 1rem;
+    }
+    .container { max-width: 1200px; margin: 0 auto; }
+
+    /* ── Back nav ── */
+    .back-nav {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: .88rem;
+      font-weight: 600;
+      margin-bottom: 1.25rem;
+      padding: 6px 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      transition: color .2s, border-color .2s;
+    }
+    .back-nav:hover { color: var(--accent); border-color: var(--accent); }
+    .back-nav .arrow { font-size: 1rem; }
+
+    h1 { font-size: 2rem; margin-bottom: 1.5rem; color: var(--accent); }
+
+    .course-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.25rem;
+      margin-top: 1.5rem;
+    }
+    .course-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      transition: border-color .2s, transform .2s;
+    }
+    .course-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .course-card h3 { font-size: 1.15rem; margin-bottom: .5rem; }
+    .course-card p { font-size: .88rem; color: var(--muted); margin-bottom: 1rem; }
+
+    .progress-bar {
+      height: 6px;
+      background: var(--border);
+      border-radius: 99px;
+      overflow: hidden;
+      margin: .75rem 0;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: 99px;
+    }
+
+    .btn {
+      display: inline-block;
+      background: var(--accent);
+      color: #0d1117;
+      padding: .6rem 1.2rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: .88rem;
+      transition: opacity .2s;
+    }
+    .btn:hover { opacity: .85; }
+
+    .empty {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ── Back to Career Recommendations ── -->
+  <a href="{% url 'ai_engine:career_recommendations' %}" class="back-nav">
+    <span class="arrow">←</span> Career Recommendations
+  </a>
+
+  <h1>My Courses</h1>
+
+  {% if courses_data %}
+    <div class="course-grid">
+      {% for item in courses_data %}
+        <div class="course-card">
+          <h3>{{ item.course.course_title }}</h3>
+          <p>{{ item.course.course_description|truncatewords:15 }}</p>
+          <div style="font-size:.8rem;color:var(--muted);margin-bottom:.5rem">
+            Modules: {{ item.module_count }} · Progress: {{ item.progress }}%
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width:{{ item.progress }}%"></div>
+          </div>
+          <a href="{% url 'ai_engine:course_detail' item.course.id %}" class="btn">View Course →</a>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty">
+      <p>You don't have any courses yet.</p>
+      <p style="margin-top:.5rem">
+        <a href="{% url 'ai_engine:select_career' %}" class="btn">Start Assessment</a>
+      </p>
+    </div>
+  {% endif %}
+
+</div>
+</body>
+</html>

@@ -1,0 +1,101 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Powered Learning Platform</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background-image: url("{% static 'img.png' %}");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        .overlay {
+            min-height: 100vh;
+            background: rgba(0, 0, 0, 0.55);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card {
+            width: 380px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            text-align: center;
+            color: white;
+        }
+
+        .card h2 {
+            margin-bottom: 10px;
+            color: #64ffda;
+        }
+
+        .card p {
+            margin-bottom: 20px;
+            font-size: 15px;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s ease;
+        }
+
+        .btn-login {
+            background: #00c896;
+            color: black;
+        }
+
+        .btn-register {
+            background: #2196f3;
+            color: white;
+        }
+
+        .btn-logout {
+            background: #ff4d4d;
+            color: white;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            opacity: 0.9;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="overlay">
+    <div class="card">
+
+        {% if user.is_authenticated %}
+            <h2>Welcome, {{ request.user.email }}</h2>
+            <p>You are successfully logged in.</p>
+            <a href="{% url 'logout' %}" class="btn btn-logout">Logout</a>
+        {% else %}
+            <h2>AI Powered Learning Platform</h2>
+            <p>Login or create an account to continue</p>
+            <a href="{% url 'login' %}" class="btn btn-login">Login</a>
+            <a href="{% url 'register' %}" class="btn btn-register">Register</a>
+        {% endif %}
+
+    </div>
+</div>
+
+</body>
+</html>

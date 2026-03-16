@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Quiz: {{ module.title }}{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg">
+                <div class="card-header bg-success text-white">
+                    <h3><i class="fas fa-clipboard-check"></i> {{ quiz.title }}</h3>
+                </div>
+
+                <div class="card-body">
+                    {% if previous_attempts %}
+                    <div class="alert alert-info">
+                        <h6><i class="fas fa-history"></i> Previous Attempts</h6>
+                        {% for attempt in previous_attempts %}
+                        <div class="d-flex justify-content-between">
+                            <span>{{ attempt.attempted_at|date:"M d, Y H:i" }}</span>
+                            <span class="badge {% if attempt.passed %}bg-success{% else %}bg-danger{% endif %}">
+                                {{ attempt.score }}%
+                            </span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <form method="post">
+                        {% csrf_token %}
+
+                        {% for question in quiz.questions %}
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <strong>Question {{ forloop.counter }}</strong>
+                            </div>
+                            <div class="card-body">
+                                <p>{{ question.question }}</p>
+
+                                {% if question.type == "multiple_choice" %}
+                                <div class="form-group">
+                                    {% for key, option in question.options.items %}
+                                    <div class="form-check">
+                                        <input class="form-check-input"
+                                               type="radio"
+                                               name="question_{{ forloop.parentloop.counter0 }}"
+                                               id="q{{ forloop.parentloop.counter0 }}_{{ forloop.counter0 }}"
+                                               value="{{ forloop.counter0 }}"
+                                               required>
+                                        <label class="form-check-label"
+                                               for="q{{ forloop.parentloop.counter0 }}_{{ forloop.counter0 }}">
+                                            {{ key }}. {{ option }}
+                                        </label>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                {% else %}
+                                <textarea class="form-control"
+                                          name="question_{{ forloop.counter0 }}"
+                                          rows="3"
+                                          required></textarea>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+
+                        <div class="alert alert-warning">
+                            <i class="fas fa-info-circle"></i>
+                            <strong>Passing Score:</strong> {{ quiz.passing_score }}%
+                        </div>
+
+                        <button type="submit" class="btn btn-success btn-lg w-100">
+                            <i class="fas fa-paper-plane"></i> Submit Quiz
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="text-center mt-3">
+                <a href="{% url 'ai_engine:module_learn' module.id %}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Module
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,483 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose Your Career Path - AI Learning Platform</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 30px 20px;
+        }
+
+        .container { max-width: 1000px; margin: 0 auto; }
+
+        /* Header */
+        .header {
+            background: white;
+            border-radius: 20px;
+            padding: 32px 40px;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 32px rgba(0,0,0,.12);
+        }
+
+        .header h1 {
+            font-size: 28px;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #64748b;
+            font-size: 15px;
+        }
+
+        /* Personality Snapshot Card */
+        .snapshot-card {
+            background: white;
+            border-radius: 20px;
+            padding: 32px 40px;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 32px rgba(0,0,0,.12);
+        }
+
+        .snapshot-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+
+        .snapshot-title span {
+            font-size: 24px;
+        }
+
+        .snapshot-title h2 {
+            font-size: 20px;
+            color: #1e293b;
+        }
+
+        /* Trait Bars */
+        .trait-row {
+            display: flex;
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .trait-row:last-child {
+            border-bottom: none;
+        }
+
+        .trait-icon {
+            font-size: 20px;
+            width: 32px;
+        }
+
+        .trait-name {
+            flex: 1;
+            font-size: 14px;
+            font-weight: 600;
+            color: #334155;
+            text-transform: capitalize;
+        }
+
+        .trait-bar {
+            flex: 2;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 0 16px;
+        }
+
+        .trait-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 10px;
+            transition: width 1s ease;
+        }
+
+        .trait-score {
+            font-size: 16px;
+            font-weight: 700;
+            color: #667eea;
+            min-width: 50px;
+            text-align: right;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            background: #fef3c7;
+            border: 2px solid #fbbf24;
+            border-radius: 16px;
+            padding: 20px 24px;
+            margin: 24px 0;
+        }
+
+        .how-it-works h3 {
+            font-size: 16px;
+            color: #92400e;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .how-steps {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .how-step {
+            flex: 1;
+            min-width: 200px;
+            background: white;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 13px;
+            color: #78350f;
+        }
+
+        .how-step strong {
+            color: #92400e;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        /* Available Career Paths */
+        .careers-section {
+            background: white;
+            border-radius: 20px;
+            padding: 32px 40px;
+            box-shadow: 0 8px 32px rgba(0,0,0,.12);
+        }
+
+        .careers-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .careers-title span {
+            font-size: 24px;
+        }
+
+        .careers-title h2 {
+            font-size: 20px;
+            color: #1e293b;
+        }
+
+        .careers-subtitle {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 24px;
+            font-style: italic;
+        }
+
+        /* Career Grid */
+        .career-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .career-card {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 24px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .career-card:hover {
+            border-color: #667eea;
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(102, 126, 234, 0.15);
+        }
+
+        .career-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: #10b981;
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .career-icon {
+            font-size: 36px;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .career-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .career-desc {
+            font-size: 13px;
+            color: #64748b;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .career-levels {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 16px;
+        }
+
+        .level-badge {
+            font-size: 10px;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .level-beginner { background: #dbeafe; color: #1e40af; }
+        .level-intermediate { background: #fef3c7; color: #92400e; }
+        .level-advanced { background: #fce7f3; color: #9f1239; }
+
+        .career-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            text-align: center;
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-secondary:hover {
+            background: #f8fafc;
+        }
+
+        .btn-disabled {
+            background: #e2e8f0;
+            color: #94a3b8;
+            cursor: not-allowed;
+        }
+
+        /* Progress indicator */
+        .progress-ring {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: conic-gradient(#667eea 0%, #667eea var(--progress), #e2e8f0 var(--progress));
+            position: relative;
+        }
+
+        .progress-ring::after {
+            content: attr(data-progress);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 11px;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        @media (max-width: 768px) {
+            .career-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .how-steps {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <!-- Header -->
+    <div class="header">
+        <h1>🎯 Choose Your Career Path</h1>
+        <p>Select a career below to start your personalized learning journey</p>
+    </div>
+
+    <!-- Personality Snapshot -->
+    {% if profile and profile.personality_traits %}
+    <div class="snapshot-card">
+        <div class="snapshot-title">
+            <span>🧠</span>
+            <h2>Your Personality Snapshot</h2>
+        </div>
+
+        {% for trait, score in profile.personality_traits.items|slice:":5" %}
+        <div class="trait-row">
+            <span class="trait-icon">
+                {% if trait == "openness" %}🔭
+                {% elif trait == "conscientiousness" %}📋
+                {% elif trait == "extraversion" %}🤝
+                {% elif trait == "agreeableness" %}💛
+                {% elif trait == "neuroticism" %}🌊
+                {% else %}⭐{% endif %}
+            </span>
+            <div class="trait-name">{{ trait }}</div>
+            <div class="trait-bar">
+                <div class="trait-fill" style="width: {{ score }}%"></div>
+            </div>
+            <div class="trait-score">{{ score }}%</div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- How It Works -->
+    <div class="snapshot-card">
+        <div class="how-it-works">
+            <h3>💡 How it works:</h3>
+            <div class="how-steps">
+                <div class="how-step">
+                    <strong>1️⃣ Choose a career</strong>
+                    Select from careers matched to your profile
+                </div>
+                <div class="how-step">
+                    <strong>2️⃣ Answer 15 LLM-generated questions</strong>
+                    Questions span Beginner → Intermediate → Advanced
+                </div>
+                <div class="how-step">
+                    <strong>3️⃣ Get your level (Beginner / Intermediate / Advanced)</strong>
+                    Your score determines your starting point
+                </div>
+                <div class="how-step">
+                    <strong>4️⃣ Receive a personalized course</strong>
+                    Custom learning path built just for you
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Available Career Paths -->
+    <div class="careers-section">
+        <div class="careers-title">
+            <span>🚀</span>
+            <h2>Available Career Paths</h2>
+        </div>
+        <p class="careers-subtitle">✨ Matched to your profile</p>
+
+        <div class="career-grid">
+            {% for career_data in careers %}
+            <div class="career-card">
+                {% if career_data.has_course %}
+                <span class="career-badge">✓ MATCHED</span>
+                {% endif %}
+
+                <span class="career-icon">
+                    {% if career_data.name == "Software Engineer" %}💻
+                    {% elif career_data.name == "Data Scientist" %}📊
+                    {% elif career_data.name == "Data Analyst" %}📈
+                    {% elif career_data.name == "UX Designer" %}🎨
+                    {% elif career_data.name == "Product Manager" %}📦
+                    {% elif career_data.name == "Project Manager" %}📋
+                    {% elif career_data.name == "Marketing Manager" %}📣
+                    {% elif career_data.name == "HR Manager" %}👥
+                    {% elif career_data.name == "Finance Analyst" %}💰
+                    {% elif career_data.name == "Teacher" %}🎓
+                    {% elif career_data.name == "Research Scientist" %}🔬
+                    {% elif career_data.name == "Content Creator" %}✍️
+                    {% elif career_data.name == "Counselor" %}💬
+                    {% else %}⭐{% endif %}
+                </span>
+
+                <div class="career-name">{{ career_data.name }}</div>
+
+                <div class="career-desc">
+                    {% if career_data.name == "Data Scientist" %}Statistical insights from data using ML and AI
+                    {% elif career_data.name == "Software Engineer" %}Build software, APIs, and scalable systems
+                    {% elif career_data.name == "UX Designer" %}Design intuitive user-centric digital experiences
+                    {% elif career_data.name == "Product Manager" %}Lead product vision and delivery
+                    {% elif career_data.name == "Data Analyst" %}Extract actionable insights from data
+                    {% elif career_data.name == "Marketing Manager" %}Drive brand growth and customer engagement
+                    {% else %}Pursue your passion in {{ career_data.name }}{% endif %}
+                </div>
+
+                <div class="career-levels">
+                    <span class="level-badge level-beginner">Beginner</span>
+                    <span class="level-badge level-intermediate">Intermediate</span>
+                    <span class="level-badge level-advanced">Advanced</span>
+                </div>
+
+                <div class="career-buttons">
+                    {% if career_data.has_course %}
+                    <a href="{% url 'ai_engine:course_detail' career_data.course_id %}" class="btn btn-secondary">
+                        View Course →
+                    </a>
+                    {% else %}
+                    <form method="POST" action="{% url 'ai_engine:select_career' %}" style="flex: 1;">
+                        {% csrf_token %}
+                        <input type="hidden" name="career" value="{{ career_data.name }}">
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">
+                            Start Assessment →
+                        </button>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+
+<script>
+// Animate trait bars
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        document.querySelectorAll('.trait-fill').forEach(fill => {
+            const width = fill.style.width;
+            fill.style.width = '0%';
+            setTimeout(() => {
+                fill.style.width = width;
+            }, 100);
+        });
+    }, 200);
+});
+</script>
+</body>
+</html>

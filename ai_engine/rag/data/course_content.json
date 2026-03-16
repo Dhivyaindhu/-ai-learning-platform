@@ -1,0 +1,489 @@
+{
+  "data_scientist": {
+    "Python Basics": "Python is the primary language for data science, offering clean syntax and powerful libraries like NumPy (numerical computing), Pandas (data manipulation), Matplotlib (visualization), and Scikit-learn (machine learning). Its interpreted nature enables rapid prototyping and interactive data exploration through Jupyter notebooks.",
+    "Pandas": "Pandas provides DataFrame and Series structures for tabular data manipulation. Key operations include filtering, grouping, aggregation, merging datasets, handling missing values, time series analysis, and reading/writing CSV, Excel, SQL, and JSON formats.",
+    "NumPy": "NumPy enables fast array operations through vectorization - applying operations to entire arrays without Python loops. Provides multidimensional arrays, broadcasting, linear algebra, random number generation, and mathematical functions optimized in C.",
+    "Data Cleaning": "Data cleaning identifies and corrects errors, missing values, duplicates, and inconsistencies. Techniques include imputation, outlier detection, format standardization, deduplication, and validation. Clean data is essential for reliable analysis and modeling.",
+    "Statistics": "Statistics provides mathematical foundation for data analysis. Descriptive statistics (mean, median, mode, standard deviation, percentiles) summarize data. Inferential statistics (hypothesis testing, confidence intervals, p-values) make predictions from samples. Understanding distributions (normal, binomial, Poisson) is crucial.",
+    "Feature Engineering": "Feature engineering creates meaningful input variables from raw data to improve model performance. Techniques include interaction terms, polynomial features, binning, encoding categorical variables, scaling, datetime extraction, and domain-specific transformations. Often more impactful than algorithm choice.",
+    "Cross Validation": "K-fold cross-validation splits data into k subsets, training on k-1 folds and testing on remaining fold, rotating so each fold is test set once. Provides robust performance estimates, detects overfitting, and guides hyperparameter tuning.",
+    "SQL": "SQL queries relational databases using SELECT (retrieve), WHERE (filter), JOIN (combine tables), GROUP BY (aggregate), and ORDER BY (sort). Understanding JOIN types (INNER, LEFT, RIGHT, FULL) is critical for extracting and combining data from multiple tables.",
+    "Machine Learning": "Machine learning trains algorithms on data to make predictions. Supervised learning uses labeled data for classification or regression. Unsupervised learning finds patterns in unlabeled data through clustering or dimensionality reduction. Key concepts: train/test split, overfitting, bias-variance tradeoff, regularization.",
+    "Deep Learning": "Deep learning uses multi-layer neural networks to learn hierarchical representations. Each layer extracts increasingly abstract features. Excels at image recognition (CNNs), sequence modeling (RNNs, LSTMs), and natural language processing (transformers). Requires large datasets and significant compute.",
+    "MLOps": "MLOps automates ML model lifecycle: version control for data/code/models, CI/CD pipelines, containerization (Docker/Kubernetes), monitoring performance and data drift, automated retraining, and A/B testing. Ensures reliable, scalable production ML systems.",
+    "Model Deployment": "Model deployment serves predictions in production via REST APIs, batch processing, embedded models, or stream processing. Critical considerations: latency, scalability, versioning, monitoring, rollback procedures, and A/B testing new versions.",
+    "A/B Testing": "A/B testing uses randomized controlled experiments to compare variants. Random assignment, sample size calculation, statistical significance testing (p-values, confidence intervals), and multiple testing correction ensure valid conclusions about which variant performs better."
+  },
+  "software_engineer": {
+    "Variables": "Variables store data values in memory. Statically-typed languages (Java, C++) require declaring types; dynamically-typed languages (Python, JavaScript) infer types at runtime. Scope determines accessibility: local (function), global (program-wide), or block (within {}). ",
+    "Functions": "Functions encapsulate reusable code blocks with parameters (inputs) and return values (outputs). Promote modularity and maintainability. Pure functions (no side effects, deterministic) vs impure functions (modify state). Higher-order functions take/return other functions.",
+    "Loops": "Loops repeat code: for-loops iterate known times or through collections; while-loops continue until condition false. Key concepts: loop variables, termination conditions, break (exit early), continue (skip iteration), nested loops. Avoid infinite loops.",
+    "Conditionals": "If-else statements execute different code paths based on boolean conditions. Boolean operators (AND, OR, NOT) combine conditions. Switch/case handles multiple discrete options efficiently. Guard clauses exit functions early for cleaner code.",
+    "APIs": "REST APIs use HTTP methods (GET retrieve, POST create, PUT update, DELETE remove) to interact with resources via URLs. Handle request/response cycles, status codes (200 OK, 404 Not Found, 500 Error), authentication (API keys, OAuth), and data formats (JSON, XML).",
+    "OOP": "Object-Oriented Programming organizes code as objects (instances of classes) with attributes (data) and methods (behavior). Core principles: Encapsulation (hide details), Inheritance (derive classes), Polymorphism (same interface, different implementations), Abstraction (model essentials).",
+    "Databases": "Relational databases (SQL) organize data in tables with schemas and ACID guarantees (Atomicity, Consistency, Isolation, Durability). NoSQL databases (MongoDB, Redis, Cassandra, Neo4j) trade consistency for scalability and flexibility across document, key-value, column-family, and graph models.",
+    "Testing": "Unit tests validate individual functions in isolation. Integration tests verify components work together. End-to-end tests validate complete workflows. Test-Driven Development writes tests before code. Good tests are independent, repeatable, fast, and maintainable.",
+    "System Design": "System design architects large-scale applications considering scalability (handle growth), reliability (uptime, fault tolerance), performance (latency, throughput), maintainability, and security. Patterns: load balancing, caching, message queues, database replication. Trade-offs: CAP theorem, sync vs async.",
+    "Microservices": "Microservices decompose applications into independently deployable services, each owning its database and communicating via APIs. Benefits: independent scaling, technology diversity, team autonomy. Challenges: distributed complexity, network latency, data consistency, monitoring.",
+    "Scalability": "Vertical scaling (scale up) adds powerful hardware to machines; limited by hardware constraints. Horizontal scaling (scale out) adds more machines; provides unlimited theoretical scaling but requires load balancing and stateless design. Database techniques: replication, sharding, caching.",
+    "Security": "Security protects against threats: authentication (verify identity), authorization (control access), encryption (protect data), input validation (prevent injection), HTTPS (secure communication), and security headers. Common vulnerabilities: SQL injection, XSS, CSRF, authentication flaws.",
+    "DevOps": "DevOps unifies development and operations through CI/CD pipelines, infrastructure as code, automated testing, containerization (Docker), orchestration (Kubernetes), monitoring, and incident response. Enables frequent, reliable deployments."
+  },
+  "data_analyst": {
+    "Excel": "Excel manipulates data with formulas (SUM, VLOOKUP, IF), pivot tables (aggregate and summarize), charts (visualize trends), and conditional formatting. Ideal for quick analysis of small to medium datasets up to hundreds of thousands of rows.",
+    "SQL Basics": "SQL queries relational databases: SELECT retrieves data, WHERE filters rows, ORDER BY sorts results, GROUP BY aggregates data, and JOIN combines tables. Essential for extracting insights from structured data stored in databases.",
+    "Statistics": "Descriptive statistics summarize data: mean (average), median (middle value), mode (most frequent), standard deviation (spread), and percentiles. Inferential statistics test hypotheses and estimate population parameters from samples.",
+    "Data Visualization": "Effective visualizations communicate insights clearly. Bar charts compare categories, line charts show trends over time, scatter plots reveal relationships, and histograms display distributions. Choose chart types matching data structure and message.",
+    "Advanced SQL": "Window functions (ROW_NUMBER, RANK, LAG, LEAD) perform calculations across row sets. Common Table Expressions (CTEs) organize complex queries. Subqueries enable nested logic. Optimization techniques improve query performance.",
+    "Python for Analysis": "Python handles larger datasets than Excel and enables automation. Libraries: Pandas (data manipulation), NumPy (numerical operations), Matplotlib/Seaborn (visualization), and SciPy (statistics). Jupyter notebooks support interactive analysis.",
+    "A/B Testing": "A/B testing compares two variants via randomized experiments. Calculate required sample size for statistical power. Test for significance using t-tests or chi-square tests. Control for multiple comparisons. Interpret p-values and confidence intervals correctly.",
+    "Dashboards": "Dashboards visualize key metrics for decision-making. Tools like Tableau, Power BI, and Looker connect to data sources, allow interactive filtering, and refresh automatically. Design principles: hierarchy, color, simplicity, and actionable insights.",
+    "Predictive Analytics": "Predictive analytics forecasts future outcomes using historical data and statistical models. Techniques include regression (linear, logistic), time series analysis (ARIMA), and machine learning. Validate predictions using holdout data and track forecast accuracy.",
+    "ETL": "ETL (Extract, Transform, Load) pipelines move data from sources to destinations. Extract from databases/APIs/files, transform (clean, aggregate, join), and load into data warehouses. Tools: Python, SQL, Apache Airflow, dbt.",
+    "Business Intelligence": "Business Intelligence transforms data into actionable insights. BI tools connect to multiple data sources, create calculated metrics, and present findings through dashboards and reports. Focus on KPIs aligned with business objectives."
+  },
+  "product_manager": {
+    "Product Roadmap": "Product roadmaps communicate product vision and priorities over time. Balance strategic goals with customer needs and business constraints. Update regularly based on feedback and changing conditions. Use themes rather than specific features for flexibility.",
+    "User Stories": "User stories describe features from user perspective: 'As a [role], I want [goal] so that [benefit]'. Include acceptance criteria defining done. Estimate effort with story points. Prioritize using value vs effort.",
+    "Stakeholder Communication": "Product managers align stakeholders (executives, engineering, sales, customers) through clear communication. Tailor messages to audience. Manage expectations proactively. Build trust through transparency and delivering on commitments.",
+    "Prioritization": "Prioritization frameworks (RICE, MoSCoW, Kano) balance impact, effort, and strategic fit. Consider customer value, business goals, technical dependencies, and resource constraints. Say no to good ideas that don't align with strategy.",
+    "OKRs": "Objectives and Key Results set ambitious goals (Objectives) with measurable outcomes (Key Results). Objectives inspire; Key Results quantify success. Typically quarterly. Track progress publicly. Accept 70% achievement as success for stretch goals.",
+    "Product Metrics": "Track metrics across funnel: acquisition (traffic, signups), activation (onboarding completion), retention (DAU/MAU), revenue (MRR, ARPU), and referral. Leading indicators predict future performance; lagging indicators confirm past performance.",
+    "Go-to-Market Strategy": "GTM strategy defines target customers, positioning, pricing, distribution channels, and launch timeline. Align product, marketing, and sales. Test messaging with target audience. Plan launch sequence and success metrics.",
+    "Product Strategy": "Product strategy defines how product achieves business goals and serves customers. Includes market analysis, competitive positioning, target customers, value proposition, and differentiation. Guides all product decisions.",
+    "Monetization": "Monetization models include subscription (recurring revenue), freemium (free tier, paid upgrade), usage-based (pay per use), and transaction fees (percentage of transactions). Choose model matching user behavior and value delivery.",
+    "Market Positioning": "Positioning differentiates product in competitive market. Define target segment, key benefits, and competitive alternatives. Craft positioning statement. Test with customers. Consistent messaging across all touchpoints."
+  },
+  "ux_designer": {
+    "Design Thinking": "Design Thinking solves problems through empathy, ideation, and iteration. Phases: Empathize (understand users), Define (frame problem), Ideate (generate solutions), Prototype (create tangible concepts), Test (gather feedback). Human-centered and iterative.",
+    "User Research": "User research uncovers user needs, behaviors, and pain points through interviews, surveys, usability testing, and analytics. Qualitative research explores why; quantitative research measures what. Research insights inform design decisions.",
+    "Wireframing": "Wireframes show page structure and layout without visual design details. Focus on information hierarchy, navigation flow, and content placement. Low-fidelity wireframes (sketches, gray boxes) enable rapid iteration before investing in visual design.",
+    "Prototyping": "Prototypes make designs tangible for testing. Fidelity ranges from paper sketches to fully interactive mockups. Test interactions, flows, and concepts before development. Tools: Figma, Sketch, Adobe XD, InVision. Iterate based on feedback.",
+    "Interaction Design": "Interaction Design defines how users interact with products through interfaces. Considers micro-interactions (button states, transitions), feedback (visual, audio, haptic), affordances (what actions look possible), and error prevention/recovery.",
+    "Design Systems": "Design systems ensure consistency through reusable components, patterns, and guidelines. Include UI components (buttons, forms), design tokens (colors, typography), patterns (navigation, forms), and documentation. Scales design across teams and products.",
+    "Usability Testing": "Usability testing observes users completing tasks to identify issues. Test early and often. Recruit representative users. Define realistic tasks. Observe without leading. Note where users struggle. Iterate designs based on findings.",
+    "UX Strategy": "UX strategy aligns user experience with business goals. Includes user research, competitive analysis, design principles, success metrics, and roadmap. Balances user needs with business constraints and technical feasibility.",
+    "Accessibility": "Accessible design ensures everyone can use products regardless of abilities. Follow WCAG guidelines. Provide keyboard navigation, screen reader support, sufficient color contrast, and flexible font sizes. Accessibility benefits all users.",
+    "Design Operations": "DesignOps optimizes design processes, tools, and team collaboration. Standardizes workflows, manages design systems, coordinates across teams, and measures design impact. Enables design to scale efficiently."
+  },
+  "marketing_manager": {
+    "Target Audience": "Target audience defines ideal customers based on demographics (age, location, income), psychographics (values, interests, lifestyle), and behaviors (purchase patterns, media consumption). Specific targeting enables relevant messaging and efficient spending.",
+    "Brand Identity": "Brand identity encompasses visual elements (logo, colors, typography), tone of voice, messaging, and values. Consistent brand identity builds recognition and trust. Brand guidelines ensure consistency across touchpoints.",
+    "Marketing Channels": "Marketing channels include organic (SEO, content, social media), paid (Google Ads, Facebook Ads, display), email, PR, and partnerships. Choose channels based on where target audience spends time and campaign objectives.",
+    "SEO": "SEO (Search Engine Optimization) improves organic search visibility through keyword research, on-page optimization (titles, meta descriptions, content), technical SEO (site speed, mobile-friendliness, structure), and backlink building.",
+    "Paid Advertising": "Paid advertising delivers immediate visibility through platforms like Google Ads (search, display), Facebook/Instagram Ads, LinkedIn Ads, and programmatic display. Key metrics: CTR, CPC, conversion rate, ROAS. Optimize through A/B testing.",
+    "Email Marketing": "Email marketing nurtures leads and retains customers through newsletters, promotional emails, and automated sequences. Build segmented lists, personalize content, optimize subject lines and CTAs. Track open rates, click rates, conversions.",
+    "Content Marketing": "Content marketing attracts and engages audiences through valuable content (blog posts, videos, podcasts, guides). Aligns content with buyer journey stages. Distributes across owned, earned, and paid channels. Measures engagement and conversions.",
+    "Marketing Strategy": "Marketing strategy defines goals, target audience, positioning, tactics, channels, budget allocation, and success metrics. Aligns marketing with business objectives. Based on market research and competitive analysis.",
+    "Attribution Modeling": "Attribution modeling assigns credit to marketing touchpoints along customer journey. Models range from simple (first-touch, last-touch) to sophisticated (multi-touch, algorithmic). Inform budget allocation across channels.",
+    "Growth Hacking": "Growth hacking prioritizes rapid experimentation across marketing channels and product development to identify most effective ways to grow business. Focuses on viral loops, referral programs, and product-led growth.",
+    "Marketing ROI": "Marketing ROI measures return on marketing investment: (Revenue - Marketing Cost) / Marketing Cost. Track at campaign and channel levels. Consider short-term direct response and long-term brand building. Use multi-touch attribution for accurate measurement."
+  },
+  "hr_manager": {
+    "HR Fundamentals": "HR manages employee lifecycle: recruitment, onboarding, development, compensation, benefits, performance management, and offboarding. Ensures legal compliance, supports business goals, and promotes positive employee experience.",
+    "Recruitment": "Recruitment attracts and selects qualified candidates. Process: define role requirements, source candidates (job boards, referrals, LinkedIn, recruiters), screen resumes, conduct interviews (phone, technical, behavioral), check references, make offers.",
+    "Onboarding": "Onboarding integrates new hires into organization. Effective programs cover paperwork, orientation, job training, cultural integration, and 30/60/90 day check-ins. Good onboarding improves retention, productivity, and engagement.",
+    "Labor Laws": "Labor laws govern employment relationships, covering minimum wage, overtime, discrimination, harassment, leave (FMLA, ADA), workplace safety (OSHA), and termination. Compliance prevents legal issues and protects employees.",
+    "Performance Reviews": "Performance reviews assess employee performance against goals and competencies. Conduct regularly (quarterly or annually). Provide specific feedback, recognize achievements, identify development areas. Use reviews for promotion and compensation decisions.",
+    "Talent Acquisition": "Talent acquisition strategically attracts, identifies, and hires talent aligned with long-term business needs. Goes beyond recruitment to include employer branding, talent pipelining, succession planning, and retention strategies.",
+    "Compensation Planning": "Compensation includes base salary, bonuses, equity, and benefits. Competitive compensation attracts and retains talent. Consider market rates, internal equity, performance, and budget. Total compensation statements show full value.",
+    "Employee Relations": "Employee relations maintains positive workplace climate through conflict resolution, grievance handling, policy enforcement, and employee engagement initiatives. Addresses concerns promptly and fairly.",
+    "Training Programs": "Training programs develop employee skills through orientation, technical training, leadership development, and compliance training. Assess needs, design programs, deliver content, and evaluate effectiveness. Supports career growth and business needs.",
+    "HR Analytics": "HR analytics uses data to inform decisions about hiring, retention, performance, and engagement. Track metrics like time-to-hire, cost-per-hire, turnover rate, employee satisfaction, and training ROI. Identify trends and predict outcomes.",
+    "Strategic HR": "Strategic HR aligns people strategy with business strategy. Workforce planning ensures right talent at right time. Organizational design structures teams for success. Culture development reinforces values and behaviors supporting business goals.",
+    "Organizational Development": "Organizational Development improves organizational effectiveness through planned interventions. Includes change management, team development, leadership development, and culture change. Uses diagnostic tools, facilitates workshops, and measures impact.",
+    "Change Management": "Change management helps people adopt new processes, systems, or strategies. Communicate vision, involve stakeholders, address resistance, provide training and support, celebrate quick wins. Follow frameworks like ADKAR or Kotter's 8 steps."
+  },
+  "finance_analyst": {
+    "Financial Statements": "Three core statements: Income Statement (revenue, expenses, profit), Balance Sheet (assets, liabilities, equity at point in time), Cash Flow Statement (cash inflows/outflows). Understand relationships between statements.",
+    "Budgeting": "Budgeting plans future revenues and expenses. Process: review historical data, forecast sales, estimate costs, allocate resources, get approval, monitor actuals vs budget, adjust as needed. Common approaches: zero-based, incremental, activity-based.",
+    "Cash Flow": "Cash flow tracks actual cash movements. Positive cash flow (more in than out) sustains operations. Cash flow statement shows operating, investing, and financing activities. Manage working capital: accounts receivable, inventory, accounts payable.",
+    "Basic Accounting": "Accounting equation: Assets = Liabilities + Equity. Double-entry bookkeeping records debits and credits. Accrual accounting recognizes revenue when earned and expenses when incurred (vs cash basis when cash changes hands).",
+    "Excel for Finance": "Excel performs financial analysis with functions (NPV, IRR, PMT), pivot tables, charts, data tables for sensitivity analysis, and macros for automation. Build financial models, forecasts, and dashboards.",
+    "Financial Modeling": "Financial models project future financial performance. Build assumptions, link to financial statements, perform scenario analysis, calculate valuation metrics. Models inform business decisions on investments, pricing, and strategy.",
+    "Variance Analysis": "Variance analysis compares actual results to budget or prior periods. Identify favorable/unfavorable variances. Investigate root causes. Common variances: volume, price, mix, efficiency. Informs corrective actions.",
+    "Forecasting": "Financial forecasting projects future revenues, expenses, and cash flows. Methods: trend analysis, regression, moving averages, scenario planning. Update regularly with actual results. More accurate short-term than long-term.",
+    "KPIs": "Key Performance Indicators measure business performance. Financial KPIs: revenue growth, gross margin, operating margin, EBITDA, cash conversion cycle, ROI, customer acquisition cost, lifetime value. Track trends and compare to benchmarks.",
+    "Valuation": "Valuation estimates company worth using discounted cash flow (DCF), comparable companies analysis (multiples), or precedent transactions. DCF discounts projected free cash flows to present value using WACC.",
+    "M&A Analysis": "M&A analysis evaluates acquisition targets. Financial due diligence reviews statements, models synergies, values target using DCF and comparables, analyzes deal structure, and estimates returns. Identify risks and opportunities.",
+    "Risk Management": "Financial risk management identifies, assesses, and mitigates risks: market risk (interest rates, currencies, commodities), credit risk (defaults), liquidity risk (cash shortage), operational risk. Use hedging, diversification, and insurance."
+  },
+  "project_manager": {
+    "Project Planning": "Project planning defines scope, objectives, deliverables, timeline, resources, and budget. Create work breakdown structure (WBS), sequence tasks, estimate durations, assign resources. Develop project charter and project plan.",
+    "Task Management": "Task management organizes work through task lists, assignments, dependencies, and deadlines. Tools like Asana, Jira, Monday track tasks, enable collaboration, and visualize progress. Update status regularly.",
+    "Agile Methodology": "Agile delivers value iteratively through short cycles (sprints). Principles: customer collaboration, responding to change, working software. Frameworks: Scrum (sprints, daily standups, retrospectives), Kanban (visual boards, WIP limits).",
+    "Risk Management": "Risk management identifies potential issues, assesses probability and impact, plans responses (avoid, mitigate, transfer, accept), and monitors. Maintain risk register. Proactive risk management prevents crises.",
+    "Stakeholder Management": "Stakeholder management identifies who affects/is affected by project, analyzes interests and influence, plans communication, manages expectations, and maintains relationships. Keep stakeholders informed and engaged.",
+    "Scrum": "Scrum framework includes roles (Product Owner, Scrum Master, Development Team), artifacts (Product Backlog, Sprint Backlog, Increment), and ceremonies (Sprint Planning, Daily Standup, Sprint Review, Retrospective). Time-boxed sprints deliver working increments.",
+    "Portfolio Management": "Portfolio management optimizes collection of projects/programs aligned with strategy. Prioritize based on strategic fit, resources, dependencies, and risk. Balance across types, risk levels, and timelines. Maximize overall value.",
+    "Change Management": "Project change management processes requests, assesses impacts (scope, time, cost, quality, risk), approves or rejects changes, and updates plans. Change control board reviews significant changes. Prevents scope creep.",
+    "PMO": "Project Management Office (PMO) provides governance, standardizes processes, manages resources, supports project managers, and reports to leadership. Types: supportive (consultative), controlling (compliance), directive (owns projects)."
+  },
+  "teacher": {
+    "Lesson Planning": "Lesson planning structures learning experiences. Components: learning objectives (what students will know/do), activities aligned with objectives, materials needed, assessment methods, differentiation strategies. Plan sequences building toward mastery.",
+    "Classroom Management": "Classroom management creates productive learning environment through clear expectations, consistent routines, positive relationships, engaging lessons, and appropriate consequences. Proactive management prevents disruptions.",
+    "Assessment Basics": "Assessments measure student learning. Formative assessments (quizzes, discussions, exit tickets) inform instruction during learning. Summative assessments (tests, projects) evaluate learning at end. Use varied assessment methods.",
+    "Student Engagement": "Student engagement increases learning through active participation. Strategies: questioning techniques, collaborative learning, hands-on activities, real-world connections, student choice, and technology integration. Monitor engagement and adjust instruction.",
+    "Learning Objectives": "Learning objectives state what students will know or do by lesson end. Use SMART criteria: Specific, Measurable, Achievable, Relevant, Time-bound. Begin with action verbs from Bloom's taxonomy. Align assessments with objectives.",
+    "Differentiated Instruction": "Differentiation meets diverse student needs through varying content (what), process (how), product (demonstration of learning), or environment. Use readiness, interest, and learning profile to differentiate. Flexible grouping supports differentiation.",
+    "Technology Integration": "Technology enhances learning through interactive lessons, online resources, collaboration tools, adaptive software, and digital portfolios. SAMR model: Substitution, Augmentation, Modification, Redefinition. Technology serves pedagogical goals.",
+    "Curriculum Design": "Curriculum design plans learning experiences achieving standards. Backward design starts with desired results (standards/objectives), determines acceptable evidence (assessments), then plans learning experiences. Ensure scope, sequence, and coherence.",
+    "Formative Assessment": "Formative assessment checks understanding during learning to guide instruction. Strategies: questioning, observations, exit tickets, peer assessment, self-assessment. Provide immediate feedback. Adjust instruction based on results.",
+    "Data-Driven Instruction": "Data-driven instruction uses assessment data to inform teaching decisions. Analyze student work, test results, and observation data to identify strengths, gaps, and patterns. Group students by needs. Targeted interventions address gaps.",
+    "Special Education": "Special education serves students with disabilities through Individualized Education Programs (IEPs) specifying goals, services, accommodations, and modifications. Use evidence-based interventions. Collaborate with special education teachers, therapists, families.",
+    "Instructional Coaching": "Instructional coaching supports teacher development through observation, feedback, modeling, co-planning, and co-teaching. Build trust, ask questions, honor teacher expertise. Focus on student learning and teacher growth goals."
+  },
+  "registered_nurse": {
+    "Patient Care": "Nurses assess patient conditions, administer medications, monitor vital signs, provide treatments, educate patients/families, and coordinate care. Document thoroughly. Patient safety is paramount. Use clinical judgment and evidence-based practice.",
+    "Medical Terminology": "Medical terminology uses root words, prefixes, and suffixes to describe anatomy, conditions, procedures, and medications. Essential for communication, documentation, and understanding orders. Common roots: cardi- (heart), pneum- (lung), gastr- (stomach).",
+    "Pharmacology": "Pharmacology studies drug actions, uses, side effects, and interactions. Know classifications (antibiotics, antihypertensives, analgesics), routes of administration, dosage calculations, and safe practices. Five rights: right patient, drug, dose, route, time.",
+    "Vital Signs": "Vital signs (temperature, pulse, respiration, blood pressure, oxygen saturation, pain) indicate patient status. Normal ranges vary by age. Document trends. Abnormal vitals require assessment and intervention.",
+    "Infection Control": "Infection control prevents disease transmission through hand hygiene, personal protective equipment (PPE), aseptic technique, isolation precautions, and environmental cleaning. Standard precautions apply to all patients.",
+    "IV Therapy": "IV therapy delivers fluids, medications, blood products, and nutrition intravenously. Skills: IV insertion, site assessment, flow rate calculation, recognizing complications (infiltration, phlebitis). Maintain sterile technique.",
+    "Critical Thinking": "Nursing critical thinking analyzes patient data, recognizes patterns, prioritizes problems, anticipates complications, and makes sound clinical judgments. Use nursing process: assessment, diagnosis, planning, implementation, evaluation.",
+    "Wound Care": "Wound care promotes healing through assessment (size, depth, drainage, tissue type), cleaning, debridement, appropriate dressings, and monitoring for infection. Understand wound healing stages and factors affecting healing.",
+    "Emergency Response": "Emergency response includes rapid assessment, cardiopulmonary resuscitation (CPR), Basic Life Support (BLS), managing airways, recognizing cardiac rhythms, defibrillation, and emergency medications. Stay calm and follow protocols.",
+    "Patient Education": "Patient education empowers patients to manage health through teaching about conditions, medications, procedures, diet, and lifestyle modifications. Assess learning needs, use teach-back method, provide written materials."
+  },
+  "physician": {
+    "Diagnosis": "Diagnosis identifies disease/condition through patient history, physical examination, diagnostic tests, and clinical reasoning. Differential diagnosis lists possible conditions. Rule out serious conditions first. Evidence-based diagnosis uses best research.",
+    "Treatment Planning": "Treatment planning considers diagnosis, patient preferences, comorbidities, contraindications, and resources. Evidence-based medicine uses current research. Shared decision-making involves patients. Monitor treatment effectiveness and adjust as needed.",
+    "Medical Ethics": "Medical ethics guides practice: autonomy (patient choice), beneficence (do good), non-maleficence (do no harm), justice (fair distribution). Informed consent, confidentiality, end-of-life decisions. Ethics committees help with dilemmas.",
+    "Clinical Reasoning": "Clinical reasoning combines medical knowledge, patient data, and experience to diagnose and treat. Hypothetico-deductive reasoning generates and tests hypotheses. Pattern recognition identifies familiar presentations. Reflection improves reasoning.",
+    "Evidence-Based Medicine": "Evidence-based medicine integrates best research evidence, clinical expertise, and patient values. Hierarchy of evidence: systematic reviews/meta-analyses, randomized controlled trials, cohort studies, case series, expert opinion. Appraise quality critically.",
+    "Prescribing": "Prescribing requires knowledge of indications, contraindications, dosing, side effects, interactions, and monitoring. Consider patient factors (age, renal/hepatic function, allergies, pregnancy). Educate patients. Avoid polypharmacy.",
+    "Differential Diagnosis": "Differential diagnosis lists possible causes of symptoms. Start broad, narrow based on history/exam/tests. Consider life-threatening conditions first. Probability based on epidemiology and patient characteristics. Cognitive errors lead to diagnostic mistakes.",
+    "Procedures": "Medical procedures require proper indications, informed consent, sterile technique, precise execution, and complication management. Common procedures: suturing, joint aspiration, intubation, central lines. Simulation improves skills.",
+    "Quality Improvement": "Quality improvement systematically enhances care through Plan-Do-Study-Act (PDSA) cycles. Measure current performance, identify causes of variation, implement changes, assess impact. Use checklists, protocols, and evidence-based practices."
+  },
+  "pharmacist": {
+    "Drug Interactions": "Drug interactions occur when one drug affects another's activity. Pharmacokinetic interactions affect absorption, distribution, metabolism, or excretion. Pharmacodynamic interactions affect drug effects. Check for interactions before dispensing.",
+    "Dispensing": "Dispensing ensures right medication, dose, patient, route, and time. Verify prescription, check interactions/allergies, counsel patient on use/side effects/storage, label accurately. Documentation and patient education are critical.",
+    "Medication Therapy Management": "MTM optimizes medication use through comprehensive medication reviews, identifying drug-related problems (inappropriate, ineffective, dosing errors, adverse effects, non-adherence), creating action plans, and follow-up.",
+    "Clinical Pharmacy": "Clinical pharmacists work in healthcare teams to manage medications, adjust dosing, monitor therapeutic drug levels, recommend alternatives, and educate patients/providers. Requires understanding of pathophysiology and therapeutics.",
+    "Compounding": "Compounding creates customized medications when commercial products don't meet patient needs. Requires calculations, sterile/non-sterile technique, quality control, and documentation. Follow USP standards.",
+    "Patient Counseling": "Patient counseling ensures patients understand medication purpose, dosing, administration, side effects, storage, and interactions. Use teach-back method. Address concerns and barriers to adherence. Provide written information."
+  },
+  "physical_therapist": {
+    "Assessment": "PT assessment includes patient history, observation, palpation, range of motion, strength testing, functional tests, and special tests. Identify impairments, activity limitations, and participation restrictions. Diagnosis guides treatment.",
+    "Therapeutic Exercise": "Therapeutic exercise improves strength, flexibility, endurance, balance, and coordination through progressive, individualized programs. Prescribe appropriate type (isometric, isotonic, isokinetic), intensity, duration, and frequency.",
+    "Manual Therapy": "Manual therapy uses hands-on techniques (joint mobilization, soft tissue mobilization, massage) to reduce pain, improve mobility, and facilitate movement. Requires understanding of anatomy, biomechanics, and contraindications.",
+    "Rehabilitation": "Rehabilitation restores function after injury, surgery, or illness. Progressive program addresses impairments, activities, and participation. Set goals with patient. Use evidence-based interventions. Progress based on response.",
+    "Movement Analysis": "Movement analysis observes and measures how people move to identify dysfunction, compensations, and asymmetries. Assess gait, posture, and functional movements. Video analysis enhances assessment. Guides treatment planning.",
+    "Pain Management": "PT pain management uses modalities (heat, cold, ultrasound, electrical stimulation), manual therapy, therapeutic exercise, and patient education. Understand pain mechanisms. Multimodal approach most effective."
+  },
+  "medical_lab_technician": {
+    "Laboratory Testing": "Lab tests analyze blood, urine, tissue, and other specimens to diagnose and monitor conditions. Follow standardized procedures, maintain quality control, troubleshoot problems, and report results accurately and timely.",
+    "Quality Control": "Quality control ensures test accuracy and precision through calibration, control samples, proficiency testing, and troubleshooting. Document results. Address out-of-range controls before patient testing.",
+    "Specimen Collection": "Proper specimen collection affects result accuracy. Verify patient identity, use correct tube/container, follow collection procedure, label immediately, ensure timely transport, and document collection.",
+    "Microscopy": "Microscopy examines cells, microorganisms, and crystals under magnification. Prepare slides properly, adjust magnification, recognize normal vs abnormal findings. Used in hematology, urinalysis, and microbiology.",
+    "Safety Protocols": "Lab safety includes personal protective equipment, biohazard disposal, chemical handling, spill cleanup, and equipment safety. Follow OSHA standards. Report exposures immediately."
+  },
+  "radiologic_technologist": {
+    "Radiation Safety": "Radiation safety protects patients, staff, and public through ALARA principle (As Low As Reasonably Achievable). Use proper techniques, shielding, distance, and time. Monitor exposure with dosimeters.",
+    "Imaging Techniques": "Imaging modalities include X-ray, CT, MRI, ultrasound, and fluoroscopy. Each has specific indications, contraindications, and protocols. Position patients correctly, select appropriate parameters, and ensure image quality.",
+    "Patient Positioning": "Proper positioning ensures diagnostic images while minimizing radiation exposure. Consider patient comfort, safety, and mobility limitations. Use positioning aids and immobilization devices as needed.",
+    "Image Quality": "Image quality depends on positioning, technical factors (kVp, mAs), patient preparation, and equipment. Assess images for diagnostic quality. Repeat when necessary but minimize patient exposure.",
+    "Cross-Sectional Anatomy": "Understanding anatomy in multiple planes (axial, sagittal, coronal) is essential for interpreting CT and MRI. Recognize normal anatomy and common variants."
+  },
+  "respiratory_therapist": {
+    "Oxygen Therapy": "Oxygen therapy treats hypoxemia through nasal cannula, masks, or high-flow systems. Monitor oxygen saturation, adjust FiO2, assess response. Know risks: oxygen toxicity, CO2 retention in COPD.",
+    "Ventilator Management": "Mechanical ventilation supports breathing. Modes include assist-control, SIMV, pressure support. Monitor settings, patient synchrony, and complications (barotrauma, VALI). Wean when ready.",
+    "Airway Management": "Airway management ensures patent airway through positioning, suctioning, oral/nasal airways, or advanced airways (endotracheal tube, tracheostomy). Assess need, use proper technique, monitor for complications.",
+    "Pulmonary Function Testing": "PFT measures lung volumes, capacities, and flow rates. Spirometry assesses obstruction and restriction. Interpret results considering patient effort, technique, and reference values.",
+    "ABG Interpretation": "Arterial blood gas (ABG) analyzes pH, PaCO2, PaO2, HCO3, and SaO2. Interpret acid-base status: respiratory acidosis/alkalosis, metabolic acidosis/alkalosis, compensation. Guide oxygen and ventilator management."
+  },
+  "occupational_therapist": {
+    "Activities of Daily Living": "ADL assessment and training help patients perform self-care (bathing, dressing, feeding, toileting, grooming). Use adaptive equipment, compensatory strategies, and environmental modifications.",
+    "Adaptive Equipment": "Adaptive equipment enables independence: reachers, sock aids, dressing sticks, built-up handles, shower chairs. Assess needs, recommend devices, train use, and ensure safety.",
+    "Sensory Integration": "Sensory integration therapy addresses how nervous system processes sensory information. Used for autism, ADHD, sensory processing disorders. Activities provide controlled sensory input to improve function.",
+    "Hand Therapy": "Hand therapy treats hand injuries, arthritis, nerve compression, and burns. Use splinting, exercises, modalities, and functional training. Understand anatomy and biomechanics.",
+    "Cognitive Rehabilitation": "Cognitive rehabilitation improves attention, memory, executive function, and problem-solving after brain injury or stroke. Use compensatory strategies, repetitive practice, and functional tasks."
+  },
+  "dental_hygienist": {
+    "Oral Hygiene": "Oral hygiene prevents disease through proper brushing (twice daily, 2 minutes), flossing (daily), and mouthwash. Educate patients on technique, frequency, and product selection.",
+    "Periodontal Disease": "Periodontal disease (gingivitis, periodontitis) results from plaque accumulation. Assess using periodontal probing, bleeding, and radiographs. Treatment includes scaling, root planing, and patient education.",
+    "Scaling and Root Planing": "Scaling removes calculus and plaque above and below gumline. Root planing smooths root surfaces. Use hand instruments and ultrasonic scalers. Local anesthesia for comfort.",
+    "Dental Radiography": "Dental radiographs detect caries, bone loss, and pathology. Types: bitewing, periapical, panoramic. Follow radiation safety, proper technique, and positioning.",
+    "Patient Education": "Educate patients on oral hygiene, diet (limit sugar), fluoride use, tobacco cessation, and regular dental visits. Tailor to age, risk factors, and comprehension level."
+  },
+  "medical_sonographer": {
+    "Ultrasound Physics": "Ultrasound uses high-frequency sound waves. Understanding frequency, wavelength, attenuation, reflection, refraction, and artifacts is essential for image optimization and interpretation.",
+    "Scanning Techniques": "Scanning techniques vary by organ system. Use appropriate transducer, patient positioning, and scanning planes. Optimize image quality through gain, depth, and focus adjustments.",
+    "Anatomy and Physiology": "Sonographers must recognize normal anatomy and variants in all planes. Understand organ function, vascular anatomy, and common pathology.",
+    "Doppler Imaging": "Doppler ultrasound assesses blood flow direction and velocity. Color Doppler shows flow, spectral Doppler quantifies. Angle correction improves accuracy. Detects stenosis, thrombosis, and shunts.",
+    "Patient Care": "Provide clear instructions, position comfortably, maintain privacy, and explain procedure. Adapt to patient limitations (mobility, pain, anxiety). Professional communication is essential."
+  },
+  "accountant": {
+    "Financial Reporting": "Financial reporting prepares accurate financial statements following GAAP or IFRS. Include income statement, balance sheet, cash flow statement, and notes. Stakeholders use reports for decision-making.",
+    "Tax Preparation": "Tax preparation calculates tax liability, completes returns, and ensures compliance with tax laws. Stay current on tax code changes. Identify deductions and credits. File timely.",
+    "Auditing": "Auditing independently examines financial statements and controls to provide assurance. Internal audits assess internal controls. External audits verify financial statement accuracy. Use audit standards (GAAS).",
+    "Cost Accounting": "Cost accounting tracks production costs to inform pricing, budgeting, and profitability analysis. Methods: job costing, process costing, activity-based costing. Analyze variances between actual and standard costs.",
+    "Reconciliation": "Reconciliation compares two sets of records to ensure they match. Bank reconciliations verify cash balances. Account reconciliations detect errors and irregularities. Reconcile regularly."
+  },
+  "investment_banker": {
+    "Financial Modeling": "Financial models project cash flows, value companies, and analyze deals. Build detailed assumptions, link financial statements, perform sensitivity analysis. Models support M&A, IPOs, and capital raises.",
+    "Valuation": "Valuation estimates company worth using discounted cash flow (intrinsic value), comparable companies (multiples), and precedent transactions. Adjust for synergies, control premiums, and market conditions.",
+    "Mergers and Acquisitions": "M&A bankers advise on buy-side and sell-side transactions. Services: target identification, valuation, deal structuring, negotiation, due diligence, and financing. Maximize client value.",
+    "Capital Markets": "Capital markets raise funds through equity (IPOs, follow-ons) and debt (bonds, loans). Understand market conditions, investor appetite, pricing, and regulatory requirements (SEC filings).",
+    "Due Diligence": "Due diligence investigates target companies through financial, legal, operational, and commercial analysis. Identify risks, synergies, and integration issues. Findings inform valuation and deal structure.",
+    "Pitch Books": "Pitch books present investment banking services and analysis to prospective clients. Include company overview, market analysis, valuation, transaction rationale, and credentials. Clear, compelling visual presentation."
+  },
+  "financial_planner": {
+    "Retirement Planning": "Retirement planning determines savings needed to maintain lifestyle. Calculate retirement income needs, project Social Security/pension, recommend savings rate and asset allocation. Consider tax-advantaged accounts (401k, IRA).",
+    "Investment Planning": "Investment planning aligns portfolio with goals, time horizon, and risk tolerance. Diversify across asset classes (stocks, bonds, real estate, alternatives). Rebalance periodically. Minimize taxes and fees.",
+    "Tax Planning": "Tax planning minimizes taxes through timing income/deductions, using tax-advantaged accounts, tax-loss harvesting, and charitable giving. Consider current and future tax brackets. Plan for tax-efficient withdrawals.",
+    "Estate Planning": "Estate planning transfers assets according to wishes while minimizing taxes. Wills, trusts, beneficiary designations, powers of attorney, healthcare directives. Update with life changes.",
+    "Risk Management": "Risk management protects wealth through appropriate insurance: life, disability, long-term care, property/casualty, liability. Balance coverage needs with affordability."
+  },
+  "business_analyst": {
+    "Requirements Gathering": "Requirements gathering elicits stakeholder needs through interviews, workshops, observation, and document analysis. Document functional and non-functional requirements clearly and completely.",
+    "Process Improvement": "Process improvement identifies inefficiencies and designs better processes. Use process mapping, data analysis, benchmarking, and root cause analysis. Implement changes and measure impact.",
+    "Data Analysis": "Data analysis extracts insights using SQL, Excel, visualization tools (Tableau), and statistics. Clean data, explore patterns, test hypotheses, and communicate findings clearly.",
+    "Stakeholder Management": "Stakeholder management identifies who affects/is affected by project, analyzes needs and influence, and communicates appropriately. Build relationships, manage expectations, resolve conflicts.",
+    "Business Case Development": "Business cases justify projects by documenting problem, solution options, costs/benefits, risks, and recommendations. Financial analysis (NPV, ROI, payback) supports decisions.",
+    "Use Case Development": "Use cases describe system functionality from user perspective. Include actors, preconditions, main flow, alternative flows, and postconditions. Use cases guide development and testing."
+  },
+  "management_consultant": {
+    "Problem Solving": "Consulting problem solving structures complex problems, generates hypotheses, analyzes data, and synthesizes recommendations. Use frameworks (Porter's Five Forces, SWOT, BCG matrix) as starting points.",
+    "Client Management": "Client management builds trust, manages expectations, communicates progress, and delivers results. Understand client culture and politics. Address concerns proactively.",
+    "Data Analysis": "Consultants analyze data to support recommendations. Use Excel, SQL, visualization, and statistics. Ensure data quality. Look for patterns and outliers. Tell story with data.",
+    "Presentation Skills": "Consultants communicate findings through clear, concise presentations. Structure logically (situation, complication, resolution). Use visuals effectively. Practice delivery. Anticipate questions.",
+    "Change Management": "Consultants help organizations implement recommendations through change management: build case for change, create vision, develop plan, communicate, empower action, generate quick wins, sustain momentum.",
+    "Industry Analysis": "Industry analysis evaluates competitive dynamics, trends, regulatory environment, and economics. Use Porter's Five Forces: rivalry, threat of new entrants, substitutes, buyer power, supplier power."
+  },
+  "real_estate_agent": {
+    "Property Valuation": "Property valuation estimates market value using comparable sales (comps), cost approach, or income approach (rental properties). Adjust for differences in size, location, condition, features.",
+    "Negotiation": "Real estate negotiation balances client interests with deal feasibility. Understand buyer/seller motivations, market conditions, and alternatives. Create win-win solutions. Maintain professionalism.",
+    "Marketing": "Property marketing attracts buyers through professional photos, staging, virtual tours, online listings (MLS, Zillow), social media, open houses, and print materials. Highlight unique features.",
+    "Client Relations": "Client relations builds trust through responsiveness, expertise, honesty, and results. Communicate regularly. Understand needs. Manage expectations. Provide excellent service.",
+    "Real Estate Law": "Agents must understand contracts, disclosures, fair housing laws, agency relationships, and title issues. Work with attorneys for complex matters. Protect clients legally."
+  },
+  "operations_manager": {
+    "Process Optimization": "Process optimization improves efficiency, quality, and cost through lean manufacturing, Six Sigma, and continuous improvement. Eliminate waste, reduce variation, and streamline workflows.",
+    "Supply Chain Management": "Supply chain management coordinates flow of materials from suppliers through production to customers. Optimize inventory levels, supplier relationships, logistics, and demand forecasting.",
+    "Quality Control": "Quality control ensures products meet standards through inspection, testing, and statistical process control. Identify defects, root causes, and corrective actions. Prevent defects proactively.",
+    "Capacity Planning": "Capacity planning ensures resources (equipment, labor, space) meet demand. Forecast demand, assess current capacity, identify gaps, and plan expansions or reductions. Balance cost and flexibility.",
+    "Lean Manufacturing": "Lean eliminates waste (overproduction, waiting, transportation, inventory, motion, over-processing, defects) to improve flow and value. Tools: 5S, value stream mapping, kanban, kaizen.",
+    "Project Management": "Operations managers lead projects improving operations. Define scope, plan, execute, monitor, and close. Manage resources, schedule, budget, and risks. Deliver on time and budget."
+  },
+  "sales_manager": {
+    "Sales Strategy": "Sales strategy defines target markets, value proposition, sales process, channels, and goals aligned with business objectives. Analyze market, competitors, and customer needs.",
+    "Team Leadership": "Sales leaders motivate, coach, and develop team members. Set clear expectations, provide feedback, recognize achievements, address performance issues. Lead by example.",
+    "Pipeline Management": "Pipeline management tracks opportunities through sales stages. Forecast revenue based on pipeline value and conversion rates. Identify stuck deals and coach reps to advance opportunities.",
+    "CRM Systems": "CRM systems (Salesforce, HubSpot) manage customer relationships through contact management, opportunity tracking, activity logging, and reporting. Ensure data quality and adoption.",
+    "Compensation Planning": "Sales compensation balances base salary and variable pay (commission, bonuses) to motivate performance. Align with goals. Keep simple and transparent. Competitive with market.",
+    "Sales Training": "Sales training develops skills in prospecting, qualifying, presenting, handling objections, and closing. Product knowledge, industry expertise, and CRM proficiency are essential."
+  },
+  "customer_success_manager": {
+    "Onboarding": "Customer onboarding ensures successful product adoption through structured process: kickoff, setup, training, and ongoing support. Set expectations, celebrate milestones, address issues promptly.",
+    "Relationship Building": "Customer success builds trusted relationships through regular check-ins, understanding business goals, anticipating needs, and demonstrating value. Be proactive, not reactive.",
+    "Product Adoption": "Drive product adoption by training users, sharing best practices, highlighting underused features, and removing barriers. Track usage metrics and engagement.",
+    "Renewal Management": "Renewal management retains customers by demonstrating value, addressing concerns, negotiating terms, and ensuring satisfaction. Start renewal conversations early. Track renewal rates.",
+    "Customer Health Scoring": "Customer health scoring predicts risk and identifies expansion opportunities using metrics: product usage, support tickets, NPS, engagement, and relationship quality.",
+    "Upselling": "Upselling grows accounts by identifying opportunities for additional products/features that deliver value. Understand customer needs, demonstrate ROI, and time appropriately."
+  },
+  "supply_chain_analyst": {
+    "Demand Forecasting": "Demand forecasting predicts future demand using historical data, trends, seasonality, and market intelligence. Methods: time series, regression, and machine learning. Accuracy improves planning.",
+    "Inventory Management": "Inventory management balances stock availability with holding costs. Determine reorder points, safety stock, and economic order quantities. Use ABC analysis to prioritize.",
+    "Logistics Optimization": "Logistics optimization minimizes transportation and warehousing costs while meeting service levels. Optimize routes, modes, carriers, and warehouse locations. Use logistics software.",
+    "Supplier Performance": "Supplier performance management evaluates quality, delivery, cost, and responsiveness. Use scorecards, conduct audits, provide feedback. Develop improvement plans.",
+    "Data Analytics": "Supply chain analysts use data to identify inefficiencies, forecast demand, optimize inventory, and measure performance. SQL, Excel, Tableau, and Python are common tools."
+  },
+  "graphic_designer": {
+    "Design Principles": "Design principles guide visual communication: contrast (emphasize differences), repetition (consistency), alignment (organize elements), proximity (group related items). Balance, hierarchy, and white space improve clarity.",
+    "Typography": "Typography affects readability and mood. Choose fonts matching content and brand. Pair complementary fonts (serif + sans-serif). Consider size, spacing, and hierarchy. Limit to 2-3 fonts.",
+    "Color Theory": "Color theory explains relationships between colors. Color wheel shows complementary (opposite), analogous (adjacent), and triadic (evenly spaced) schemes. Colors evoke emotions and create mood.",
+    "Adobe Creative Suite": "Designers use Adobe tools: Photoshop (photo editing), Illustrator (vector graphics), InDesign (page layout), XD (UI/UX). Master essential tools and techniques in primary software.",
+    "Layout Design": "Layout design organizes content visually using grids, hierarchy, and composition. Guide eye flow, balance elements, and create visual interest while maintaining functionality.",
+    "Branding": "Branding creates cohesive visual identity through logo, colors, typography, imagery, and style guidelines. Consistent branding builds recognition and communicates values."
+  },
+  "video_editor": {
+    "Editing Software": "Video editors use Adobe Premiere Pro, Final Cut Pro, or DaVinci Resolve. Master timeline editing, transitions, effects, color correction, audio mixing, and export settings.",
+    "Storytelling": "Video storytelling engages viewers through narrative structure: setup (introduce), conflict (build tension), resolution (conclude). Pacing, shot selection, and music support story.",
+    "Color Grading": "Color grading creates mood and consistency through adjusting colors, contrast, and saturation. Use scopes (waveform, vectorscope) for accuracy. Maintain skin tones.",
+    "Audio Editing": "Audio quality affects viewer experience. Mix dialogue, music, and sound effects at appropriate levels. Remove noise, add ambient sound, and ensure clarity.",
+    "Motion Graphics": "Motion graphics add dynamic titles, lower thirds, and transitions using After Effects or Premiere. Animate text and graphics to enhance storytelling.",
+    "Video Formats": "Understand codecs (H.264, ProRes), resolutions (1080p, 4K), frame rates (24fps cinematic, 30fps standard, 60fps smooth), and aspect ratios (16:9, 9:16 vertical)."
+  },
+  "photographer": {
+    "Exposure": "Exposure depends on aperture (lens opening), shutter speed (exposure duration), and ISO (sensor sensitivity). Exposure triangle balances these for correct brightness. Wider aperture (f/2.8) = shallower depth of field.",
+    "Composition": "Composition arranges visual elements using rules: rule of thirds (place subjects off-center), leading lines (guide eye), framing (natural frames), symmetry, and patterns.",
+    "Lighting": "Lighting affects mood and quality. Natural light (soft, flattering) vs artificial light (controlled). Three-point lighting: key light (main), fill light (soften shadows), back light (separation).",
+    "Post-Processing": "Post-processing enhances photos through Lightroom or Photoshop. Adjust exposure, contrast, colors, sharpness. Remove distractions. Maintain natural look unless creative effect intended.",
+    "Portrait Photography": "Portrait photography captures personality. Direct subjects, use flattering angles, control depth of field, and create connection with subject. Natural expressions beat forced smiles.",
+    "Commercial Photography": "Commercial photography serves business needs: product photos (clean, accurate), real estate (wide angle, well-lit), headshots (professional), and marketing (align with brand)."
+  },
+  "content_writer": {
+    "SEO Writing": "SEO writing ranks content in search results through keyword research (target search terms), strategic keyword placement (titles, headers, first paragraph), internal linking, and readability.",
+    "Copywriting": "Copywriting persuades readers to act through compelling headlines, benefits-focused content, emotional appeals, clear calls-to-action, and addressing objections.",
+    "Content Strategy": "Content strategy plans topics aligned with audience needs and business goals. Editorial calendar schedules content. Distribution across channels maximizes reach.",
+    "Editing": "Editing improves content clarity, flow, grammar, and consistency. Self-edit first. Read aloud. Check facts. Use tools (Grammarly) but don't rely solely on them.",
+    "Storytelling": "Storytelling engages readers through narrative: characters (relatable), conflict (challenges), resolution (outcomes). Stories are memorable and persuasive.",
+    "Brand Voice": "Brand voice reflects company personality through word choice, tone, and style. Consistent voice builds recognition. Adapt tone (formal vs casual) to context while maintaining voice."
+  },
+  "social_media_manager": {
+    "Content Creation": "Create engaging content (posts, images, videos, stories) tailored to each platform. Mix content types: educational, entertaining, promotional. Visual content performs best.",
+    "Community Management": "Community management engages followers through responding to comments/messages, moderating discussions, highlighting user content, and building relationships. Authentic engagement builds loyalty.",
+    "Analytics": "Track metrics: reach (audience size), engagement (likes, comments, shares), clicks, conversions. Use platform analytics and Google Analytics. Data informs strategy.",
+    "Platform Strategy": "Each platform serves different purposes: Instagram (visual, lifestyle), LinkedIn (professional, B2B), TikTok (short video, young), Facebook (broad reach), Twitter (news, real-time).",
+    "Paid Social Advertising": "Paid social amplifies reach through sponsored posts, stories ads, and campaigns. Target by demographics, interests, behaviors. A/B test creative and targeting.",
+    "Influencer Marketing": "Influencer marketing partners with influencers to reach audiences. Identify relevant influencers, negotiate terms, provide guidelines, track performance. Authentic partnerships work best."
+  },
+  "journalist": {
+    "News Writing": "News writing delivers facts clearly and concisely. Inverted pyramid: most important information first. Answer who, what, when, where, why, how. Objective tone. Verify facts.",
+    "Interviewing": "Interviewing gathers information and quotes. Prepare questions, build rapport, listen actively, ask follow-ups, verify spelling/titles. Record with permission.",
+    "Research": "Journalism research verifies facts through multiple credible sources, public records, databases, and expert interviews. Cross-check information. Document sources.",
+    "Ethics": "Journalism ethics require accuracy, fairness, independence, and minimizing harm. Verify information, present multiple perspectives, disclose conflicts of interest, protect sources.",
+    "Investigative Reporting": "Investigative reporting uncovers hidden issues through deep research, document analysis, source cultivation, and persistence. Verify everything. Understand legal protections and risks.",
+    "Multimedia Storytelling": "Modern journalism combines text, photos, video, audio, graphics, and interactive elements. Choose formats serving story. Mobile-first design."
+  },
+  "public_relations_specialist": {
+    "Media Relations": "Media relations builds relationships with journalists through pitches, press releases, interviews, and events. Know reporter beats, provide value, be responsive and credible.",
+    "Crisis Management": "Crisis management protects reputation during emergencies. Prepare crisis plan, respond quickly with facts, show empathy, provide updates, monitor sentiment. Honesty and transparency build trust.",
+    "Press Releases": "Press releases announce newsworthy information to media. Include strong headline, lead paragraph (who, what, when, where, why), quotes, boilerplate. Follow AP style.",
+    "Brand Reputation": "Brand reputation management monitors mentions, responds to feedback, addresses negative sentiment, and amplifies positive content. Online reputation affects business success.",
+    "Event Planning": "PR events (product launches, press conferences, community events) generate publicity. Plan logistics, invite media, prepare materials, execute smoothly, follow up.",
+    "Messaging": "Messaging articulates key points consistently across communications. Develop talking points, anticipate questions, train spokespeople. Message discipline maintains consistency."
+  },
+  "web_developer": {
+    "HTML/CSS": "HTML structures content (headings, paragraphs, links, images). CSS styles appearance (colors, fonts, layout). Semantic HTML improves accessibility and SEO. Responsive design adapts to screen sizes.",
+    "JavaScript": "JavaScript adds interactivity through DOM manipulation, event handling, and dynamic content. Modern frameworks (React, Vue, Angular) build complex applications.",
+    "Frontend Frameworks": "Frontend frameworks provide structure and components for building UIs. React (component-based, virtual DOM), Vue (progressive, flexible), Angular (full-featured, TypeScript). Choose based on project needs.",
+    "Backend Development": "Backend handles server logic, databases, authentication, and APIs. Languages: JavaScript (Node.js), Python (Django, Flask), Ruby (Rails), PHP (Laravel). Choose based on requirements and team expertise.",
+    "Responsive Design": "Responsive design adapts layouts to screen sizes using flexible grids, media queries, and fluid images. Mobile-first approach designs for small screens first, then enhances for larger screens.",
+    "Web Performance": "Web performance affects user experience and SEO. Optimize images, minify code, enable caching, use CDNs, lazy load content. Measure with Google PageSpeed Insights.",
+    "Version Control": "Version control (Git) tracks code changes, enables collaboration, and maintains code history. Use branches for features, commit frequently with clear messages, and review pull requests."
+  },
+  "animator": {
+    "Animation Principles": "12 principles of animation: squash and stretch, anticipation, staging, straight ahead/pose to pose, follow through, slow in/out, arcs, secondary action, timing, exaggeration, solid drawing, appeal.",
+    "2D Animation": "2D animation creates movement through sequential drawings or digital art. Frame-by-frame (traditional), digital (After Effects), or software (Toon Boom). Understand timing and spacing.",
+    "3D Modeling": "3D modeling creates objects in 3D software (Maya, Blender, Cinema 4D). Polygon modeling (faces, edges, vertices), sculpting, and procedural modeling. Topology affects animation.",
+    "Rigging": "Rigging creates skeletal structure controlling 3D models. Bones, joints, constraints, and controls enable animation. Good rigs are flexible and animator-friendly.",
+    "Motion Graphics": "Motion graphics animate graphic elements for videos, titles, and interfaces using After Effects. Keyframe animation, expressions, and effects create dynamic visuals.",
+    "Storyboarding": "Storyboarding plans animation through visual sequences showing key frames, camera angles, timing, and action. Guides production and communicates vision."
+  },
+  "game_designer": {
+    "Game Mechanics": "Game mechanics are rules and systems governing gameplay: movement, combat, progression, economy. Mechanics should be intuitive, balanced, and fun. Prototype and playtest early.",
+    "Level Design": "Level design creates game environments through layout, pacing, challenges, rewards. Guide player flow, teach mechanics gradually, provide variety. Test with players.",
+    "User Experience": "Game UX ensures intuitive controls, clear feedback, appropriate difficulty, and smooth onboarding. Remove frustration without removing challenge. Playtest extensively.",
+    "Narrative Design": "Narrative design integrates story with gameplay through characters, dialogue, choices, and environmental storytelling. Story should enhance, not interrupt, gameplay.",
+    "Game Balancing": "Game balancing ensures fair, engaging gameplay through adjusting difficulty, character abilities, item power, economy. Data analysis and player feedback guide balancing.",
+    "Prototyping": "Game prototyping tests mechanics quickly through paper prototypes, simple digital builds, or game engines. Fail fast, iterate frequently. Focus on fun factor."
+  },
+  "mechanical_engineer": {
+    "CAD Design": "CAD (Computer-Aided Design) creates 3D models and technical drawings using SolidWorks, AutoCAD, or CATIA. Parametric modeling enables design changes. Drawings communicate manufacturing specifications.",
+    "Thermodynamics": "Thermodynamics governs heat, work, and energy transfer. Laws: energy conservation, entropy increase. Applications: engines, refrigeration, power plants, HVAC systems.",
+    "Materials Science": "Materials science studies properties of metals, polymers, ceramics, and composites. Select materials based on strength, weight, cost, corrosion resistance, manufacturability.",
+    "Statics and Dynamics": "Statics analyzes forces on stationary objects through free body diagrams and equilibrium equations. Dynamics studies moving objects through kinematics (motion) and kinetics (forces causing motion).",
+    "Manufacturing Processes": "Manufacturing processes transform raw materials into products: machining (cutting), casting (molten metal), forming (plastic deformation), joining (welding). Process selection affects cost, quality, and tolerances.",
+    "FEA": "Finite Element Analysis simulates physical systems to predict stress, deformation, heat transfer, and fluid flow. Validate designs virtually before prototyping. Mesh quality affects accuracy."
+  },
+  "electrical_engineer": {
+    "Circuit Analysis": "Circuit analysis applies Kirchhoff's laws (voltage and current) and Ohm's law to determine voltages, currents, and power in circuits. Use nodal analysis and mesh analysis for complex circuits.",
+    "Power Systems": "Power systems generate, transmit, and distribute electricity. Three-phase power, transformers, transmission lines, protection schemes. Understand AC theory, phasors, and power factor.",
+    "Digital Logic": "Digital logic uses binary signals (0,1) through logic gates (AND, OR, NOT, XOR). Combinational circuits (output depends on current input) vs sequential circuits (output depends on current and past inputs).",
+    "Microcontrollers": "Microcontrollers are small computers on single chip (Arduino, Raspberry Pi). Program in C/C++ or Python. Applications: embedded systems, IoT devices, robotics.",
+    "Signal Processing": "Signal processing analyzes and manipulates signals (audio, image, sensor data). Time domain vs frequency domain. Filtering, Fourier analysis, sampling theory.",
+    "Control Systems": "Control systems maintain desired output through feedback. Open-loop (no feedback) vs closed-loop (feedback). PID controllers widely used. Stability analysis critical."
+  },
+  "civil_engineer": {
+    "Structural Analysis": "Structural analysis determines forces, stresses, and deflections in structures. Methods: statics (equilibrium), strength of materials, finite element analysis. Design for loads: dead, live, wind, seismic.",
+    "Concrete Design": "Concrete design specifies concrete strength, reinforcement (rebar), mix design, and construction methods. Understand concrete behavior: compression strength, creep, shrinkage.",
+    "Geotechnical Engineering": "Geotechnical engineering studies soil and rock for foundations, slopes, retaining walls. Soil properties: strength, settlement, permeability. Site investigation and testing essential.",
+    "Transportation Engineering": "Transportation engineering designs roads, highways, and transit systems. Geometric design, traffic flow, pavement design, intersection control. Safety paramount.",
+    "Water Resources": "Water resources engineering manages water supply, stormwater, wastewater. Hydrology (rainfall-runoff), hydraulics (flow in channels/pipes), water treatment, flood control.",
+    "Project Management": "Civil engineers manage projects: scope, schedule, budget, quality, safety. Coordination with stakeholders. Understand construction methods and contracts."
+  },
+  "chemical_engineer": {
+    "Process Design": "Process design creates chemical manufacturing processes. Mass and energy balances, reaction kinetics, separation processes, heat exchangers, process control. Optimize yield, safety, and cost.",
+    "Thermodynamics": "Chemical thermodynamics determines feasibility and efficiency of processes. Phase equilibria, chemical equilibria, property estimation. Gibbs energy predicts reaction direction.",
+    "Reaction Engineering": "Reaction engineering designs chemical reactors. Reaction kinetics (rates), reactor types (batch, continuous, CSTR, PFR), temperature control, conversion and selectivity optimization.",
+    "Separation Processes": "Separation processes purify products: distillation (vapor-liquid), extraction (liquid-liquid), crystallization (solid-liquid), filtration, membrane separation. Select based on properties and economics.",
+    "Process Control": "Process control maintains desired conditions (temperature, pressure, flow, composition) through sensors, controllers, actuators. Feedback control, PID tuning, cascade control.",
+    "Process Safety": "Process safety prevents accidents in chemical plants. Hazard identification (HAZOP), risk assessment, pressure relief, emergency shutdown systems, safety instrumented systems."
+  },
+  "aerospace_engineer": {
+    "Aerodynamics": "Aerodynamics studies air flow around objects. Bernoulli's principle, lift, drag, Reynolds number, boundary layers. Wind tunnel testing and CFD (Computational Fluid Dynamics) validate designs.",
+    "Flight Mechanics": "Flight mechanics analyzes aircraft motion through forces (lift, weight, thrust, drag) and moments. Stability (returns to equilibrium) and control (pilot input response) critical for safe flight.",
+    "Propulsion": "Propulsion systems generate thrust: jet engines (turbojet, turbofan), rockets (chemical, ion). Thermodynamics, fluid mechanics, and combustion govern propulsion. Specific impulse measures efficiency.",
+    "Structures": "Aircraft structures must be strong yet lightweight. Materials: aluminum alloys, composites (carbon fiber). Stress analysis, fatigue, damage tolerance. Fail-safe and safe-life design philosophies.",
+    "Orbital Mechanics": "Orbital mechanics governs satellite and spacecraft motion. Kepler's laws, orbital elements, trajectory optimization, Hohmann transfer. Understand gravitational forces and orbital perturbations.",
+    "Systems Integration": "Aerospace systems integrate propulsion, structures, avionics, and subsystems. Interface management, verification, and validation ensure integrated system meets requirements."
+  },
+  "biomedical_engineer": {
+    "Medical Devices": "Medical device design follows regulated process: user needs, design requirements, prototyping, testing, regulatory approval (FDA), manufacturing. Examples: pacemakers, imaging systems, prosthetics.",
+    "Biomechanics": "Biomechanics applies mechanics to biological systems: musculoskeletal forces, joint kinematics, tissue mechanics. Applications: prosthetics, ergonomics, injury prevention, sports performance.",
+    "Tissue Engineering": "Tissue engineering creates biological substitutes to restore tissue function. Scaffold (structure), cells, growth factors. Applications: skin grafts, cartilage repair, organ engineering.",
+    "Medical Imaging": "Medical imaging visualizes internal structures: X-ray, CT, MRI, ultrasound, PET. Understand physics, image processing, and clinical applications. Radiation safety important.",
+    "Regulatory Affairs": "Medical device development requires regulatory compliance (FDA, CE mark). Documentation: design controls, risk management, clinical trials, quality systems. Understand standards (ISO 13485).",
+    "Clinical Engineering": "Clinical engineers manage medical equipment in healthcare facilities: procurement, testing, maintenance, training, safety. Ensure equipment operates safely and effectively."
+  },
+  "environmental_engineer": {
+    "Water Treatment": "Water treatment provides safe drinking water through sedimentation, filtration, disinfection (chlorine, UV, ozone). Remove contaminants: turbidity, microorganisms, chemicals. Understand regulations (Safe Drinking Water Act).",
+    "Wastewater Treatment": "Wastewater treatment removes pollutants before discharge. Primary (solids removal), secondary (biological treatment), tertiary (advanced treatment). Meet discharge permits (NPDES).",
+    "Air Quality": "Air quality engineering controls air pollution from industrial sources and vehicles. Pollutants: particulate matter, SOx, NOx, VOCs, CO. Technologies: scrubbers, filters, catalytic converters.",
+    "Solid Waste Management": "Solid waste management handles municipal waste through collection, recycling, landfills, incineration, composting. Reduce, reuse, recycle hierarchy. Landfill design prevents groundwater contamination.",
+    "Remediation": "Environmental remediation cleans contaminated sites (soil, groundwater). Technologies: excavation, pump-and-treat, bioremediation, soil vapor extraction. Characterize contamination, assess risks, select remedies.",
+    "Sustainability": "Environmental engineers promote sustainability through life cycle assessment, green design, renewable energy, pollution prevention, and resource conservation. Balance environmental, economic, and social factors."
+  },
+  "industrial_engineer": {
+    "Process Improvement": "Industrial engineers optimize processes using lean manufacturing, Six Sigma, time studies, and value stream mapping. Eliminate waste, reduce variation, improve flow and quality.",
+    "Facility Layout": "Facility layout arranges equipment and workstations to minimize material handling, reduce cycle time, and improve flow. Types: product layout (assembly line), process layout (job shop), cellular layout.",
+    "Ergonomics": "Ergonomics designs work environments fitting human capabilities and limitations. Reduce injuries, fatigue, and errors. Consider posture, force, repetition, and environmental factors.",
+    "Supply Chain Optimization": "Supply chain optimization improves flow of materials from suppliers to customers. Inventory optimization, demand forecasting, logistics, supplier management. Use simulation and optimization tools.",
+    "Quality Management": "Quality management ensures products meet specifications through quality planning, control (inspection, SPC), and improvement (PDCA, Six Sigma). Prevent defects rather than detect.",
+    "Simulation": "Simulation models complex systems (manufacturing, logistics, services) to evaluate performance and test improvements. Discrete event simulation widely used. Validate model with real data."
+  },
+  "network_engineer": {
+    "Network Architecture": "Network architecture designs network structure: topology (star, mesh, bus), layers (access, distribution, core), redundancy, and scalability. Understand OSI and TCP/IP models.",
+    "Routing and Switching": "Routing directs packets between networks using routers and protocols (OSPF, BGP). Switching connects devices within networks using switches and VLANs. Configure devices for optimal traffic flow.",
+    "Network Security": "Network security protects against threats through firewalls, VPNs, IDS/IPS, access controls, and encryption. Defense in depth uses multiple security layers. Monitor for intrusions.",
+    "Wireless Networks": "Wireless networks use Wi-Fi (802.11) standards. Consider coverage, capacity, security (WPA2/3), and interference. Site surveys optimize access point placement.",
+    "Network Troubleshooting": "Network troubleshooting diagnoses issues using tools (ping, traceroute, packet analyzers) and systematic approach: identify problem, gather information, isolate cause, implement solution, verify.",
+    "Cloud Networking": "Cloud networking extends traditional networking to cloud environments (AWS, Azure, GCP). Virtual networks, load balancing, VPN connectivity, security groups, and multi-cloud integration."
+  },
+  "cybersecurity_analyst": {
+    "Threat Analysis": "Threat analysis identifies potential attacks, assesses likelihood and impact, and prioritizes defenses. Understand threat actors, attack vectors, and common vulnerabilities. Stay current on emerging threats.",
+    "Penetration Testing": "Penetration testing simulates attacks to find vulnerabilities before attackers do. Reconnaissance, scanning, exploitation, post-exploitation. Automated tools and manual testing. Report findings clearly.",
+    "Incident Response": "Incident response handles security breaches: preparation (plans, tools), detection (monitoring, alerts), containment (isolate), eradication (remove threat), recovery (restore), lessons learned.",
+    "Security Monitoring": "Security monitoring detects threats through SIEM systems collecting logs from firewalls, servers, and endpoints. Write detection rules, investigate alerts, and distinguish true positives from false positives.",
+    "Vulnerability Management": "Vulnerability management identifies, assesses, prioritizes, and remediates vulnerabilities. Regular scanning, patch management, configuration hardening. Risk-based prioritization addresses critical issues first.",
+    "Security Policies": "Security policies define rules and procedures: acceptable use, access control, incident response, data handling. Policies backed by technical controls and user training."
+  },
+  "school_counselor": {
+    "Student Development": "School counselors support academic, career, and social-emotional development. Implement comprehensive school counseling program aligned with ASCA standards. Promote equity and access for all students.",
+    "Crisis Intervention": "Crisis intervention provides immediate support during emergencies (suicide risk, violence, trauma). Assess safety, provide support, connect to resources, follow up. Understand district protocols.",
+    "College Counseling": "College counseling guides students through college search, applications, financial aid, and transition. Understand admissions, test prep, scholarships. Help students find good fits.",
+    "Group Counseling": "Group counseling addresses common issues (social skills, grief, divorce, academic skills). Screen members, establish norms, facilitate discussions, and evaluate outcomes.",
+    "Data-Driven Counseling": "School counselors use data to identify needs, plan interventions, monitor progress, and demonstrate outcomes. Analyze attendance, behavior, achievement data. Close achievement gaps."
+  },
+  "social_worker": {
+    "Case Management": "Case managers coordinate services for clients: assessment, care planning, referrals, monitoring, and advocacy. Connect clients to resources (housing, healthcare, employment). Document thoroughly.",
+    "Crisis Intervention": "Social workers respond to crises (abuse, homelessness, mental health emergencies) through immediate support, safety assessment, and connection to resources. Trauma-informed approach.",
+    "Child Welfare": "Child welfare social workers protect children from abuse and neglect. Investigate reports, assess safety, provide services to families, arrange foster care or adoption when necessary.",
+    "Mental Health Counseling": "Social workers provide therapy: individual, family, group. Evidence-based approaches: cognitive-behavioral therapy, motivational interviewing, solution-focused brief therapy.",
+    "Community Resources": "Social workers know community resources: housing assistance, food banks, healthcare, job training, legal aid. Build relationships with agencies. Advocate for policy changes addressing root causes."
+  },
+  "special_education_teacher": {
+    "IEP Development": "Individualized Education Programs specify goals, services, accommodations, and modifications for students with disabilities. Collaborate with team (parents, teachers, specialists). Measurable goals, data-driven decisions.",
+    "Differentiation": "Differentiate instruction to meet diverse needs through varying content, process, product, or environment. Use flexible grouping, tiered assignments, and learning centers.",
+    "Behavioral Interventions": "Functional Behavior Assessment (FBA) identifies function of behavior. Behavior Intervention Plan (BIP) teaches replacement behaviors. Positive reinforcement, teaching strategies, environmental modifications.",
+    "Assistive Technology": "Assistive technology supports students with disabilities: text-to-speech, speech-to-text, communication devices, adapted keyboards. Match technology to student needs. Train use.",
+    "Inclusion Strategies": "Inclusion educates students with disabilities in general education with appropriate supports. Co-teaching, accommodations, modifications, collaboration. Least restrictive environment principle."
+  },
+  "librarian": {
+    "Information Literacy": "Information literacy teaches finding, evaluating, and using information effectively. Evaluate sources for authority, accuracy, bias. Understand academic vs popular sources. Cite properly to avoid plagiarism.",
+    "Collection Development": "Collection development builds library collections aligned with user needs. Selection criteria: relevance, quality, diversity. Balance print and digital. Weed outdated materials.",
+    "Research Assistance": "Librarians help users find information through reference interviews, database searching, and instruction. Understand user needs, suggest resources, teach search strategies.",
+    "Library Technology": "Library technology includes integrated library systems (cataloging, circulation), databases, digital collections, and makerspaces. Stay current on emerging technologies serving users.",
+    "Programming": "Library programming engages communities through story times, book clubs, workshops, author visits, and summer reading. Promote literacy and lifelong learning."
+  },
+  "academic_advisor": {
+    "Degree Planning": "Academic advisors help students plan course sequences meeting degree requirements. Understand curricula, prerequisites, and graduation requirements. Create four-year plans.",
+    "Student Success": "Advising supports student success through goal-setting, time management, study skills, campus resources, and addressing barriers. Intrusive advising reaches out proactively.",
+    "Career Exploration": "Advisors help students explore majors and careers through assessments, informational interviews, and job shadowing. Connect academic choices to career goals.",
+    "Policy Knowledge": "Advisors understand institutional policies: registration, financial aid, academic standing, degree requirements. Guide students through processes correctly.",
+    "Crisis Support": "Advisors recognize students in crisis (mental health, financial, academic) and refer to appropriate resources (counseling, financial aid, tutoring). Follow up on referrals."
+  }
+}

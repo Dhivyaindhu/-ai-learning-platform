@@ -1,0 +1,195 @@
+{% comment %}templates/ai/assessment_complete.html{% endcomment %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Assessment Complete — {{ career }}</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg:      #0d1117;
+      --card:    #161b22;
+      --border:  #30363d;
+      --accent:  #58a6ff;
+      --accent2: #bc8cff;
+      --success: #3fb950;
+      --warn:    #d9a93a;
+      --danger:  #f85149;
+      --text:    #e6edf3;
+      --muted:   #8b949e;
+      --radius:  14px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+    .container { width: 100%; max-width: 560px; }
+
+    /* level badge */
+    .level-block {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .level-emoji { font-size: 3rem; margin-bottom: .5rem; }
+    .level-title { font-size: 1.7rem; font-weight: 700; margin-bottom: .3rem; }
+    .level-sub   { color: var(--muted); font-size: .9rem; }
+
+    .level-advanced     .level-title { color: var(--danger); }
+    .level-intermediate .level-title { color: var(--warn); }
+    .level-beginner     .level-title { color: var(--success); }
+
+    /* cards */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .card h3 { font-size: .78rem; font-weight: 700; text-transform: uppercase;
+               letter-spacing: .08em; color: var(--muted); margin-bottom: 1rem; }
+
+    /* score row */
+    .score-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: .85rem; }
+    .score-label { font-size: .88rem; display: flex; align-items: center; gap: .5rem; }
+    .diff-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .dot-beginner     { background: var(--success); }
+    .dot-intermediate { background: var(--warn); }
+    .dot-advanced     { background: var(--danger); }
+
+    .score-right { display: flex; align-items: center; gap: .75rem; }
+    .score-pct   { font-weight: 700; font-size: .92rem; min-width: 40px; text-align: right; }
+    .score-bar-track {
+      width: 100px; height: 6px; background: var(--border);
+      border-radius: 99px; overflow: hidden;
+    }
+    .score-bar-fill { height: 100%; border-radius: 99px; }
+    .fill-beginner     { background: var(--success); }
+    .fill-intermediate { background: var(--warn); }
+    .fill-advanced     { background: var(--danger); }
+
+    /* overall */
+    .overall-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-top: 1rem; border-top: 1px solid var(--border); margin-top: .25rem;
+    }
+    .overall-label { font-size: .88rem; font-weight: 600; }
+    .overall-pct   { font-size: 1.4rem; font-weight: 700; color: var(--accent); }
+
+    /* course info */
+    .course-info { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+    .course-info p { font-size: .88rem; color: var(--muted); line-height: 1.5; }
+    .course-info strong { color: var(--text); }
+
+    /* buttons */
+    .btn {
+      display: block; width: 100%; padding: .85rem;
+      border-radius: 10px; font-size: .95rem; font-weight: 700;
+      text-align: center; text-decoration: none;
+      border: none; cursor: pointer; transition: opacity .2s;
+      margin-bottom: .6rem;
+    }
+    .btn-primary   { background: var(--accent); color: #0d1117; }
+    .btn-secondary { background: var(--card); color: var(--text);
+                     border: 1px solid var(--border); }
+    .btn:hover { opacity: .85; }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- level heading -->
+  <div class="level-block level-{{ level }}">
+    <div class="level-emoji">
+      {% if level == "advanced" %}🏆{% elif level == "intermediate" %}🎯{% else %}🌱{% endif %}
+    </div>
+    <div class="level-title">{{ level|title }} Level</div>
+    <div class="level-sub">{{ career }} Assessment Complete</div>
+  </div>
+
+  <!-- scores by difficulty -->
+  <div class="card">
+    <h3>Performance Breakdown</h3>
+
+    {% with s=scores %}
+    <div class="score-row">
+      <span class="score-label">
+        <span class="diff-dot dot-beginner"></span> Beginner
+      </span>
+      <div class="score-right">
+        <span class="score-pct">{{ s.beginner }}%</span>
+        <div class="score-bar-track">
+          <div class="score-bar-fill fill-beginner" style="width:{{ s.beginner }}%"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="score-row">
+      <span class="score-label">
+        <span class="diff-dot dot-intermediate"></span> Intermediate
+      </span>
+      <div class="score-right">
+        <span class="score-pct">{{ s.intermediate }}%</span>
+        <div class="score-bar-track">
+          <div class="score-bar-fill fill-intermediate" style="width:{{ s.intermediate }}%"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="score-row" style="margin-bottom:0">
+      <span class="score-label">
+        <span class="diff-dot dot-advanced"></span> Advanced
+      </span>
+      <div class="score-right">
+        <span class="score-pct">{{ s.advanced }}%</span>
+        <div class="score-bar-track">
+          <div class="score-bar-fill fill-advanced" style="width:{{ s.advanced }}%"></div>
+        </div>
+      </div>
+    </div>
+    {% endwith %}
+
+    <div class="overall-row">
+      <span class="overall-label">Overall Score</span>
+      <span class="overall-pct">{{ result.overall_score }}%</span>
+    </div>
+  </div>
+
+  <!-- course created -->
+  {% if course %}
+  <div class="card">
+    <h3>Your Course is Ready</h3>
+    <div class="course-info">
+      <p>
+        A personalised <strong>{{ level|title }}</strong> course for
+        <strong>{{ career }}</strong> has been generated with
+        <strong>{{ course.total_modules }} modules</strong> tailored to your results.
+      </p>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- actions — ALL use ai_engine: namespace -->
+  {% if course %}
+    <a href="{% url 'ai_engine:course_detail' course.id %}" class="btn btn-primary">
+      Start My Course →
+    </a>
+  {% endif %}
+  <a href="{% url 'ai_engine:select_career' %}" class="btn btn-secondary">
+    Assess a Different Career
+  </a>
+  <a href="{% url 'ai_engine:dashboard' %}" class="btn btn-secondary">
+    Go to Dashboard
+  </a>
+
+</div>
+</body>
+</html>

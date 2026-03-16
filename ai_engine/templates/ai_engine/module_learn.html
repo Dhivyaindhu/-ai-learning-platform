@@ -1,0 +1,406 @@
+{% comment %}ai_engine/templates/ai_engine/module_learn.html{% endcomment %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{{ module.title }}</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root { --bg:#0d1117;--surface:#161b22;--border:#30363d;--accent:#58a6ff;--success:#3fb950;--text:#e6edf3;--muted:#8b949e; }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:2rem 1rem;}
+    .container{max-width:980px;margin:0 auto;}
+
+    /* Header */
+    .module-header{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:2rem;margin-bottom:1.5rem;}
+    .module-badge{display:inline-block;padding:.4rem .85rem;background:rgba(88,166,255,.15);color:var(--accent);border-radius:8px;font-size:.75rem;font-weight:600;margin-bottom:1rem;}
+    .module-header h1{font-size:1.75rem;margin-bottom:.5rem;}
+    .module-header p{color:var(--muted);font-size:.88rem;}
+
+    /* Objectives */
+    .learning-objectives{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin-bottom:1.5rem;}
+    .learning-objectives h3{font-size:1rem;margin-bottom:.75rem;}
+    .learning-objectives ul{list-style:none;padding:0;}
+    .learning-objectives li{padding:.4rem 0 .4rem 1.25rem;position:relative;color:var(--muted);font-size:.88rem;}
+    .learning-objectives li:before{content:"→";position:absolute;left:0;color:var(--accent);}
+
+    /* Progress */
+    .progress-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin-bottom:1.5rem;}
+    .progress-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;}
+    .progress-percentage{font-size:2rem;font-weight:bold;color:var(--accent);}
+    .progress-bar{height:8px;background:var(--border);border-radius:99px;overflow:hidden;}
+    .progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),#bc8cff);border-radius:99px;transition:width .3s;}
+
+    /* Checklist */
+    .checklist{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin-bottom:1.5rem;}
+    .checklist h3{font-size:1rem;margin-bottom:1rem;}
+    .checklist-item{display:flex;align-items:center;gap:.75rem;padding:.75rem 0;border-bottom:1px solid var(--border);}
+    .checklist-item:last-child{border-bottom:none;}
+    .checkbox{width:20px;height:20px;border-radius:6px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.75rem;}
+    .checkbox.checked{background:var(--success);border-color:var(--success);color:#0d1117;font-weight:700;}
+
+    /* Tabs */
+    .tabs{display:flex;gap:.5rem;margin-bottom:1.5rem;border-bottom:1px solid var(--border);}
+    .tab{padding:.85rem 1.5rem;background:none;border:none;color:var(--muted);cursor:pointer;font-weight:600;font-size:.88rem;border-bottom:2px solid transparent;transition:all .2s;}
+    .tab:hover{color:var(--text);}
+    .tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+    .tab-content{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:2rem;margin-bottom:1.5rem;display:none;}
+    .tab-content.active{display:block;}
+
+    /* Theory */
+    .tab-content h1{font-size:1.75rem;margin-bottom:1.5rem;color:var(--text);}
+    .tab-content h2{font-size:1.25rem;margin:2rem 0 1rem;color:var(--text);}
+    .tab-content h3{font-size:1.1rem;margin:1.5rem 0 .75rem;color:var(--text);}
+    .tab-content p{line-height:1.7;margin-bottom:1rem;color:var(--muted);}
+    .tab-content ul,.tab-content ol{margin:1rem 0;padding-left:1.5rem;}
+    .tab-content li{margin-bottom:.5rem;line-height:1.6;color:var(--muted);}
+    .tab-content strong{color:var(--text);font-weight:600;}
+    .tab-content section{margin-bottom:2.5rem;}
+
+    /* ── ENHANCED EXERCISE CARDS ── */
+    .exercises-intro{color:var(--muted);font-size:.88rem;margin-bottom:1rem;line-height:1.65;}
+    .ex-bar-row{display:flex;align-items:center;gap:.85rem;margin-bottom:1.5rem;}
+    .ex-bar-label{font-size:.8rem;color:var(--muted);white-space:nowrap;}
+    .ex-bar{flex:1;height:6px;background:var(--border);border-radius:99px;overflow:hidden;}
+    .ex-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--success));border-radius:99px;transition:width .4s;}
+    .ex-bar-count{font-size:.8rem;font-weight:700;color:var(--accent);white-space:nowrap;}
+
+    .exercise-card{border:1px solid var(--border);border-radius:12px;margin-bottom:1.1rem;overflow:hidden;transition:border-color .2s,box-shadow .2s;}
+    .exercise-card:hover{border-color:rgba(88,166,255,.35);}
+    .exercise-card.completed{border-color:rgba(63,185,80,.5);background:rgba(63,185,80,.02);}
+    .exercise-card.active-card{border-color:var(--accent);box-shadow:0 0 0 3px rgba(88,166,255,.1);}
+
+    .ex-hdr{padding:1.1rem 1.4rem;display:flex;justify-content:space-between;align-items:center;cursor:pointer;user-select:none;transition:background .15s;}
+    .ex-hdr:hover{background:rgba(88,166,255,.05);}
+    .ex-hdr-left{display:flex;align-items:center;gap:.8rem;min-width:0;}
+    .ex-num{width:34px;height:34px;border-radius:50%;background:rgba(88,166,255,.12);color:var(--accent);font-weight:700;font-size:.85rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .2s,color .2s;}
+    .ex-num.done{background:var(--success);color:#0d1117;}
+    .ex-hdr-info{min-width:0;}
+    .ex-title{font-size:.95rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+    .ex-badges{display:flex;gap:.45rem;margin-top:.3rem;flex-wrap:wrap;}
+    .diff{padding:.18rem .55rem;border-radius:5px;font-size:.7rem;font-weight:700;text-transform:uppercase;}
+    .diff-easy{background:rgba(63,185,80,.15);color:#3fb950;}
+    .diff-medium{background:rgba(255,191,0,.15);color:#e3a800;}
+    .diff-hard{background:rgba(248,81,73,.15);color:#f85149;}
+    .type-tag{font-size:.7rem;color:var(--muted);background:rgba(255,255,255,.06);padding:.18rem .55rem;border-radius:5px;}
+    .expand-icon{color:var(--muted);font-size:.8rem;transition:transform .25s;flex-shrink:0;margin-left:.5rem;}
+    .expand-icon.open{transform:rotate(180deg);}
+
+    .ex-body{display:none;border-top:1px solid var(--border);}
+    .ex-body.open{display:block;animation:slideDown .18s ease;}
+    @keyframes slideDown{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:none}}
+
+    .ex-desc{padding:1.1rem 1.4rem;color:var(--muted);font-size:.88rem;line-height:1.75;border-bottom:1px solid var(--border);}
+
+    .ex-steps{padding:.9rem 1.4rem;border-bottom:1px solid var(--border);}
+    .steps-lbl{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);margin-bottom:.6rem;}
+    .step-row{display:flex;align-items:flex-start;gap:.55rem;padding:.38rem 0;}
+    .step-dot{width:16px;height:16px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;margin-top:3px;}
+    .step-text{font-size:.83rem;color:var(--muted);line-height:1.5;}
+
+    .ex-workspace{padding:1rem 1.4rem;border-bottom:1px solid var(--border);background:rgba(0,0,0,.12);}
+    .ws-label{font-size:.75rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.5rem;}
+    .ws-textarea{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.88rem;line-height:1.65;padding:.8rem 1rem;resize:vertical;min-height:115px;outline:none;transition:border-color .2s;}
+    .ws-textarea:focus{border-color:var(--accent);}
+    .ws-textarea:disabled{opacity:.4;cursor:not-allowed;background:rgba(255,255,255,.02);}
+    .ws-hint{font-size:.75rem;color:var(--muted);margin-top:.35rem;}
+
+    .ex-footer{padding:.85rem 1.4rem;display:flex;justify-content:space-between;align-items:center;}
+    .ex-cc{font-size:.75rem;color:var(--muted);}
+    .ex-done-label{color:var(--success);font-weight:600;font-size:.88rem;}
+
+    /* Resources */
+    .resource-list{display:flex;flex-direction:column;gap:1rem;}
+    .resource-item{background:rgba(88,166,255,.05);border:1px solid var(--border);border-radius:10px;padding:1.25rem;display:flex;justify-content:space-between;align-items:center;transition:border-color .2s;}
+    .resource-item:hover{border-color:var(--accent);}
+    .resource-info h4{font-size:1rem;margin-bottom:.3rem;}
+    .resource-type{font-size:.8rem;color:var(--muted);text-transform:capitalize;}
+    .resource-link{padding:.5rem 1rem;background:var(--accent);color:#0d1117;border-radius:8px;text-decoration:none;font-weight:600;font-size:.85rem;white-space:nowrap;}
+    .resource-link:hover{opacity:.88;}
+
+    /* Buttons */
+    .btn{padding:.75rem 1.5rem;border-radius:8px;text-decoration:none;font-weight:600;font-size:.88rem;cursor:pointer;border:none;transition:all .2s;display:inline-block;}
+    .btn-primary{background:var(--accent);color:#0d1117;}
+    .btn-primary:hover{opacity:.88;}
+    .btn-secondary{background:rgba(88,166,255,.15);color:var(--accent);}
+    .btn-secondary:hover{background:rgba(88,166,255,.25);}
+    .btn-sm{padding:.5rem 1rem;font-size:.82rem;}
+    .action-buttons{display:flex;gap:1rem;margin-top:2rem;flex-wrap:wrap;}
+
+    #toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--success);color:#0d1117;padding:.75rem 1.25rem;border-radius:10px;font-weight:600;font-size:.88rem;opacity:0;transform:translateY(10px);transition:all .3s;pointer-events:none;z-index:999;}
+    #toast.show{opacity:1;transform:translateY(0);}
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <div class="module-header">
+    <div class="module-badge">MODULE {{ module.module_number }}</div>
+    <h1>{{ module.title }}</h1>
+    <p>{{ module.description }}</p>
+  </div>
+
+  {% if module.learning_objectives %}
+  <div class="learning-objectives">
+    <h3>🎯 Learning Objectives</h3>
+    <ul>{% for o in module.learning_objectives %}<li>{{ o }}</li>{% endfor %}</ul>
+  </div>
+  {% endif %}
+
+  <div class="progress-card">
+    <div class="progress-header">
+      <h3>MODULE PROGRESS</h3>
+      <span class="progress-percentage">{{ completion }}%</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" style="width:{{ completion }}%"></div></div>
+  </div>
+
+  <div class="checklist">
+    <h3>COMPLETION CHECKLIST</h3>
+    <div class="checklist-item">
+      <div class="checkbox {% if theory_completed %}checked{% endif %}">{% if theory_completed %}✓{% endif %}</div>
+      <span>Read theory content</span>
+    </div>
+    {% for exercise in module.practical_exercises %}
+    <div class="checklist-item" id="chk-{{ forloop.counter0 }}">
+      <div class="checkbox" id="chk-box-{{ forloop.counter0 }}"></div>
+      <span>{{ exercise.title|truncatechars:50 }}</span>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('theory',this)">📖 Theory</button>
+    <button class="tab" id="tab-exercises" onclick="showTab('exercises',this)">✏️ Exercises</button>
+    <button class="tab" onclick="showTab('resources',this)">📚 Resources</button>
+  </div>
+
+  <!-- Theory -->
+  <div id="theory-tab" class="tab-content active">
+    {% if not theory_completed %}
+    <div style="background:rgba(88,166,255,.08);border:1px solid rgba(88,166,255,.2);border-radius:10px;padding:1rem 1.25rem;margin-bottom:1.5rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;">
+      <div>
+        <p style="font-size:.88rem;color:var(--accent);font-weight:600;margin-bottom:.2rem;">📚 Read all sections below</p>
+        <p style="font-size:.8rem;color:var(--muted);">Mark as complete once you've read and understood everything.</p>
+      </div>
+      <form method="POST" action="{% url 'ai_engine:mark_theory_complete' module.id %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary">✓ Mark Theory Read</button>
+      </form>
+    </div>
+    {% else %}
+    <div style="background:rgba(63,185,80,.08);border:1px solid rgba(63,185,80,.2);border-radius:10px;padding:.85rem 1.25rem;margin-bottom:1.5rem;font-size:.88rem;color:var(--success);font-weight:600;">
+      ✅ Theory completed — great work!
+    </div>
+    {% endif %}
+    <div class="theory-content">
+      {% if module.theoretical_content %}
+        {{ module.theoretical_content|safe }}
+      {% else %}
+        <div style="text-align:center;padding:3rem 1rem;color:var(--muted);">
+          <div style="font-size:2.5rem;margin-bottom:.75rem;">📄</div>
+          <p>Theory content will appear here once the module is fully generated.</p>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Exercises — ENHANCED -->
+  <div id="exercises-tab" class="tab-content">
+    <p class="exercises-intro">
+      Click an exercise to expand it, work through the checklist, write your notes in the workspace, then mark it complete.
+    </p>
+    <div class="ex-bar-row">
+      <span class="ex-bar-label">Progress</span>
+      <div class="ex-bar"><div class="ex-bar-fill" id="ex-bar-fill" style="width:0%"></div></div>
+      <span class="ex-bar-count" id="ex-bar-count">0 / {{ module.practical_exercises|length }}</span>
+    </div>
+
+    {% for exercise in module.practical_exercises %}
+    <div class="exercise-card" id="ex-card-{{ forloop.counter0 }}">
+      <div class="ex-hdr" onclick="toggleEx({{ forloop.counter0 }})">
+        <div class="ex-hdr-left">
+          <div class="ex-num" id="ex-num-{{ forloop.counter0 }}">{{ forloop.counter }}</div>
+          <div class="ex-hdr-info">
+            <div class="ex-title">{{ exercise.title }}</div>
+            <div class="ex-badges">
+              <span class="diff diff-{{ exercise.difficulty|lower }}">{{ exercise.difficulty }}</span>
+              <span class="type-tag">{{ exercise.type|title }}</span>
+            </div>
+          </div>
+        </div>
+        <span class="expand-icon" id="ex-icon-{{ forloop.counter0 }}">▼</span>
+      </div>
+
+      <div class="ex-body" id="ex-body-{{ forloop.counter0 }}">
+        <div class="ex-desc">{{ exercise.description }}</div>
+
+        <div class="ex-steps">
+          <div class="steps-lbl">Your checklist</div>
+          {% if exercise.type == "research" %}
+            <div class="step-row"><div class="step-dot"></div><span class="step-text">Find 2–3 real-world examples relevant to this topic</span></div>
+            <div class="step-row"><div class="step-dot"></div><span class="step-text">Summarise each example in 2–3 sentences in the workspace</span></div>
+            <div class="step-row"><div class="step-dot"></div><span class="step-text">Identify the key lesson or pattern connecting your examples</span></div>
+          {% elif exercise.type == "project" %}
+            <div class="step-row"><div class="step-dot"></div><span class="step-text">Define your goal and what "done" looks like before starting</span></div>
+            <div class="step-row"><div class="step-dot"></div><span class="step-text">Build your deliverable step by step</span></div>
+            <div class="step-row"><div class="step-dot"></div><span class="step-text">Document your approach, key decisions, and any challenges</span></div>
+            <div class="step-row"><div class="step-dot"></div><span class="step-text">Review against the brief and write a short reflection</span></div>
+          {% else %}
+            <div class="step-row"><div class="step-dot"></div><span class="step-text">Read the brief fully before starting</span></div>
+            <div class="step-row"><div class="step-dot"></div><span class="step-text">Apply the concept or technique from the theory section</span></div>
+            <div class="step-row"><div class="step-dot"></div><span class="step-text">Document what you did and what you learned</span></div>
+          {% endif %}
+        </div>
+
+        <div class="ex-workspace">
+          <div class="ws-label">📝 Your Notes / Work</div>
+          <textarea class="ws-textarea" id="ws-{{ forloop.counter0 }}"
+            placeholder="Write your notes, answers, or work here…"
+            oninput="updateCC({{ forloop.counter0 }})"></textarea>
+          <div class="ws-hint">Notes are auto-saved in your browser — they persist if you switch tabs.</div>
+        </div>
+
+        <div class="ex-footer" id="ex-footer-{{ forloop.counter0 }}">
+          <span class="ex-cc" id="cc-{{ forloop.counter0 }}">0 characters</span>
+          <form method="POST" action="{% url 'ai_engine:complete_exercise' module.id forloop.counter0 %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-secondary btn-sm">✓ Mark Complete</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Resources -->
+  <div id="resources-tab" class="tab-content">
+    <p style="color:var(--muted);margin-bottom:1.5rem;">Curated references to deepen your understanding of each topic in this module.</p>
+    {% if module.resources %}
+    <div class="resource-list">
+      {% for link in module.resources %}
+      <div class="resource-item">
+        <div class="resource-info">
+          <h4>{{ link.title }}</h4>
+          <div class="resource-type">{{ link.type }}</div>
+        </div>
+        <a href="{{ link.url }}" target="_blank" rel="noopener" class="resource-link">Visit →</a>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div style="text-align:center;padding:3rem 1rem;color:var(--muted);">
+      <div style="font-size:2.5rem;margin-bottom:.75rem;">🔗</div>
+      <p>Reference links will appear here once the module is generated.</p>
+    </div>
+    {% endif %}
+  </div>
+
+  <div class="action-buttons">
+    <a href="{% url 'ai_engine:course_detail' module.course.id %}" class="btn btn-secondary">← Back to Course</a>
+    <a href="{% url 'ai_engine:module_quiz' module.id %}" class="btn btn-primary">📝 Take Quiz</a>
+    {% if next_module %}
+    <a href="{% url 'ai_engine:module_learn' next_module.id %}" class="btn btn-primary">Next Module →</a>
+    {% else %}
+    <a href="{% url 'ai_engine:capstone_project' module.course.id %}" class="btn btn-primary">🎓 Final Project →</a>
+    {% endif %}
+  </div>
+
+</div>
+
+<div id="toast">✅ Saved!</div>
+{{ exercises_completed|default:"[]"|json_script:"exercises-completed-data" }}
+
+<script>
+const MODULE_ID = '{{ module.id }}';
+const TOTAL_EX  = {{ module.practical_exercises|length }};
+
+function showTab(name, btn) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(name + '-tab').classList.add('active');
+  btn.classList.add('active');
+}
+
+function toggleEx(i) {
+  const body = document.getElementById('ex-body-' + i);
+  const icon = document.getElementById('ex-icon-' + i);
+  const card = document.getElementById('ex-card-' + i);
+  const isOpen = body.classList.contains('open');
+  document.querySelectorAll('.ex-body').forEach(b => b.classList.remove('open'));
+  document.querySelectorAll('.expand-icon').forEach(ic => ic.classList.remove('open'));
+  document.querySelectorAll('.exercise-card').forEach(c => c.classList.remove('active-card'));
+  if (!isOpen) {
+    body.classList.add('open');
+    icon.classList.add('open');
+    card.classList.add('active-card');
+    const saved = localStorage.getItem('ex-note-' + MODULE_ID + '-' + i);
+    if (saved) { document.getElementById('ws-' + i).value = saved; updateCC(i); }
+  }
+}
+
+function updateCC(i) {
+  const ta = document.getElementById('ws-' + i);
+  const cc = document.getElementById('cc-' + i);
+  if (!ta || !cc) return;
+  const len = ta.value.length;
+  cc.textContent = len + (len === 1 ? ' character' : ' characters');
+  try { localStorage.setItem('ex-note-' + MODULE_ID + '-' + i, ta.value); } catch(e){}
+}
+
+// Apply completed states
+const completedExercises = JSON.parse(
+  document.getElementById('exercises-completed-data').textContent
+);
+
+function markDone(idx) {
+  const i = parseInt(idx, 10);
+  if (isNaN(i)) return;
+  const card   = document.getElementById('ex-card-' + i);
+  const num    = document.getElementById('ex-num-'  + i);
+  const footer = document.getElementById('ex-footer-' + i);
+  const ta     = document.getElementById('ws-' + i);
+  const chkBox = document.getElementById('chk-box-' + i);
+  const chkRow = document.getElementById('chk-' + i);
+  if (card)   card.classList.add('completed');
+  if (num)    { num.classList.add('done'); num.textContent = '✓'; }
+  if (footer) footer.innerHTML = '<span class="ex-done-label">✅ Completed</span>';
+  if (ta)     ta.disabled = true;
+  if (chkBox) { chkBox.classList.add('checked'); chkBox.textContent = '✓'; }
+  if (chkRow) chkRow.style.opacity = '.65';
+}
+
+completedExercises.forEach(markDone);
+
+// Progress bar
+(function() {
+  const done = completedExercises.length;
+  const pct  = TOTAL_EX > 0 ? Math.round(done / TOTAL_EX * 100) : 0;
+  const fill  = document.getElementById('ex-bar-fill');
+  const count = document.getElementById('ex-bar-count');
+  if (fill)  fill.style.width = pct + '%';
+  if (count) count.textContent = done + ' / ' + TOTAL_EX;
+})();
+
+// Auto-open first incomplete exercise when exercises tab is activated
+document.getElementById('tab-exercises').addEventListener('click', function() {
+  setTimeout(function() {
+    const done = completedExercises.map(x => parseInt(x, 10));
+    for (let i = 0; i < TOTAL_EX; i++) {
+      if (!done.includes(i)) { toggleEx(i); break; }
+    }
+  }, 60);
+});
+
+// Toast on form submit
+document.querySelectorAll('form').forEach(function(f) {
+  f.addEventListener('submit', function() {
+    const t = document.getElementById('toast');
+    t.classList.add('show');
+    setTimeout(function() { t.classList.remove('show'); }, 2500);
+  });
+});
+</script>
+</body>
+</html>

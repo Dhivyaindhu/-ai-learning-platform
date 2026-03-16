@@ -1,0 +1,267 @@
+{% comment %}
+templates/ai/assessment_question.html
+Works with the updated views.py that passes options_list (sorted A→D).
+Correct answer position is random — no visual cues betray it.
+{% endcomment %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Question {{ question_number }} — {{ career }} Assessment</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg:       #0d1117;
+      --card:     #161b22;
+      --border:   #30363d;
+      --accent:   #58a6ff;
+      --accent2:  #bc8cff;
+      --success:  #3fb950;
+      --text:     #e6edf3;
+      --muted:    #8b949e;
+      --radius:   14px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem 3rem;
+    }
+
+    /* ── progress bar ── */
+    .progress-wrap {
+      width: 100%;
+      max-width: 640px;
+      margin-bottom: 1.75rem;
+    }
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: .78rem;
+      color: var(--muted);
+      margin-bottom: .4rem;
+    }
+    .progress-track {
+      height: 5px;
+      background: var(--border);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: 99px;
+      transition: width .4s ease;
+    }
+
+    /* ── card ── */
+    .card {
+      width: 100%;
+      max-width: 640px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+    }
+
+    /* ── meta badges ── */
+    .badges {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      margin-bottom: 1.1rem;
+      flex-wrap: wrap;
+    }
+    .badge {
+      font-size: .7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      padding: .2rem .55rem;
+      border-radius: 6px;
+    }
+    .badge-career    { background: rgba(88,166,255,.15); color: var(--accent); }
+    .badge-topic     { background: rgba(188,140,255,.15); color: var(--accent2); }
+    .badge-beginner  { background: rgba(63,185,80,.15);  color: var(--success); }
+    .badge-intermediate { background: rgba(210,153,34,.15); color: #d9a93a; }
+    .badge-advanced  { background: rgba(248,81,73,.15);  color: #f85149; }
+    .badge-qnum      { color: var(--muted); font-size: .78rem; margin-left: auto; }
+
+    /* ── question text ── */
+    .question-text {
+      font-size: 1.08rem;
+      font-weight: 600;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+      color: var(--text);
+    }
+
+    /* ── options ── */
+    .options { display: flex; flex-direction: column; gap: .65rem; margin-bottom: 1.5rem; }
+
+    .option-label {
+      display: flex;
+      align-items: flex-start;
+      gap: .85rem;
+      padding: .85rem 1rem;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: border-color .15s, background .15s;
+      position: relative;
+    }
+    /* hide the radio visually */
+    .option-label input[type="radio"] { display: none; }
+
+    .option-label:hover {
+      border-color: var(--accent);
+      background: rgba(88,166,255,.05);
+    }
+    /* selected state */
+    .option-label:has(input:checked) {
+      border-color: var(--accent);
+      background: rgba(88,166,255,.10);
+    }
+
+    .letter-badge {
+      flex-shrink: 0;
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .78rem;
+      font-weight: 700;
+      color: var(--muted);
+      transition: background .15s, color .15s;
+    }
+    .option-label:has(input:checked) .letter-badge {
+      background: var(--accent);
+      color: #0d1117;
+    }
+
+    .option-text {
+      font-size: .9rem;
+      line-height: 1.55;
+      padding-top: 3px;
+    }
+
+    /* ── submit button ── */
+    .submit-btn {
+      width: 100%;
+      padding: .85rem;
+      background: var(--accent);
+      color: #0d1117;
+      border: none;
+      border-radius: 10px;
+      font-size: .95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity .2s;
+    }
+    .submit-btn:hover   { opacity: .85; }
+    .submit-btn:disabled { opacity: .45; cursor: not-allowed; }
+
+    /* ── error ── */
+    .error-msg {
+      background: rgba(248,81,73,.1);
+      border: 1px solid rgba(248,81,73,.3);
+      color: #f85149;
+      border-radius: 8px;
+      padding: .6rem 1rem;
+      font-size: .84rem;
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+<!-- progress -->
+<div class="progress-wrap">
+  <div class="progress-meta">
+    <span>Question {{ question_number }} of {{ total_questions }}</span>
+    <span>{{ progress_pct }}% complete</span>
+  </div>
+  <div class="progress-track">
+    <div class="progress-fill" style="width:{{ progress_pct }}%"></div>
+  </div>
+</div>
+
+<!-- card -->
+<div class="card">
+
+  <!-- badges -->
+  <div class="badges">
+    <span class="badge badge-career">{{ career }}</span>
+    {% if topic %}<span class="badge badge-topic">{{ topic }}</span>{% endif %}
+    <span class="badge badge-{{ difficulty }}">{{ difficulty }}</span>
+    <span class="badge-qnum">{{ question_number }} / {{ total_questions }}</span>
+  </div>
+
+  <!-- question -->
+  <p class="question-text">{{ question.question }}</p>
+
+  <!-- error if any -->
+  {% if messages %}
+    {% for msg in messages %}
+      <div class="error-msg">{{ msg }}</div>
+    {% endfor %}
+  {% endif %}
+
+  <!-- answer form -->
+  <form method="post" id="answerForm">
+    {% csrf_token %}
+
+    {# Hidden fields carry answer metadata to the view #}
+    <input type="hidden" name="question_id"    value="{{ question.id }}"/>
+    <input type="hidden" name="correct_answer" value="{{ question.correct_answer }}"/>
+    <input type="hidden" name="difficulty"     value="{{ question.difficulty }}"/>
+
+    <div class="options">
+      {% for opt in options_list %}
+        <label class="option-label">
+          <input type="radio" name="answer" value="{{ opt.letter }}" required/>
+          <span class="letter-badge">{{ opt.letter }}</span>
+          <span class="option-text">{{ opt.text }}</span>
+        </label>
+      {% endfor %}
+    </div>
+
+    <button type="submit" class="submit-btn" id="submitBtn" disabled>
+      {% if question_number == total_questions %}
+        Finish Assessment →
+      {% else %}
+        Next Question →
+      {% endif %}
+    </button>
+  </form>
+
+</div>
+
+<script>
+  // Enable submit only after an option is chosen
+  const radios = document.querySelectorAll('input[type="radio"]');
+  const btn    = document.getElementById('submitBtn');
+
+  radios.forEach(r => r.addEventListener('change', () => {
+    btn.disabled = false;
+  }));
+
+  // Prevent double-submit
+  document.getElementById('answerForm').addEventListener('submit', () => {
+    btn.disabled = true;
+    btn.textContent = 'Saving…';
+  });
+</script>
+
+</body>
+</html>

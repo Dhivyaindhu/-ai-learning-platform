@@ -1,0 +1,684 @@
+{
+  "data_scientist": {
+    "beginner": [
+      {
+        "id": "ds_b_001",
+        "topic": "Python Basics",
+        "question": "What is Python primarily used for in data science?",
+        "options": {
+          "A": "Data analysis, machine learning, and automation tasks",
+          "B": "Only creating mobile applications",
+          "C": "Hardware driver development",
+          "D": "Operating system kernel development"
+        },
+        "explanation": "Python is widely used in data science for its extensive libraries and ease of use.",
+        "keywords": ["python", "data science", "programming", "language", "basics"]
+      },
+      {
+        "id": "ds_b_002",
+        "topic": "Pandas",
+        "question": "What is the pandas library primarily used for?",
+        "options": {
+          "A": "Loading, cleaning, and manipulating tabular data efficiently",
+          "B": "Creating 3D animations and graphics rendering",
+          "C": "Building web servers and REST APIs",
+          "D": "Managing operating system processes and threads"
+        },
+        "explanation": "Pandas is the go-to library for working with structured data in Python.",
+        "keywords": ["pandas", "dataframe", "tabular", "data manipulation", "library"]
+      },
+      {
+        "id": "ds_b_003",
+        "topic": "NumPy",
+        "question": "Why use NumPy arrays instead of Python lists for numerical operations?",
+        "options": {
+          "A": "NumPy arrays are optimized for fast mathematical operations on large datasets",
+          "B": "Python lists cannot store any numeric values",
+          "C": "NumPy arrays require less memory than empty Python lists",
+          "D": "NumPy is the only way to work with pandas DataFrames"
+        },
+        "explanation": "NumPy provides efficient numerical computation through optimized C libraries.",
+        "keywords": ["numpy", "arrays", "numerical", "performance", "optimization"]
+      },
+      {
+        "id": "ds_b_004",
+        "topic": "Data Cleaning",
+        "question": "What is the first step in data cleaning?",
+        "options": {
+          "A": "Identifying and handling missing values in the dataset",
+          "B": "Immediately building machine learning models",
+          "C": "Creating visualizations without checking data",
+          "D": "Deploying the model to production servers"
+        },
+        "explanation": "Data cleaning starts with understanding and handling missing or corrupt data.",
+        "keywords": ["data cleaning", "missing values", "preprocessing", "quality"]
+      },
+      {
+        "id": "ds_b_005",
+        "topic": "Statistics",
+        "question": "What does the mean represent in a dataset?",
+        "options": {
+          "A": "The average value calculated by summing all values and dividing by count",
+          "B": "The most frequently occurring value in the dataset",
+          "C": "The middle value when data is sorted in order",
+          "D": "The difference between maximum and minimum values"
+        },
+        "explanation": "Mean is the arithmetic average and is sensitive to outliers.",
+        "keywords": ["statistics", "mean", "average", "central tendency"]
+      }
+    ],
+    "intermediate": [
+      {
+        "id": "ds_i_001",
+        "topic": "Feature Engineering",
+        "question": "Why is feature engineering important in machine learning?",
+        "options": {
+          "A": "It creates meaningful input variables that improve model performance",
+          "B": "It automatically selects the best machine learning algorithm",
+          "C": "It eliminates the need for collecting training data",
+          "D": "It makes models run faster without affecting accuracy"
+        },
+        "explanation": "Good features help models learn patterns more effectively from data.",
+        "keywords": ["feature engineering", "features", "model performance", "variables", "preprocessing"]
+      },
+      {
+        "id": "ds_i_002",
+        "topic": "Cross Validation",
+        "question": "What is the purpose of k-fold cross-validation?",
+        "options": {
+          "A": "To evaluate model performance on multiple independent data splits reliably",
+          "B": "To automatically tune all hyperparameters to optimal values",
+          "C": "To increase the total size of the training dataset",
+          "D": "To deploy trained models to production servers"
+        },
+        "explanation": "Cross-validation provides robust performance estimates by testing on multiple splits.",
+        "keywords": ["cross-validation", "validation", "model evaluation", "k-fold", "testing"]
+      },
+      {
+        "id": "ds_i_003",
+        "topic": "SQL",
+        "question": "When should a Data Scientist use a LEFT JOIN instead of an INNER JOIN?",
+        "options": {
+          "A": "When you want to keep all rows from the left table even without matches in the right table",
+          "B": "When you only want rows that exist in both tables simultaneously",
+          "C": "When you want to combine tables without any matching key columns",
+          "D": "When you want to automatically remove all NULL values from results"
+        },
+        "explanation": "LEFT JOIN preserves all records from the left table regardless of matches.",
+        "keywords": ["sql", "joins", "left join", "inner join", "database"]
+      },
+      {
+        "id": "ds_i_004",
+        "topic": "Machine Learning",
+        "question": "What is the difference between supervised and unsupervised learning?",
+        "options": {
+          "A": "Supervised uses labeled data to train models, unsupervised finds patterns in unlabeled data",
+          "B": "Supervised requires human monitoring during training",
+          "C": "Supervised is only for classification, unsupervised only for regression",
+          "D": "Supervised uses deep learning, unsupervised uses decision trees"
+        },
+        "explanation": "The presence or absence of labels distinguishes these approaches.",
+        "keywords": ["machine learning", "supervised", "unsupervised", "labeled data", "algorithms"]
+      }
+    ],
+    "advanced": [
+      {
+        "id": "ds_a_001",
+        "topic": "Deep Learning",
+        "question": "When should you choose deep learning over traditional machine learning?",
+        "options": {
+          "A": "When you have large datasets with complex non-linear patterns to learn",
+          "B": "Always use deep learning regardless of problem complexity or data size",
+          "C": "Only when you have fewer than 100 training examples available",
+          "D": "Never use deep learning as traditional ML always performs better"
+        },
+        "explanation": "Deep learning excels with big data and complex patterns but requires more resources.",
+        "keywords": ["deep learning", "neural networks", "large datasets", "complex patterns", "decision"]
+      },
+      {
+        "id": "ds_a_002",
+        "topic": "MLOps",
+        "question": "What is the primary goal of MLOps in a data science workflow?",
+        "options": {
+          "A": "To automate and monitor ML model deployment, training, and maintenance in production",
+          "B": "To replace data scientists with fully automated ML systems",
+          "C": "To ensure models never require retraining once deployed",
+          "D": "To generate documentation for regulatory compliance only"
+        },
+        "explanation": "MLOps bridges development and operations for reliable ML systems at scale.",
+        "keywords": ["mlops", "deployment", "automation", "production", "monitoring"]
+      },
+      {
+        "id": "ds_a_003",
+        "topic": "Model Deployment",
+        "question": "What is the most critical consideration when deploying ML models to production?",
+        "options": {
+          "A": "Monitoring model performance and implementing automated retraining pipelines",
+          "B": "Achieving 100% accuracy on all possible inputs",
+          "C": "Ensuring the model runs on the most expensive hardware",
+          "D": "Preventing any model updates after initial deployment"
+        },
+        "explanation": "Production models need continuous monitoring and updates as data changes.",
+        "keywords": ["deployment", "production", "monitoring", "retraining", "mlops"]
+      },
+      {
+        "id": "ds_a_004",
+        "topic": "A/B Testing",
+        "question": "Why is statistical significance important in A/B testing?",
+        "options": {
+          "A": "To determine if observed differences are real or due to random chance",
+          "B": "To automatically choose the winning variant without analysis",
+          "C": "To ensure both groups have exactly the same number of users",
+          "D": "To eliminate the need for hypothesis testing entirely"
+        },
+        "explanation": "Statistical tests help distinguish signal from noise in experiments.",
+        "keywords": ["ab testing", "statistical significance", "hypothesis testing", "experiments"]
+      }
+    ]
+  },
+  "software_engineer": {
+    "beginner": [
+      {
+        "id": "se_b_001",
+        "topic": "Variables",
+        "question": "What is the purpose of variables in programming?",
+        "options": {
+          "A": "To store and reference data values during program execution",
+          "B": "To create permanent files that persist after program ends",
+          "C": "To define the structure of database tables",
+          "D": "To control hardware devices directly"
+        },
+        "explanation": "Variables are fundamental containers for storing data in memory.",
+        "keywords": ["variables", "data storage", "programming", "memory", "values"]
+      },
+      {
+        "id": "se_b_002",
+        "topic": "Functions",
+        "question": "Why do software engineers use functions when writing code?",
+        "options": {
+          "A": "To organize reusable blocks of code that reduce duplication",
+          "B": "To automatically test that code produces correct output",
+          "C": "To define the visual layout of user interface components",
+          "D": "To specify which database fields queries should return"
+        },
+        "explanation": "Functions enable code reuse and better organization of program logic.",
+        "keywords": ["functions", "code reuse", "organization", "modular", "programming"]
+      },
+      {
+        "id": "se_b_003",
+        "topic": "Loops",
+        "question": "What is the primary purpose of a loop in programming?",
+        "options": {
+          "A": "To repeat a block of code multiple times until a condition is met",
+          "B": "To store multiple values in a single variable",
+          "C": "To connect to remote databases automatically",
+          "D": "To make code run in parallel on multiple processors"
+        },
+        "explanation": "Loops enable iteration and repetition of code blocks.",
+        "keywords": ["loops", "iteration", "repetition", "for", "while"]
+      },
+      {
+        "id": "se_b_004",
+        "topic": "Conditionals",
+        "question": "What do conditional statements like if-else allow you to do?",
+        "options": {
+          "A": "Execute different code paths based on whether conditions are true or false",
+          "B": "Automatically fix all bugs in your program",
+          "C": "Speed up code execution by skipping unnecessary lines",
+          "D": "Convert variables from one data type to another"
+        },
+        "explanation": "Conditionals enable decision-making and branching logic in programs.",
+        "keywords": ["conditionals", "if else", "branching", "decision making", "control flow"]
+      }
+    ],
+    "intermediate": [
+      {
+        "id": "se_i_001",
+        "topic": "APIs",
+        "question": "What is a REST API?",
+        "options": {
+          "A": "An interface using HTTP methods to interact with web services",
+          "B": "A relational database management system",
+          "C": "A programming language for mobile apps",
+          "D": "A code editor with syntax highlighting"
+        },
+        "explanation": "REST APIs are widely used for communication between web services.",
+        "keywords": ["rest api", "http", "web services", "interface", "endpoints"]
+      },
+      {
+        "id": "se_i_002",
+        "topic": "OOP",
+        "question": "What is encapsulation in object-oriented programming?",
+        "options": {
+          "A": "Hiding internal implementation details and exposing only necessary interfaces",
+          "B": "Making all class variables public for easy external access",
+          "C": "Combining all functions into a single large file",
+          "D": "Removing all documentation from the codebase"
+        },
+        "explanation": "Encapsulation protects internal state and reduces coupling between components.",
+        "keywords": ["oop", "encapsulation", "classes", "objects", "hiding"]
+      },
+      {
+        "id": "se_i_003",
+        "topic": "Databases",
+        "question": "What is the difference between SQL and NoSQL databases?",
+        "options": {
+          "A": "SQL uses structured tables with relationships, NoSQL is more flexible with various data models",
+          "B": "SQL is only for small datasets, NoSQL is only for big data",
+          "C": "SQL requires programming knowledge, NoSQL does not",
+          "D": "SQL is newer technology than NoSQL databases"
+        },
+        "explanation": "SQL and NoSQL represent different approaches to data storage and retrieval.",
+        "keywords": ["databases", "sql", "nosql", "data models", "storage"]
+      },
+      {
+        "id": "se_i_004",
+        "topic": "Testing",
+        "question": "Why write unit tests for your code?",
+        "options": {
+          "A": "To verify individual components work correctly and catch bugs early",
+          "B": "To make the code run faster in production",
+          "C": "To automatically generate documentation",
+          "D": "To reduce the amount of code you need to write"
+        },
+        "explanation": "Unit tests provide confidence that code changes don't break existing functionality.",
+        "keywords": ["testing", "unit tests", "quality assurance", "bugs", "verification"]
+      }
+    ],
+    "advanced": [
+      {
+        "id": "se_a_001",
+        "topic": "System Design",
+        "question": "Why use microservices architecture instead of a monolithic design?",
+        "options": {
+          "A": "To enable independent deployment, scaling, and technology choices per service",
+          "B": "Microservices are always faster than monolithic applications",
+          "C": "Monolithic architectures are completely obsolete now",
+          "D": "Microservices eliminate all need for inter-service communication"
+        },
+        "explanation": "Microservices offer flexibility and scalability but add complexity.",
+        "keywords": ["microservices", "architecture", "scalability", "deployment", "design"]
+      },
+      {
+        "id": "se_a_002",
+        "topic": "Microservices",
+        "question": "What is a key challenge when implementing microservices?",
+        "options": {
+          "A": "Managing distributed data consistency and inter-service communication",
+          "B": "Writing code in multiple programming languages simultaneously",
+          "C": "Ensuring all services use the same database schema",
+          "D": "Preventing services from accessing the internet"
+        },
+        "explanation": "Distributed systems introduce complexity in data consistency and communication.",
+        "keywords": ["microservices", "distributed systems", "challenges", "consistency", "communication"]
+      },
+      {
+        "id": "se_a_003",
+        "topic": "Scalability",
+        "question": "What is horizontal scaling?",
+        "options": {
+          "A": "Adding more machines to distribute the load across multiple servers",
+          "B": "Upgrading existing hardware to more powerful components",
+          "C": "Writing faster algorithms to process data more quickly",
+          "D": "Reducing the number of features in your application"
+        },
+        "explanation": "Horizontal scaling distributes work across multiple machines for better scalability.",
+        "keywords": ["scalability", "horizontal scaling", "distributed systems", "load balancing"]
+      }
+    ]
+  },
+  "ux_designer": {
+    "beginner": [
+      {
+        "topic": "Design Thinking",
+        "question": "What is design thinking?",
+        "options": {
+          "A": "Human-centered problem-solving approach iterating solutions",
+          "B": "Only making things look pretty",
+          "C": "Following strict visual rules",
+          "D": "Copying competitor designs"
+        },
+        "explanation": "Design thinking is about solving problems"
+      },
+      {
+        "topic": "User Research",
+        "question": "Why conduct user research?",
+        "options": {
+          "A": "To understand user needs, behaviors, and pain points",
+          "B": "To delay project timeline",
+          "C": "To prove designers right",
+          "D": "To make designs complex"
+        },
+        "explanation": "Research informs better decisions"
+      },
+      {
+        "topic": "Wireframing",
+        "question": "Purpose of wireframing?",
+        "options": {
+          "A": "To create low-fidelity layouts showing structure before details",
+          "B": "To produce final pixel-perfect designs",
+          "C": "To write production code",
+          "D": "To replace user testing"
+        },
+        "explanation": "Wireframes show structure"
+      },
+      {
+        "topic": "Prototyping",
+        "question": "Why create prototypes?",
+        "options": {
+          "A": "To test interactions and gather feedback before building",
+          "B": "To replace final products",
+          "C": "To avoid user testing",
+          "D": "To waste development time"
+        },
+        "explanation": "Prototypes enable testing"
+      }
+    ],
+    "intermediate": [
+      {
+        "topic": "Interaction Design",
+        "question": "What is interaction design?",
+        "options": {
+          "A": "Designing how users interact with products through interfaces",
+          "B": "Only visual aesthetics",
+          "C": "Backend code architecture",
+          "D": "Database schema design"
+        },
+        "explanation": "IxD focuses on interactions"
+      },
+      {
+        "topic": "Design Systems",
+        "question": "Purpose of design systems?",
+        "options": {
+          "A": "Maintain consistency with reusable components and guidelines",
+          "B": "Limit designer creativity",
+          "C": "Replace all documentation",
+          "D": "Make design slower"
+        },
+        "explanation": "Systems ensure consistency"
+      },
+      {
+        "topic": "Usability Testing",
+        "question": "When conduct usability testing?",
+        "options": {
+          "A": "Throughout design process to validate decisions with users",
+          "B": "Only after product launches",
+          "C": "Never test with real users",
+          "D": "Only when designs fail"
+        },
+        "explanation": "Test early and often"
+      }
+    ],
+    "advanced": [
+      {
+        "topic": "UX Strategy",
+        "question": "What is UX strategy?",
+        "options": {
+          "A": "Aligning user experience with business goals through research and planning",
+          "B": "Only creating pretty interfaces",
+          "C": "Following competitors blindly",
+          "D": "Ignoring business needs"
+        },
+        "explanation": "Strategy connects UX and business"
+      },
+      {
+        "topic": "Accessibility",
+        "question": "Why design for accessibility?",
+        "options": {
+          "A": "To ensure everyone can use products regardless of abilities",
+          "B": "Only legal compliance",
+          "C": "To make designs ugly",
+          "D": "Accessibility optional feature"
+        },
+        "explanation": "Accessibility is inclusive design"
+      },
+      {
+        "topic": "Design Operations",
+        "question": "What is DesignOps?",
+        "options": {
+          "A": "Optimizing design processes, tools, and team collaboration",
+          "B": "Only hiring designers",
+          "C": "Making design slower",
+          "D": "Removing design processes"
+        },
+        "explanation": "DesignOps improves efficiency"
+      }
+    ]
+  },
+  "data_analyst": {
+    "beginner": [
+      {
+        "topic": "Excel",
+        "question": "Why use Excel for data analysis?",
+        "options": {
+          "A": "Quick data manipulation with formulas, pivot tables, and charts",
+          "B": "Only for word processing",
+          "C": "Cannot handle numbers",
+          "D": "Worse than paper spreadsheets"
+        },
+        "explanation": "Excel is versatile analysis tool"
+      },
+      {
+        "topic": "SQL Basics",
+        "question": "What is SQL used for?",
+        "options": {
+          "A": "Querying and manipulating data in relational databases",
+          "B": "Creating websites",
+          "C": "Editing photos",
+          "D": "Writing emails"
+        },
+        "explanation": "SQL manages database data"
+      },
+      {
+        "topic": "Statistics",
+        "question": "What is standard deviation?",
+        "options": {
+          "A": "Measure of data spread around the mean",
+          "B": "The average value",
+          "C": "The highest value",
+          "D": "Number of data points"
+        },
+        "explanation": "Std dev shows variability"
+      },
+      {
+        "topic": "Data Visualization",
+        "question": "When use bar chart vs line chart?",
+        "options": {
+          "A": "Bar charts for categories, line charts for trends over time",
+          "B": "They're interchangeable",
+          "C": "Bar charts only for negative",
+          "D": "Line charts only for prices"
+        },
+        "explanation": "Different charts serve different purposes"
+      }
+    ],
+    "intermediate": [
+      {
+        "topic": "Advanced SQL",
+        "question": "What are window functions?",
+        "options": {
+          "A": "Functions performing calculations across rows related to current row",
+          "B": "Functions opening windows",
+          "C": "Only for filtering data",
+          "D": "Same as regular functions"
+        },
+        "explanation": "Window functions enable advanced analytics"
+      },
+      {
+        "topic": "Python for Analysis",
+        "question": "Why use Python over Excel?",
+        "options": {
+          "A": "Python handles larger datasets and enables automation",
+          "B": "Excel always better",
+          "C": "Python only for web development",
+          "D": "They cannot work together"
+        },
+        "explanation": "Python scales better"
+      },
+      {
+        "topic": "A/B Testing",
+        "question": "Purpose of A/B testing?",
+        "options": {
+          "A": "Compare two versions to determine which performs better",
+          "B": "Testing alphabetical order",
+          "C": "Always choose option A",
+          "D": "Avoid making decisions"
+        },
+        "explanation": "A/B tests inform decisions"
+      }
+    ],
+    "advanced": [
+      {
+        "topic": "Predictive Analytics",
+        "question": "What is predictive analytics?",
+        "options": {
+          "A": "Using data and models to forecast future outcomes",
+          "B": "Only looking at past data",
+          "C": "Guaranteeing future events",
+          "D": "Replacing human judgment"
+        },
+        "explanation": "Predictive models forecast"
+      },
+      {
+        "topic": "ETL",
+        "question": "What does ETL stand for?",
+        "options": {
+          "A": "Extract, Transform, Load - data pipeline process",
+          "B": "Electronic Transfer of Lists",
+          "C": "Excel Table Loading",
+          "D": "Email Template Language"
+        },
+        "explanation": "ETL moves and transforms data"
+      },
+      {
+        "topic": "Business Intelligence",
+        "question": "Purpose of BI tools?",
+        "options": {
+          "A": "Transform data into actionable insights for decisions",
+          "B": "Only create pretty charts",
+          "C": "Replace business analysts",
+          "D": "Store data without analysis"
+        },
+        "explanation": "BI enables data-driven decisions"
+      }
+    ]
+  },
+  "project_manager": {
+    "beginner": [
+      {
+        "topic": "Project Planning",
+        "question": "What is a project charter?",
+        "options": {
+          "A": "Document authorizing project and defining objectives",
+          "B": "Daily task list",
+          "C": "Team attendance sheet",
+          "D": "Budget spreadsheet"
+        },
+        "explanation": "Charter formally initiates project"
+      },
+      {
+        "topic": "Agile",
+        "question": "What is Agile methodology?",
+        "options": {
+          "A": "Iterative approach delivering value incrementally",
+          "B": "Doing everything at once",
+          "C": "Never planning ahead",
+          "D": "Avoiding customer feedback"
+        },
+        "explanation": "Agile enables flexibility"
+      },
+      {
+        "topic": "Stakeholder Management",
+        "question": "Who are stakeholders?",
+        "options": {
+          "A": "Anyone impacted by or influencing the project",
+          "B": "Only project managers",
+          "C": "Only customers",
+          "D": "Only executives"
+        },
+        "explanation": "Stakeholders include all affected parties"
+      },
+      {
+        "topic": "Risk Management",
+        "question": "Purpose of risk register?",
+        "options": {
+          "A": "Document and track potential project risks",
+          "B": "Ignore all risks",
+          "C": "Only track issues",
+          "D": "Hide problems from team"
+        },
+        "explanation": "Risk register enables proactive management"
+      }
+    ],
+    "intermediate": [
+      {
+        "topic": "Scrum",
+        "question": "What is a sprint in Scrum?",
+        "options": {
+          "A": "Time-boxed iteration to deliver working increment",
+          "B": "Running exercise for team",
+          "C": "Entire project timeline",
+          "D": "Meeting with executives"
+        },
+        "explanation": "Sprints structure Agile work"
+      },
+      {
+        "topic": "Budget Management",
+        "question": "What is earned value management?",
+        "options": {
+          "A": "Method measuring project performance against plan",
+          "B": "Calculating employee salaries",
+          "C": "Counting money in bank",
+          "D": "Ignoring budget completely"
+        },
+        "explanation": "EVM tracks project health"
+      },
+      {
+        "topic": "Change Management",
+        "question": "Why have change control process?",
+        "options": {
+          "A": "To evaluate and manage project scope changes systematically",
+          "B": "To prevent any changes",
+          "C": "To accept all requests",
+          "D": "To delay project indefinitely"
+        },
+        "explanation": "Change control protects scope"
+      }
+    ],
+    "advanced": [
+      {
+        "topic": "Portfolio Management",
+        "question": "What is portfolio management?",
+        "options": {
+          "A": "Managing multiple projects to achieve strategic objectives",
+          "B": "Managing one project",
+          "C": "Creating art portfolios",
+          "D": "Only financial investments"
+        },
+        "explanation": "Portfolio aligns projects with strategy"
+      },
+      {
+        "topic": "Leadership",
+        "question": "Difference between manager and leader?",
+        "options": {
+          "A": "Managers execute plans, leaders inspire and set vision",
+          "B": "They're identical roles",
+          "C": "Managers always better",
+          "D": "Leaders never manage"
+        },
+        "explanation": "Leadership and management differ"
+      },
+      {
+        "topic": "Conflict Resolution",
+        "question": "Best approach to team conflict?",
+        "options": {
+          "A": "Address early with open communication and collaboration",
+          "B": "Ignore and hope it goes away",
+          "C": "Fire everyone involved",
+          "D": "Let conflicts escalate"
+        },
+        "explanation": "Early resolution prevents escalation"
+      }
+    ]
+  }
+}

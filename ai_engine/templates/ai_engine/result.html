@@ -1,0 +1,470 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Personality Results</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f4ff;
+            min-height: 100vh;
+            padding: 30px 20px;
+        }
+
+        .page { max-width: 880px; margin: 0 auto; }
+
+        /* ── Header ────────────────────────────────────── */
+        .hero {
+            background: linear-gradient(135deg, #1a56db 0%, #5b21b6 100%);
+            border-radius: 24px;
+            padding: 44px 48px 36px;
+            text-align: center;
+            color: white;
+            margin-bottom: 28px;
+            box-shadow: 0 12px 40px rgba(26,86,219,.35);
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255,255,255,.18);
+            border: 1.5px solid rgba(255,255,255,.35);
+            padding: 5px 18px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        .hero h1 { font-size: 34px; font-weight: 800; margin-bottom: 10px; }
+        .hero p  { font-size: 16px; opacity: .85; line-height: 1.65; max-width: 540px; margin: 0 auto 22px; }
+
+        .trait-pills {
+            display: flex; flex-wrap: wrap; gap: 10px;
+            justify-content: center; margin-top: 4px;
+        }
+
+        .trait-pill {
+            background: rgba(255,255,255,.2);
+            border: 1.5px solid rgba(255,255,255,.4);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: capitalize;
+        }
+
+        /* ── Cards ─────────────────────────────────────── */
+        .card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 36px 40px;
+            box-shadow: 0 4px 24px rgba(0,0,0,.07);
+            margin-bottom: 24px;
+            border: 1px solid #e8eeff;
+        }
+
+        .card-title {
+            font-size: 19px;
+            font-weight: 800;
+            color: #1e2a4a;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-title .icon { font-size: 22px; }
+
+        /* ── Trait bars ─────────────────────────────────── */
+        .trait-row {
+            padding: 18px 0;
+            border-bottom: 1px solid #f1f5ff;
+        }
+        .trait-row:last-child { border-bottom: none; padding-bottom: 0; }
+        .trait-row:first-child { padding-top: 0; }
+
+        .trait-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .trait-left { display: flex; align-items: center; gap: 10px; }
+
+        .trait-emoji { font-size: 22px; }
+
+        .trait-name-block {}
+        .trait-name {
+            font-size: 15px;
+            font-weight: 700;
+            color: #1e2a4a;
+            text-transform: capitalize;
+        }
+        .trait-desc-short {
+            font-size: 12px;
+            color: #6b7aaa;
+            margin-top: 1px;
+        }
+
+        .trait-right { display: flex; align-items: center; gap: 10px; }
+
+        .level-badge {
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 11px;
+            border-radius: 10px;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+        }
+        .lvl-high   { background: #dcfce7; color: #166534; }
+        .lvl-mid    { background: #fef9c3; color: #854d0e; }
+        .lvl-low    { background: #e0e7ff; color: #3730a3; }
+
+        .score-num {
+            font-size: 18px;
+            font-weight: 800;
+            color: #1a56db;
+            min-width: 44px;
+            text-align: right;
+        }
+
+        .bar-track {
+            height: 12px;
+            background: #eef2ff;
+            border-radius: 99px;
+            overflow: hidden;
+        }
+        .bar-fill {
+            height: 100%;
+            border-radius: 99px;
+            width: 0%;
+            transition: width 1.3s cubic-bezier(.25,.8,.25,1);
+        }
+
+        .bar-openness          { background: linear-gradient(90deg,#1a56db,#7c3aed); }
+        .bar-conscientiousness { background: linear-gradient(90deg,#059669,#34d399); }
+        .bar-extraversion      { background: linear-gradient(90deg,#d97706,#fbbf24); }
+        .bar-agreeableness     { background: linear-gradient(90deg,#db2777,#f472b6); }
+        .bar-neuroticism       { background: linear-gradient(90deg,#0284c7,#38bdf8); }
+        .bar-default           { background: linear-gradient(90deg,#6366f1,#a78bfa); }
+
+        .trait-meaning {
+            font-size: 13px;
+            color: #7c85b0;
+            margin-top: 8px;
+            line-height: 1.55;
+        }
+
+        /* ── Career grid ────────────────────────────────── */
+        .career-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+            gap: 16px;
+        }
+
+        .career-tile {
+            background: #f8faff;
+            border: 2px solid #dce5ff;
+            border-radius: 16px;
+            padding: 22px 20px;
+            text-decoration: none;
+            display: block;
+            transition: all .22s ease;
+            position: relative;
+        }
+
+        .career-tile:hover {
+            border-color: #1a56db;
+            background: #eff4ff;
+            transform: translateY(-4px);
+            box-shadow: 0 8px 28px rgba(26,86,219,.18);
+        }
+
+        .career-tile-icon  { font-size: 30px; margin-bottom: 10px; display: block; }
+        .career-tile-name  { font-size: 15px; font-weight: 700; color: #1e2a4a; margin-bottom: 4px; }
+        .career-tile-match {
+            font-size: 12px;
+            font-weight: 600;
+            color: #1a56db;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .match-dot {
+            width: 7px; height: 7px;
+            background: #1a56db;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        /* ── CTA ────────────────────────────────────────── */
+        .cta {
+            background: white;
+            border-radius: 20px;
+            padding: 32px 40px;
+            text-align: center;
+            box-shadow: 0 4px 24px rgba(0,0,0,.07);
+            border: 1px solid #e8eeff;
+        }
+
+        .cta p { color: #5a6690; font-size: 15px; margin-bottom: 22px; line-height: 1.6; }
+
+        .btn {
+            display: inline-block;
+            padding: 13px 36px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all .25s ease;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #1a56db, #5b21b6);
+            color: white;
+            box-shadow: 0 6px 20px rgba(26,86,219,.3);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 28px rgba(26,86,219,.4);
+        }
+
+        .btn-ghost {
+            background: white;
+            color: #1a56db;
+            border: 2px solid #c7d7ff;
+            margin-left: 12px;
+        }
+        .btn-ghost:hover { background: #eef4ff; }
+
+        /* ── Insight strip ──────────────────────────────── */
+        .insight-strip {
+            background: linear-gradient(135deg, #eff6ff, #f5f3ff);
+            border: 1.5px solid #c7d7ff;
+            border-radius: 14px;
+            padding: 16px 20px;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #1e3a8a;
+            line-height: 1.65;
+        }
+
+        .insight-strip strong { color: #1a56db; }
+
+        @media(max-width:600px) {
+            .hero { padding: 32px 24px 28px; }
+            .card { padding: 24px 20px; }
+            .career-grid { grid-template-columns: 1fr 1fr; }
+            .btn-ghost { margin-left: 0; margin-top: 10px; }
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+
+    <!-- ── Hero ── -->
+    <div class="hero">
+        <div class="hero-badge">✓ Assessment Complete</div>
+        <h1>🎉 Your Personality Profile</h1>
+        <p>
+            You've completed the personality assessment. Here are your Big Five trait scores
+            and the career paths that align best with your profile.
+        </p>
+        {% if top_traits %}
+        <div class="trait-pills">
+            {% for trait, score in top_traits %}
+            <span class="trait-pill">{{ trait }} · {{ score }}%</span>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- ── Trait Scores ── -->
+    {% if top_traits %}
+    <div class="card">
+        <div class="card-title">
+            <span class="icon">🧠</span> Big Five Personality Traits
+        </div>
+
+        {% for trait, score in top_traits %}
+        <div class="trait-row">
+            <div class="trait-top">
+                <div class="trait-left">
+                    <span class="trait-emoji">
+                        {% if trait == "openness" %}🔭
+                        {% elif trait == "conscientiousness" %}📋
+                        {% elif trait == "extraversion" %}🤝
+                        {% elif trait == "agreeableness" %}💛
+                        {% elif trait == "neuroticism" %}🌊
+                        {% else %}⭐{% endif %}
+                    </span>
+                    <div class="trait-name-block">
+                        <div class="trait-name">{{ trait }}</div>
+                        <div class="trait-desc-short">
+                            {% if trait == "openness" %}Curiosity &amp; creativity
+                            {% elif trait == "conscientiousness" %}Organisation &amp; discipline
+                            {% elif trait == "extraversion" %}Social energy &amp; assertiveness
+                            {% elif trait == "agreeableness" %}Empathy &amp; cooperation
+                            {% elif trait == "neuroticism" %}Emotional sensitivity
+                            {% else %}Personal strength{% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="trait-right">
+                    <span class="level-badge
+                        {% if score >= 70 %}lvl-high
+                        {% elif score >= 40 %}lvl-mid
+                        {% else %}lvl-low{% endif %}">
+                        {% if score >= 70 %}High
+                        {% elif score >= 40 %}Moderate
+                        {% else %}Low{% endif %}
+                    </span>
+                    <span class="score-num">{{ score }}%</span>
+                </div>
+            </div>
+
+            <div class="bar-track">
+                <div class="bar-fill bar-{{ trait }} bar-default"
+                     data-width="{{ score }}"
+                     style="width:0%"></div>
+            </div>
+
+            <div class="trait-meaning">
+                {% if trait == "openness" %}
+                    {% if score >= 70 %}You are highly imaginative and curious — you enjoy exploring ideas, art, and new experiences. Careers in research, design, and strategy suit you well.
+                    {% elif score >= 40 %}You balance openness with practicality, comfortable in both creative and structured environments.
+                    {% else %}You prefer structure and proven approaches over experimentation. You thrive in stable, well-defined roles.{% endif %}
+
+                {% elif trait == "conscientiousness" %}
+                    {% if score >= 70 %}You are highly organised and goal-driven. You follow through on commitments and deliver reliable, high-quality work.
+                    {% elif score >= 40 %}You manage responsibilities well while staying adaptable when plans change.
+                    {% else %}You prefer flexibility and spontaneity over rigid schedules. You work best in dynamic, evolving environments.{% endif %}
+
+                {% elif trait == "extraversion" %}
+                    {% if score >= 70 %}You gain energy from social situations. You are confident, communicative, and comfortable leading and influencing others.
+                    {% elif score >= 40 %}You enjoy both social engagement and independent work, adapting well to each context.
+                    {% else %}You recharge through solitude and prefer deep, focused independent work over constant collaboration.{% endif %}
+
+                {% elif trait == "agreeableness" %}
+                    {% if score >= 70 %}You are warm, empathetic, and a natural team player. You prioritise harmony and are skilled at building trust.
+                    {% elif score >= 40 %}You balance collaboration with assertiveness, working well in teams while holding your own position.
+                    {% else %}You are direct and independent — you prioritise logic and outcomes over consensus.{% endif %}
+
+                {% elif trait == "neuroticism" %}
+                    {% if score >= 70 %}You experience emotions intensely and are highly sensitive to stress. This awareness makes you thoughtful and attentive to detail.
+                    {% elif score >= 40 %}You respond thoughtfully to pressure, with a balanced emotional range across most situations.
+                    {% else %}You are calm and emotionally resilient — difficult situations rarely destabilise you.{% endif %}
+
+                {% else %}
+                    {% if score >= 70 %}This is a strong trait that positively shapes how you approach challenges and decisions.
+                    {% elif score >= 40 %}This is a balanced quality that serves you well across a variety of situations.
+                    {% else %}This is an area with room to grow through targeted practice and experience.{% endif %}
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+
+        <div class="insight-strip">
+            <strong>Your profile summary:</strong>
+            Your highest trait is
+            <strong>{{ top_traits.0.0 }}</strong>
+            ({{ top_traits.0.1 }}%).
+            This, combined with your other scores, suggests you are well-suited to roles that require
+            {% if top_traits.0.0 == "openness" %}creative thinking and exploration.
+            {% elif top_traits.0.0 == "conscientiousness" %}careful planning and reliable execution.
+            {% elif top_traits.0.0 == "extraversion" %}leadership, communication, and teamwork.
+            {% elif top_traits.0.0 == "agreeableness" %}collaboration, mentoring, and people-centred work.
+            {% elif top_traits.0.0 == "neuroticism" %}attention to detail and emotionally nuanced work.
+            {% else %}a thoughtful and balanced approach.{% endif %}
+            Select a career below to begin your skill assessment.
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- ── Career Recommendations ── -->
+    {% if recommended_careers %}
+    <div class="card">
+        <div class="card-title">
+            <span class="icon">🚀</span> Recommended Career Paths
+        </div>
+        <p style="color:#5a6690;font-size:14px;margin-bottom:22px;line-height:1.6">
+            Each career below was matched to your personality profile.
+            Click one to start a 15-question skill assessment — your answers determine
+            whether you are placed at <strong>Beginner</strong>, <strong>Intermediate</strong>,
+            or <strong>Advanced</strong> level, and your personalised course is generated from that.
+        </p>
+
+        <div class="career-grid">
+            {% for career in recommended_careers %}
+            <a href="{% url 'ai_engine:assessment_start' career=career %}" class="career-tile">
+                <span class="career-tile-icon">
+                    {% if career == "Software Engineer" %}💻
+                    {% elif career == "Data Scientist" %}📊
+                    {% elif career == "Data Analyst" %}📈
+                    {% elif career == "UX Designer" or career == "UI/UX Designer" %}🎨
+                    {% elif career == "Product Manager" %}📦
+                    {% elif career == "Project Manager" %}📋
+                    {% elif career == "Marketing Manager" or career == "Marketing Strategist" %}📣
+                    {% elif career == "HR Manager" %}👥
+                    {% elif career == "Finance Analyst" %}💰
+                    {% elif career == "Teacher" %}🎓
+                    {% elif career == "Research Scientist" %}🔬
+                    {% elif career == "Content Creator" or career == "Content Writer" %}✍️
+                    {% elif career == "Counselor" %}💬
+                    {% elif career == "Creative Director" %}🎭
+                    {% elif career == "Product Designer" %}🖌️
+                    {% else %}⭐{% endif %}
+                </span>
+                <div class="career-tile-name">{{ career }}</div>
+                <div class="career-tile-match">
+                    <span class="match-dot"></span> Matched to your profile
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- ── CTA ── -->
+    <div class="cta">
+        <div class="card-title" style="justify-content:center;margin-bottom:12px">
+            <span class="icon">🎯</span> What Happens Next?
+        </div>
+        <p>
+            Select any career above to take a <strong>15-question LLM-generated assessment</strong>
+            covering Beginner, Intermediate, and Advanced topics.
+            Your score determines your level and unlocks a personalised course built just for you.
+        </p>
+        <a href="{% url 'ai_engine:select_career' %}" class="btn btn-primary">
+            Browse All Career Paths →
+        </a>
+        <a href="{% url 'ai_engine:dashboard' %}" class="btn btn-ghost">
+            Dashboard
+        </a>
+    </div>
+
+</div>
+
+<script>
+    // Animate bars in after page loads
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            document.querySelectorAll('.bar-fill[data-width]').forEach(bar => {
+                bar.style.width = bar.dataset.width + '%';
+            });
+        }, 250);
+    });
+</script>
+</body>
+</html>

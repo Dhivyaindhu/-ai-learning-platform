@@ -1,0 +1,249 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question {{ question_number }} of {{ max_questions }}</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 700px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .progress-container { margin-bottom: 30px; }
+
+        .progress-text {
+            text-align: center;
+            color: #667eea;
+            font-size: 14px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        .question-number {
+            color: #667eea;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .question-text {
+            font-size: 20px;
+            color: #333;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .answer-section { margin-bottom: 30px; }
+
+        .answer-label {
+            display: block;
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .answer-textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: inherit;
+            resize: vertical;
+            transition: all 0.3s ease;
+        }
+
+        .answer-textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+        }
+
+        .char-count {
+            text-align: right;
+            font-size: 12px;
+            color: #999;
+            margin-top: 5px;
+        }
+
+        .char-count.valid  { color: #4CAF50; }
+        .char-count.invalid { color: #f44336; }
+
+        .error-message {
+            background: #fee;
+            border: 1px solid #fcc;
+            color: #c00;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102,126,234,0.3);
+        }
+
+        .submit-btn:disabled { background: #ccc; cursor: not-allowed; }
+
+        .helper-text {
+            font-size: 13px;
+            color: #666;
+            margin-top: 10px;
+            font-style: italic;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-text">
+            Question {{ question_number }} of {{ max_questions }}
+            ({{ progress_pct }}% Complete)
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" style="width: {{ progress_pct }}%"></div>
+        </div>
+    </div>
+
+    <!-- Question Number -->
+    <div class="question-number">Question {{ question_number }}</div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="error-message">⚠️ {{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- Question Form -->
+    <form method="post" id="questionForm">
+        {% csrf_token %}
+        <input type="hidden" name="question_id" value="{{ question.id }}">
+        <input type="hidden" name="trait"        value="{{ question.trait }}">
+        <input type="hidden" name="question_text" value="{{ question.question }}">
+
+        <div class="question-text">{{ question.question }}</div>
+
+        <div class="answer-section">
+            <label class="answer-label" for="answer">Your Answer:</label>
+            <textarea
+                name="answer"
+                id="answer"
+                class="answer-textarea"
+                placeholder="Share your thoughts honestly. There are no right or wrong answers..."
+                required
+                minlength="10"
+                oninput="updateCharCount()"
+                autofocus
+            ></textarea>
+            <div class="char-count" id="charCountContainer">
+                <span id="charCount">0</span> characters
+                <span id="statusText">(minimum 10 required)</span>
+            </div>
+        </div>
+
+        <p class="helper-text">💡 Be honest and specific. Share real examples when possible!</p>
+
+        <button type="submit" class="submit-btn" id="submitBtn" disabled>
+            Next Question →
+        </button>
+    </form>
+</div>
+
+<script>
+    const textarea         = document.getElementById('answer');
+    const submitBtn        = document.getElementById('submitBtn');
+    const charCountSpan    = document.getElementById('charCount');
+    const charCountContainer = document.getElementById('charCountContainer');
+    const statusText       = document.getElementById('statusText');
+
+    function updateCharCount() {
+        const length = textarea.value.trim().length;
+        charCountSpan.textContent = length;
+
+        if (length >= 10) {
+            submitBtn.disabled = false;
+            charCountContainer.classList.add('valid');
+            charCountContainer.classList.remove('invalid');
+            statusText.textContent = '(✓ Ready to submit)';
+        } else {
+            submitBtn.disabled = true;
+            charCountContainer.classList.remove('valid');
+            if (length > 0) {
+                charCountContainer.classList.add('invalid');
+                statusText.textContent = `(${10 - length} more needed)`;
+            } else {
+                charCountContainer.classList.remove('invalid');
+                statusText.textContent = '(minimum 10 required)';
+            }
+        }
+    }
+
+    textarea.focus();
+
+    document.getElementById('questionForm').addEventListener('submit', function(e) {
+        if (textarea.value.trim().length < 10) {
+            e.preventDefault();
+            alert('Please provide a more detailed answer (at least 10 characters).');
+            return false;
+        }
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Processing...';
+    });
+</script>
+</body>
+</html>

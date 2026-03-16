@@ -1,0 +1,80 @@
+{% comment %}templates/ai/course_detail.html{% endcomment %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{{ course.course_title }}</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root { --bg:#0d1117; --surface:#161b22; --border:#30363d; --accent:#58a6ff; --success:#3fb950; --text:#e6edf3; --muted:#8b949e; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 2rem 1rem; }
+    .container { max-width: 980px; margin: 0 auto; }
+    .header { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 2rem; margin-bottom: 1.5rem; }
+    .header h1 { font-size: 1.75rem; margin-bottom: .5rem; }
+    .header p { color: var(--muted); font-size: .92rem; margin-bottom: 1rem; }
+    .progress-row { display: flex; justify-content: space-between; font-size: .8rem; color: var(--muted); margin-bottom: .4rem; }
+    .progress-bar { height: 6px; background: var(--border); border-radius: 99px; overflow: hidden; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), #bc8cff); border-radius: 99px; }
+
+    .module-list { display: flex; flex-direction: column; gap: .85rem; }
+    .module-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; transition: border-color .2s; }
+    .module-card:hover { border-color: var(--accent); }
+    .module-info h3 { font-size: 1rem; margin-bottom: .3rem; }
+    .module-info p { font-size: .82rem; color: var(--muted); }
+    .module-actions { display: flex; align-items: center; gap: 1rem; }
+    .completion-badge { font-size: .75rem; font-weight: 600; padding: .3rem .7rem; border-radius: 6px; white-space: nowrap; }
+    .badge-done { background: rgba(63,185,80,.15); color: var(--success); }
+    .badge-progress { background: rgba(88,166,255,.15); color: var(--accent); }
+    .btn { background: var(--accent); color: #0d1117; padding: .6rem 1.1rem; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: .85rem; white-space: nowrap; }
+    .btn:hover { opacity: .88; }
+
+    .capstone-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 1.75rem; margin-top: 1.5rem; }
+    .capstone-card h2 { font-size: 1.25rem; margin-bottom: .75rem; }
+    .capstone-card p { color: var(--muted); font-size: .88rem; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>{{ course.course_title }}</h1>
+    <p>{{ course.course_description }}</p>
+    <div class="progress-row">
+      <span>Overall Progress</span>
+      <span>{{ overall_progress }}%</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" style="width:{{ overall_progress }}%"></div>
+    </div>
+  </div>
+
+  <div class="module-list">
+    {% for item in module_list %}
+      <div class="module-card">
+        <div class="module-info">
+          <h3>Module {{ item.module.module_number }}: {{ item.module.title }}</h3>
+          <p>{{ item.module.description|truncatewords:15 }}</p>
+        </div>
+        <div class="module-actions">
+          {% if item.completion == 100 %}
+            <span class="completion-badge badge-done">✓ Complete</span>
+          {% else %}
+            <span class="completion-badge badge-progress">{{ item.completion }}%</span>
+          {% endif %}
+          <a href="{% url 'ai_engine:module_learn' item.module.id %}" class="btn">Continue →</a>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  {% if capstone %}
+  <div class="capstone-card">
+    <h2>🎓 Final Project</h2>
+    <p>{{ capstone.title }}</p>
+    <a href="{% url 'ai_engine:capstone_project' course.id %}" class="btn">View Project →</a>
+  </div>
+  {% endif %}
+</div>
+</body>
+</html>

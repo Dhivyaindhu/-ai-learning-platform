@@ -1,0 +1,39 @@
+{% comment %}templates/ai/assessment_start.html{% endcomment %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Start Assessment — {{ career }}</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root { --bg:#0d1117; --surface:#161b22; --border:#30363d; --accent:#58a6ff; --text:#e6edf3; --muted:#8b949e; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; }
+    .card { max-width: 540px; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 2.5rem; text-align: center; }
+    h1 { font-size: 1.8rem; margin-bottom: .5rem; }
+    .subtitle { color: var(--accent); font-size: 1.1rem; margin-bottom: 1.5rem; }
+    p { color: var(--muted); line-height: 1.7; margin-bottom: 1.5rem; }
+    ul { text-align: left; margin: 0 auto 1.5rem; max-width: 360px; }
+    ul li { margin-bottom: .5rem; color: var(--muted); }
+    form button { width: 100%; background: var(--accent); color: #0d1117; border: none; border-radius: 10px; padding: .9rem; font-weight: 700; font-size: 1rem; cursor: pointer; }
+    form button:hover { opacity: .88; }
+  </style>
+</head>
+<body>
+<div class="card">
+  <h1>Career Assessment</h1>
+  <div class="subtitle">{{ career }}</div>
+  <p>You're about to take a 15-question assessment to determine your skill level in {{ career }}.</p>
+  <ul>
+    <li>✅ 15 questions covering beginner to advanced topics</li>
+    <li>✅ Adaptive difficulty based on your answers</li>
+    <li>✅ Personalized course generated at the end</li>
+  </ul>
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit">Begin Assessment →</button>
+  </form>
+</div>
+</body>
+</html>

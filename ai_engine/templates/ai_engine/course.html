@@ -1,0 +1,341 @@
+<!-- ai_engine/templates/ai_engine/course.html -->
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ course.course_title }} - Course Details</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .breadcrumb {
+            color: white;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .breadcrumb a {
+            color: white;
+            text-decoration: none;
+            opacity: 0.8;
+        }
+
+        .breadcrumb a:hover {
+            opacity: 1;
+        }
+
+        .course-header {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .course-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            background: #e0e7ff;
+            color: #667eea;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-transform: capitalize;
+        }
+
+        .course-title {
+            font-size: 36px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .course-description {
+            color: #666;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .course-stats {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #666;
+        }
+
+        .stat-icon {
+            font-size: 24px;
+        }
+
+        .progress-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .progress-header h2 {
+            color: #333;
+            font-size: 24px;
+        }
+
+        .progress-percentage {
+            font-size: 32px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 15px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s ease;
+        }
+
+        .modules-section h2 {
+            color: white;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .module-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.3s ease;
+        }
+
+        .module-card:hover {
+            transform: translateX(5px);
+        }
+
+        .module-info {
+            flex: 1;
+        }
+
+        .module-number {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+
+        .module-title {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 8px;
+            display: inline;
+        }
+
+        .module-meta {
+            color: #666;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .module-progress {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .module-progress-bar {
+            width: 150px;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .module-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
+        .module-status {
+            font-size: 12px;
+            color: #666;
+            font-weight: 600;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #e0e7ff;
+            color: #667eea;
+        }
+
+        .btn-secondary:hover {
+            background: #c7d2fe;
+        }
+
+        .btn-disabled {
+            background: #e0e0e0;
+            color: #999;
+            cursor: not-allowed;
+        }
+
+        .completed-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            background: #d4edda;
+            color: #155724;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="{% url 'ai_engine:my_courses' %}">← Back to My Courses</a>
+        </div>
+
+        <div class="course-header">
+            <div class="course-badge">{{ course.difficulty_level }}</div>
+            <h1 class="course-title">{{ course.course_title }}</h1>
+            <p class="course-description">{{ course.course_description }}</p>
+
+            <div class="course-stats">
+                <div class="stat-item">
+                    <span class="stat-icon">📚</span>
+                    <span>{{ course.total_modules }} Modules</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-icon">⏱️</span>
+                    <span>{{ course.estimated_duration }}</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-icon">🎯</span>
+                    <span>{{ course.career }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="progress-card">
+            <div class="progress-header">
+                <h2>Your Progress</h2>
+                <span class="progress-percentage">{{ completion }}%</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: {{ completion }}%"></div>
+            </div>
+        </div>
+
+        <div class="modules-section">
+            <h2>Course Modules</h2>
+
+            {% for item in modules_with_progress %}
+            <div class="module-card">
+                <div class="module-info">
+                    <div>
+                        <span class="module-number">{{ item.module.module_number }}</span>
+                        <h3 class="module-title">{{ item.module.title }}</h3>
+                        {% if item.progress.completed %}
+                        <span class="completed-badge">✓ Completed</span>
+                        {% endif %}
+                    </div>
+                    <div class="module-meta">
+                        {{ item.module.description }} • {{ item.module.estimated_time }}
+                    </div>
+                </div>
+
+                <div class="module-progress">
+                    <div class="module-progress-bar">
+                        <div class="module-progress-fill" style="width: {{ item.completion }}%"></div>
+                    </div>
+                    <span class="module-status">{{ item.completion }}%</span>
+
+                    {% if item.progress.completed %}
+                    <a href="{% url 'ai_engine:module_learn' item.module.id %}" class="btn btn-secondary">
+                        Review
+                    </a>
+                    {% elif item.completion > 0 %}
+                    <a href="{% url 'ai_engine:module_learn' item.module.id %}" class="btn btn-primary">
+                        Continue
+                    </a>
+                    {% else %}
+                    <a href="{% url 'ai_engine:module_learn' item.module.id %}" class="btn btn-primary">
+                        Start
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

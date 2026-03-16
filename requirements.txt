@@ -7,3 +7,4 @@ python-dotenv
 asgiref
 sqlparse
 tzdata
+requests

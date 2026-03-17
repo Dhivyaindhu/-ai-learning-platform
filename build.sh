@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 set -o errexit
 
-# Install Tailscale
+# Install Tailscale (without sudo)
 curl -fsSL https://tailscale.com/install.sh | sh
 
-# Connect to Tailscale network
+# Start Tailscale (Render runs as root, so no sudo needed)
 if [ -n "$TAILSCALE_AUTH_KEY" ]; then
-  sudo tailscale up --authkey=$TAILSCALE_AUTH_KEY --accept-routes
+  tailscale up --authkey=$TAILSCALE_AUTH_KEY --accept-routes --hostname=render-ai-platform
 fi
 
 # Regular build steps

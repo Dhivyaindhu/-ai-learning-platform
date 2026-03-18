@@ -39,7 +39,7 @@ if [ -n "$TAILSCALE_AUTH_KEY" ]; then
         up \
         --authkey="$TAILSCALE_AUTH_KEY" \
         --hostname=render-django \
-        --accept-routes || echo "⚠️  Tailscale up failed (might already be connected)"
+        --accept-routes || echo "⚠️  Tailscale up failed"
     
     sleep 3
     
@@ -49,6 +49,7 @@ else
     echo "❌ TAILSCALE_AUTH_KEY not set!"
 fi
 
-# Start Django (DON'T start Ollama here - it's on your laptop!)
+# Start Django
 echo "🌐 Starting Django application..."
-exec gunicorn Aipoweredlearningplatform.wsgi:application
+cd /opt/render/project/src
+exec gunicorn AIpoweredlearningplatform.wsgi:application --bind 0.0.0.0:$PORT

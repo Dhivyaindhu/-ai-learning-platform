@@ -4,6 +4,7 @@
 import time
 import re
 import os
+import sys
 from typing import Dict, Any
 
 _llm_instance = None
@@ -17,6 +18,41 @@ def get_llm_engine():
     return _llm_instance
 
 
+def _is_dev_reloader_process():
+    """
+    Returns True ONLY for the Django dev server reloader parent process.
+    Returns False for Gunicorn, Render, and Django dev server worker.
+
+    Django dev server spawns two processes:
+      Parent (reloader): RUN_MAIN is NOT set → skip LLM init
+      Child  (worker):   RUN_MAIN=true       → init LLM
+
+    Gunicorn never sets RUN_MAIN so we always init there.
+    """
+    # Gunicorn — always initialize
+    if os.environ.get("SERVER_SOFTWARE", "").startswith("gunicorn"):
+        return False
+
+    # Render platform env var — always initialize
+    if os.environ.get("RENDER"):
+        return False
+
+    # OLLAMA_URL set = running on server — always initialize
+    if os.environ.get("OLLAMA_URL"):
+        return False
+
+    # Django dev server worker process — initialize
+    if os.environ.get("RUN_MAIN") == "true":
+        return False
+
+    # Django dev server reloader parent — skip
+    if "runserver" in sys.argv:
+        return True
+
+    # Default — initialize
+    return False
+
+
 class LLMEngine:
 
     def __init__(self):
@@ -28,15 +64,11 @@ class LLMEngine:
         self.error_count            = 0
         self.total_tokens_generated = 0
 
-        # Prevent double-init from Django autoreloader (only in development)
-        # In production (Render), always initialize
-        is_development = os.environ.get("DEBUG", "False") == "True"
-        is_reloader = os.environ.get("RUN_MAIN") != "true"
-
-        if is_development and is_reloader:
-            print("🔧 LLM Engine: skipping init in reloader process (development)")
+        # ✅ FIX: old guard used RUN_MAIN only — blocked Gunicorn/Render entirely
+        if _is_dev_reloader_process():
+            print("🔧 LLM Engine: skipping init in Django reloader process")
             return
-        
+
         print("🚀 LLM Engine: INITIALIZING...")
         self._initialize_model()
 

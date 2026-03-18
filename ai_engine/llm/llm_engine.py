@@ -28,11 +28,16 @@ class LLMEngine:
         self.error_count            = 0
         self.total_tokens_generated = 0
 
-        # Prevent double-init from Django autoreloader
-        if os.environ.get("RUN_MAIN") != "true":
-            print("🔧 LLM Engine: skipping init in reloader process")
-            return
+        # Prevent double-init from Django autoreloader (only in development)
+        # In production (Render), always initialize
+        is_development = os.environ.get("DEBUG", "False") == "True"
+        is_reloader = os.environ.get("RUN_MAIN") != "true"
 
+        if is_development and is_reloader:
+            print("🔧 LLM Engine: skipping init in reloader process (development)")
+            return
+        
+        print("🚀 LLM Engine: INITIALIZING...")
         self._initialize_model()
 
     def _initialize_model(self):

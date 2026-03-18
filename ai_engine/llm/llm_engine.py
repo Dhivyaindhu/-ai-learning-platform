@@ -18,22 +18,28 @@ def get_llm_engine():
     return _llm_instance
 
 
-def _is_dev_reloader_process():
+def _should_skip_init():
     """
-    Returns True ONLY for the Django dev server reloader parent process.
-    Returns False for Gunicorn, Render, and Django dev server worker.
-
-    Django dev server spawns two processes:
-      Parent (reloader): RUN_MAIN is NOT set → skip LLM init
-      Child  (worker):   RUN_MAIN=true       → init LLM
-
-    Gunicorn never sets RUN_MAIN so we always init there.
+    Returns True when LLM init must be skipped.
+    Skip during:
+      1. Django build commands (collectstatic, migrate, makemigrations)
+      2. Django dev server reloader parent process
+    Initialize during:
+      1. Gunicorn workers (Render production)
+      2. Django dev server worker (RUN_MAIN=true)
     """
+    # Always skip during Django management commands that run in build phase
+    build_commands = {"collectstatic", "migrate", "makemigrations", "check", "shell"}
+    for cmd in build_commands:
+        if cmd in sys.argv:
+            print(f"🔧 LLM Engine: skipping init during '{cmd}' command")
+            return True
+
     # Gunicorn — always initialize
     if os.environ.get("SERVER_SOFTWARE", "").startswith("gunicorn"):
         return False
 
-    # Render platform env var — always initialize
+    # Render platform — always initialize
     if os.environ.get("RENDER"):
         return False
 
@@ -41,7 +47,7 @@ def _is_dev_reloader_process():
     if os.environ.get("OLLAMA_URL"):
         return False
 
-    # Django dev server worker process — initialize
+    # Django dev server worker — initialize
     if os.environ.get("RUN_MAIN") == "true":
         return False
 
@@ -49,7 +55,6 @@ def _is_dev_reloader_process():
     if "runserver" in sys.argv:
         return True
 
-    # Default — initialize
     return False
 
 
@@ -64,9 +69,7 @@ class LLMEngine:
         self.error_count            = 0
         self.total_tokens_generated = 0
 
-        # ✅ FIX: old guard used RUN_MAIN only — blocked Gunicorn/Render entirely
-        if _is_dev_reloader_process():
-            print("🔧 LLM Engine: skipping init in Django reloader process")
+        if _should_skip_init():
             return
 
         print("🚀 LLM Engine: INITIALIZING...")
@@ -79,7 +82,6 @@ class LLMEngine:
 
             self.llm_client = LocalLLM(model_name="qwen-local")
 
-            # Test generation
             print("   Testing generation...")
             test = self.llm_client.generate("Say hello in 3 words.", max_tokens=10)
 

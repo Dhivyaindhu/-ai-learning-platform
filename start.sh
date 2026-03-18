@@ -29,10 +29,8 @@ echo "🚀 Starting Tailscale daemon..."
 TAILSCALED_PID=$!
 echo "✅ Tailscaled started (PID: $TAILSCALED_PID)"
 
-# Wait for daemon
 sleep 5
 
-# Check if daemon is running
 if ps -p $TAILSCALED_PID > /dev/null; then
    echo "✅ Tailscaled is running!"
 else
@@ -43,20 +41,33 @@ fi
 # Connect to Tailscale
 if [ -n "$TAILSCALE_AUTH_KEY" ]; then
     echo "🔗 Connecting to Tailscale network..."
-    
     /tmp/tailscale-bin \
         --socket=/tmp/tailscale-socket/tailscaled.sock \
         up \
         --authkey="$TAILSCALE_AUTH_KEY" \
         --hostname=render-django \
         --accept-routes || echo "⚠️  Tailscale up failed (might already be connected)"
-    
     sleep 3
-    
     echo "✅ Tailscale status:"
     /tmp/tailscale-bin --socket=/tmp/tailscale-socket/tailscaled.sock status || echo "Status check failed"
 else
     echo "❌ TAILSCALE_AUTH_KEY not set!"
+fi
+
+# Start Ollama
+echo "🚀 Starting Ollama..."
+curl -fsSL https://ollama.com/download/Ollama-linux-amd64.tgz -o /tmp/ollama.tgz
+tar -xzf /tmp/ollama.tgz -C /tmp
+chmod +x /tmp/ollama/ollama
+/tmp/ollama/ollama serve &
+OLLAMA_PID=$!
+sleep 5
+
+if ps -p $OLLAMA_PID > /dev/null; then
+    echo "✅ Ollama started (PID: $OLLAMA_PID)"
+else
+    echo "❌ Ollama failed to start!"
+    exit 1
 fi
 
 # Start Django

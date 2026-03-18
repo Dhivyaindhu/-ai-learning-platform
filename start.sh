@@ -51,4 +51,4 @@ fi
 
 # Start Django (DON'T start Ollama here - it's on your laptop!)
 echo "🌐 Starting Django application..."
-exec gunicorn AIpoweredlearningplatform.wsgi:application
+exec gunicorn Aipoweredlearningplatform.wsgi:application

@@ -1,7 +1,5 @@
 # ai_engine/psychology/engine.py
-# Key fix: _run_generation now tries 3 progressively simpler prompts before
-# ever touching the static fallback — so the LLM does the work on the vast
-# majority of questions.
+# Key fix: validates against meta-responses from small LLMs like qwen
 
 import hashlib
 import random
@@ -10,28 +8,32 @@ from ..llm.llm_engine import get_llm_engine
 from .traits import PERSONALITY_TRAITS as PSYCHOLOGICAL_TRAITS
 
 
-# ── System prompts — one per retry level ──────────────────────────────────────
-# Level 0: full instruction set
+# ── System prompts ─────────────────────────────────────────────────────────────
+# For small models (qwen 0.5B-1.5B), the key is to give a concrete EXAMPLE
+# of the output format — they follow by imitation better than by instruction.
+
 _SYS_FULL = (
-    "You are a skilled interviewer in a one-on-one conversation. "
-    "Write ONE open-ended question to help you understand the person. "
+    "You are conducting a personality interview. "
+    "Your job is to ask ONE question directly to the person.\n\n"
+    "EXAMPLE of good output: What kind of work environment helps you feel most focused?\n"
+    "EXAMPLE of good output: How do you usually handle it when your plans change unexpectedly?\n\n"
     "Rules:\n"
-    "- Use 'you' or 'your' — never 'this person', 'they', or 'their'\n"
-    "- One sentence ending with a question mark\n"
-    "- Natural and conversational — no jargon, no test terminology\n"
-    "- Do NOT assume anything not already stated\n"
-    "- Do NOT apologise or add any preamble — output the question only."
+    "- Output ONLY the question itself — nothing else\n"
+    "- Use 'you' or 'your' — address the person directly\n"
+    "- One sentence ending with ?\n"
+    "- Do NOT write: 'Here is a question', 'One example', 'Sure!', or any preamble\n"
+    "- Do NOT describe what you are doing — just ask the question"
 )
 
-# Level 1: shorter, stricter
 _SYS_SHORT = (
-    "Write ONE interview question using 'you' or 'your'. "
-    "One sentence, ends with ?. No preamble, no apology. Question only."
+    "Ask the person ONE question directly. "
+    "Example: 'How do you usually handle stress at work?' "
+    "Output the question only. No preamble. Use 'you' or 'your'. End with ?."
 )
 
-# Level 2: minimal — last chance before fallback
 _SYS_MINIMAL = (
-    "Ask the user one short open-ended question. Use 'you'. End with ?."
+    "Write one question to ask a person. "
+    "Use 'you'. End with ?. Output only the question."
 )
 
 
@@ -88,15 +90,9 @@ class PsychologyEngine:
         session.setdefault("questions_asked", []).append(question)
         return question
 
-    # ── Multi-strategy generation: 3 attempts before static fallback ──────────
+    # ── Multi-strategy generation ─────────────────────────────────────────────
 
     def _generate_with_retries(self, trait, q_no, session, mode, last):
-        """
-        Try 3 progressively simpler prompts before falling back to static pool.
-        Strategy 0 — full context prompt  (best quality)
-        Strategy 1 — concise prompt       (fewer tokens = less drift)
-        Strategy 2 — minimal 1-line ask   (almost impossible to confuse the model)
-        """
         strategies = [
             (self._build_prompt(trait, session, mode, last, level=0), _SYS_FULL,    80),
             (self._build_prompt(trait, session, mode, last, level=1), _SYS_SHORT,   60),
@@ -114,75 +110,97 @@ class PsychologyEngine:
                 return _make_q(q_no, trait, question)
 
             except Exception as e:
-                print(f"   ↩  [{mode}/s{attempt}] Q{q_no}: {str(e)[:60]} — trying next strategy")
+                print(f"   ↩  [{mode}/s{attempt}] Q{q_no}: {str(e)[:80]} — trying next")
                 continue
 
-        # All 3 LLM strategies failed → static fallback
-        print(f"   📋 [fallback] Q{q_no} ({trait}): all LLM strategies failed")
+        # All LLM strategies failed → use static fallback
+        print(f"   📋 [fallback] Q{q_no} ({trait}): using static pool")
         return self._static_fallback(trait, q_no, session)
 
-    # ── Prompt builders — three detail levels ─────────────────────────────────
+    # ── Prompt builders ───────────────────────────────────────────────────────
 
     def _build_prompt(self, trait, session, mode, last, level):
         theme = _TRAIT_THEMES[trait]
 
-        # ── Level 2: bare minimum ─────────────────────────────────────────────
         if level == 2:
             if mode == "followup" and last:
                 snippet = last["answer"][:80]
-                return f'The person said: "{snippet}". Ask them one short follow-up question.'
-            return f"Ask one question to explore {theme}."
+                return f'They said: "{snippet}". Ask one short follow-up question using "you".'
+            return f"Ask one question about {theme} using 'you'."
 
-        # ── Level 1: concise ──────────────────────────────────────────────────
         if level == 1:
             if mode == "followup" and last:
                 snippet = last["answer"][:120]
                 return (
                     f'You asked: "{last["question"]}"\n'
                     f'They said: "{snippet}"\n'
-                    f"Ask one follow-up question about what they just shared."
+                    f"Ask one follow-up question about what they shared. Use 'you'."
                 )
             recent = session["responses"][-1]["answer"][:100] if session["responses"] else ""
-            context = f'Last answer: "{recent}"\n\n' if recent else ""
-            return f"{context}Ask one open-ended question about {theme}."
+            context = f'They last said: "{recent}"\n\n' if recent else ""
+            return f"{context}Ask one open-ended question about {theme}. Use 'you'."
 
-        # ── Level 0: full context ─────────────────────────────────────────────
+        # Level 0 — full context with example
         if mode == "followup" and last:
             answer_snippet = last["answer"][:200]
             return (
                 f'You asked: "{last["question"]}"\n'
-                f'The person answered: "{answer_snippet}"\n\n'
-                f"Write ONE follow-up question that digs into something specific they mentioned. "
-                f"Use 'you' or 'your'. Do not repeat the previous question. "
-                f"Do not add any preamble or apology."
+                f'They answered: "{answer_snippet}"\n\n'
+                f"Write ONE follow-up question that explores something specific they mentioned. "
+                f"Use 'you' or 'your'. Output the question only — no preamble."
             )
 
-        # opening — level 0
         if session["responses"]:
             recent = session["responses"][-1]["answer"][:150]
-            context_line = f'The person recently shared: "{recent}"\n\n'
+            context_line = f'They recently shared: "{recent}"\n\n'
         else:
             context_line = ""
 
         return (
             f"{context_line}"
             f"Write ONE open-ended question to explore {theme}. "
-            f"Invite the person to share a specific experience or story. "
-            f"Use 'you' or 'your'. Do not add any preamble or apology."
+            f"Invite them to share a specific experience. "
+            f"Use 'you' or 'your'. Output the question only — no preamble."
         )
 
     # ── Validation ────────────────────────────────────────────────────────────
 
     def _validate(self, question, session):
-        """Raise ValueError if question fails any quality check."""
-
         if not question or len(question) < 15:
             raise ValueError(f"Too short: '{question}'")
 
         if not question.endswith("?"):
             raise ValueError(f"Missing '?': '{question[:60]}'")
 
-        # Apology / filler detection — the most common 0.5B failure mode
+        q_lower = question.lower()
+
+        # ── META-RESPONSE detection (the main bug) ────────────────────────────
+        # Small models often output a description of the question instead of
+        # the question itself. Catch all known patterns.
+        meta_patterns = [
+            "one example of",
+            "here is an example",
+            "here's an example",
+            "an example of",
+            "example of a question",
+            "example question",
+            "open-ended question based on",
+            "a question about",
+            "question to ask",
+            "here is a question",
+            "here's a question",
+            "one open-ended",
+            "a follow-up question",
+            "one follow-up",
+            "based on your answer",
+            "based on their answer",
+            "the following question",
+        ]
+        for pattern in meta_patterns:
+            if pattern in q_lower:
+                raise ValueError(f"Meta-response detected '{pattern}': '{question[:60]}'")
+
+        # ── Apology / filler detection ─────────────────────────────────────────
         bad_starts = (
             "i'm sorry", "i am sorry", "i apologize", "i apologise",
             "apologies", "sorry for", "my apologies",
@@ -190,12 +208,11 @@ class PsychologyEngine:
             "of course", "certainly", "no problem", "absolutely",
             "i'd be happy", "i would be happy",
         )
-        q_lower = question.lower()
         for b in bad_starts:
             if q_lower.startswith(b):
                 raise ValueError(f"Bad opener '{b}': '{question[:50]}'")
 
-        # Third-person leakage
+        # ── Third-person leakage ───────────────────────────────────────────────
         third_person = [
             "this person", "the person", "the individual",
             "the respondent", "he said", "she said",
@@ -204,11 +221,11 @@ class PsychologyEngine:
             if tp in q_lower:
                 raise ValueError(f"Third-person: '{question[:60]}'")
 
-        # Must address the user
+        # ── Must address the user ──────────────────────────────────────────────
         if "you" not in q_lower and "your" not in q_lower:
             raise ValueError(f"No second-person pronoun: '{question[:60]}'")
 
-        # Deduplicate
+        # ── Deduplicate ────────────────────────────────────────────────────────
         q_hash = self._hash(question)
         if q_hash in session.get("asked_hashes", []):
             raise ValueError("Duplicate question")
@@ -221,18 +238,18 @@ class PsychologyEngine:
 
         t = text.strip()
 
-        # ── 1. Strip surrounding quotes the model sometimes adds ──────────────
-        # e.g.  "What does you's approach involve?"  →  What does you's approach involve?
+        # Strip surrounding quotes
         if (t.startswith('"') and t.endswith('"')) or \
            (t.startswith("'") and t.endswith("'")):
             t = t[1:-1].strip()
 
-        # ── 2. Strip preamble prefixes ────────────────────────────────────────
+        # Strip preamble prefixes
         prefixes = (
             "question:", "q:", "follow-up:", "here's a question:",
             "sure!", "great!", "of course,", "certainly,", "absolutely,",
-            "here's one:", "here is a question:",
+            "here's one:", "here is a question:", "one example:",
             "i'd be happy to ask:", "i would ask:",
+            "open-ended question:", "interview question:",
         )
         lower = t.lower()
         for p in prefixes:
@@ -240,31 +257,26 @@ class PsychologyEngine:
                 t = t[len(p):].lstrip(" ,:.!\n")
                 break
 
-        # ── 3. Take first line only ───────────────────────────────────────────
+        # Take first line only
         lines = [l.strip() for l in t.split("\n") if l.strip()]
         t = lines[0] if lines else t
 
-        # ── 4. Trim to first question mark ────────────────────────────────────
+        # Trim to first question mark
         if "?" in t:
             t = t[:t.index("?") + 1]
 
-        # ── 5. Second-person corrections (possessives FIRST) ──────────────────
-        # Possessive forms must come before plain noun replacements, otherwise
-        # "this person's" → "you" + "'s" → "you's" (wrong).
+        # Second-person corrections (possessives first)
         replacements = [
-            # possessives — must be handled before plain "this person" / "their"
             (r"\bthis person's\b",    "your",      re.IGNORECASE),
             (r"\bthe person's\b",     "your",      re.IGNORECASE),
             (r"\bthe individual's\b", "your",      re.IGNORECASE),
             (r"\bthe respondent's\b", "your",      re.IGNORECASE),
             (r"\btheir\b",            "your",      re.IGNORECASE),
             (r"\bthemselves\b",       "yourself",  re.IGNORECASE),
-            # plain noun replacements
             (r"\bthis person\b",      "you",       re.IGNORECASE),
             (r"\bthe person\b",       "you",       re.IGNORECASE),
             (r"\bthe individual\b",   "you",       re.IGNORECASE),
             (r"\bthe respondent\b",   "you",       re.IGNORECASE),
-            # verb agreement
             (r"\bthey enjoy\b",       "you enjoy", re.IGNORECASE),
             (r"\bthey have\b",        "you have",  re.IGNORECASE),
             (r"\bthey feel\b",        "you feel",  re.IGNORECASE),
@@ -274,16 +286,13 @@ class PsychologyEngine:
         for pattern, repl, flags in replacements:
             t = re.sub(pattern, repl, t, flags=flags)
 
-        # ── 6. Fix broken grammar left by replacements ────────────────────────
-        # "you's"     → "your"     (possessive escaped replacement artifact)
-        # "does you"  → "do you"   (verb agreement after noun swap)
-        # "is you"    → "are you"
-        t = re.sub(r"\byou's\b",   "your",   t, flags=re.IGNORECASE)
-        t = re.sub(r"\bdoes you\b","do you",  t, flags=re.IGNORECASE)
-        t = re.sub(r"\bis you\b",  "are you", t, flags=re.IGNORECASE)
-        t = re.sub(r"\bwas you\b", "were you",t, flags=re.IGNORECASE)
+        # Fix grammar artifacts
+        t = re.sub(r"\byou's\b",    "your",    t, flags=re.IGNORECASE)
+        t = re.sub(r"\bdoes you\b", "do you",  t, flags=re.IGNORECASE)
+        t = re.sub(r"\bis you\b",   "are you", t, flags=re.IGNORECASE)
+        t = re.sub(r"\bwas you\b",  "were you",t, flags=re.IGNORECASE)
 
-        # ── 7. Final cleanup ──────────────────────────────────────────────────
+        # Final cleanup
         t = re.sub(r"\s+", " ", t).strip()
         if t:
             t = t[0].upper() + t[1:]
@@ -291,7 +300,7 @@ class PsychologyEngine:
         t = t.rstrip("?.,! ") + "?"
         return t
 
-    # ── Static fallback (last resort only) ───────────────────────────────────
+    # ── Static fallback ───────────────────────────────────────────────────────
 
     def _static_fallback(self, trait, q_no, session):
         has_context = bool(session.get("responses"))
@@ -333,7 +342,7 @@ class PsychologyEngine:
             f"One digit only.\nAnswer: \"{answer[:200]}\""
         )
         try:
-            result  = self.llm.generate(
+            result = self.llm.generate(
                 prompt, max_tokens=5,
                 system_prompt="Rate personality answers. Output only a single digit 1–5.",
             )
@@ -386,7 +395,7 @@ def _make_q(q_no, trait, question):
     }
 
 
-# ── Trait themes (plain English, used in prompts only — never shown to user) ──
+# ── Trait themes ──────────────────────────────────────────────────────────────
 
 _TRAIT_THEMES = {
     "openness":          "their curiosity and how they engage with new ideas or experiences",
@@ -397,7 +406,7 @@ _TRAIT_THEMES = {
 }
 
 
-# ── Static fallback pools — second-person, exploratory, never jargon-y ───────
+# ── Static fallback pools ─────────────────────────────────────────────────────
 
 _OPENING_FALLBACKS = {
     "openness": [

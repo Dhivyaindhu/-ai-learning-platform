@@ -43,18 +43,24 @@ if [ -n "$TAILSCALE_AUTH_KEY" ]; then
     echo "✅ Tailscale status:"
     /tmp/tailscale-bin --socket=/tmp/tailscale-socket/tailscaled.sock status
 
-    echo "🔍 Pinging laptop via Tailscale..."
-    /tmp/tailscale-bin --socket=/tmp/tailscale-socket/tailscaled.sock ping 100.111.210.32 || echo "Ping result above"
-
     echo "🧪 Testing Ollama via SOCKS5 proxy..."
     curl --socks5 localhost:1055 --max-time 20 http://100.111.210.32:11434 \
         && echo "✅ Ollama reachable via SOCKS5!" \
         || echo "❌ Ollama not reachable via SOCKS5"
-
 else
     echo "❌ TAILSCALE_AUTH_KEY not set!"
 fi
 
 echo "🌐 Starting Django application..."
 cd /opt/render/project/src
-exec gunicorn AIpoweredlearningplatform.wsgi:application --bind 0.0.0.0:$PORT
+
+# ✅ FIX: timeout=300 gives LLM 5 minutes per request (was 30s default)
+# ✅ graceful-timeout=300 allows slow LLM responses to finish
+# ✅ keep-alive=5 handles connection reuse
+exec gunicorn AIpoweredlearningplatform.wsgi:application \
+    --bind 0.0.0.0:$PORT \
+    --timeout 300 \
+    --graceful-timeout 300 \
+    --keep-alive 5 \
+    --workers 1 \
+    --log-level info

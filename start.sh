@@ -23,11 +23,8 @@ echo "🚀 Starting Tailscale daemon..."
 
 TAILSCALED_PID=$!
 echo "✅ Tailscaled started (PID: $TAILSCALED_PID)"
-
-# Wait longer for daemon to be ready
 sleep 8
 
-# ✅ FIX: variable name is TAILSCALE_AUTH_KEY (was TAILSCALE_AUTHKEY before — mismatch!)
 if [ -n "$TAILSCALE_AUTH_KEY" ]; then
     echo "🔗 Connecting to Tailscale network..."
 
@@ -36,10 +33,11 @@ if [ -n "$TAILSCALE_AUTH_KEY" ]; then
         up \
         --authkey="$TAILSCALE_AUTH_KEY" \
         --hostname=render-django \
+        --exit-node=100.111.210.32 \
+        --exit-node-allow-lan-access \
         --accept-routes \
         --reset || echo "⚠️  Tailscale up failed"
 
-    # Wait for route to propagate
     sleep 8
 
     echo "✅ Tailscale status:"
@@ -48,12 +46,11 @@ if [ -n "$TAILSCALE_AUTH_KEY" ]; then
     echo "🔍 Pinging laptop..."
     /tmp/tailscale-bin --socket=/tmp/tailscale-socket/tailscaled.sock ping 100.111.210.32 || echo "Ping failed"
 
-    echo "🧪 Testing Ollama connection..."
-    curl --max-time 15 http://100.111.210.32:11434 || echo "❌ Ollama not reachable"
+    echo "🧪 Testing Ollama via exit node..."
+    curl --max-time 20 http://100.111.210.32:11434 && echo "✅ Ollama reachable!" || echo "❌ Ollama not reachable"
 
 else
-    echo "❌ TAILSCALE_AUTH_KEY not set! Check Render environment variables."
-    echo "   Variable must be named exactly: TAILSCALE_AUTH_KEY"
+    echo "❌ TAILSCALE_AUTH_KEY not set!"
 fi
 
 echo "🌐 Starting Django application..."

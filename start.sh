@@ -14,15 +14,17 @@ echo "✅ Tailscale binaries installed"
 mkdir -p /tmp/tailscale-socket
 mkdir -p /tmp/tailscale-state
 
-echo "🚀 Starting Tailscale daemon..."
+echo "🚀 Starting Tailscale daemon with SOCKS5 proxy on port 1055..."
 /tmp/tailscaled-bin \
     --tun=userspace-networking \
+    --socks5-server=localhost:1055 \
+    --outbound-http-proxy-listen=localhost:1055 \
     --state=/tmp/tailscale-state/tailscaled.state \
     --socket=/tmp/tailscale-socket/tailscaled.sock \
     --statedir=/tmp/tailscale-state &
 
 TAILSCALED_PID=$!
-echo "✅ Tailscaled started (PID: $TAILSCALED_PID)"
+echo "✅ Tailscaled started with SOCKS5 on :1055 (PID: $TAILSCALED_PID)"
 sleep 8
 
 if [ -n "$TAILSCALE_AUTH_KEY" ]; then
@@ -33,21 +35,21 @@ if [ -n "$TAILSCALE_AUTH_KEY" ]; then
         up \
         --authkey="$TAILSCALE_AUTH_KEY" \
         --hostname=render-django \
-        --exit-node=100.111.210.32 \
-        --exit-node-allow-lan-access \
         --accept-routes \
         --reset || echo "⚠️  Tailscale up failed"
 
     sleep 8
 
     echo "✅ Tailscale status:"
-    /tmp/tailscale-bin --socket=/tmp/tailscale-socket/tailscaled.sock status || echo "Status check failed"
+    /tmp/tailscale-bin --socket=/tmp/tailscale-socket/tailscaled.sock status
 
-    echo "🔍 Pinging laptop..."
-    /tmp/tailscale-bin --socket=/tmp/tailscale-socket/tailscaled.sock ping 100.111.210.32 || echo "Ping failed"
+    echo "🔍 Pinging laptop via Tailscale..."
+    /tmp/tailscale-bin --socket=/tmp/tailscale-socket/tailscaled.sock ping 100.111.210.32 || echo "Ping result above"
 
-    echo "🧪 Testing Ollama via exit node..."
-    curl --max-time 20 http://100.111.210.32:11434 && echo "✅ Ollama reachable!" || echo "❌ Ollama not reachable"
+    echo "🧪 Testing Ollama via SOCKS5 proxy..."
+    curl --socks5 localhost:1055 --max-time 20 http://100.111.210.32:11434 \
+        && echo "✅ Ollama reachable via SOCKS5!" \
+        || echo "❌ Ollama not reachable via SOCKS5"
 
 else
     echo "❌ TAILSCALE_AUTH_KEY not set!"

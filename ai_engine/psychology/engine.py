@@ -1,5 +1,4 @@
 # ai_engine/psychology/engine.py
-# Key fix: validates against meta-responses from small LLMs like qwen
 
 import hashlib
 import random
@@ -7,10 +6,6 @@ import re
 from ..llm.llm_engine import get_llm_engine
 from .traits import PERSONALITY_TRAITS as PSYCHOLOGICAL_TRAITS
 
-
-# ── System prompts ─────────────────────────────────────────────────────────────
-# For small models (qwen 0.5B-1.5B), the key is to give a concrete EXAMPLE
-# of the output format — they follow by imitation better than by instruction.
 
 _SYS_FULL = (
     "You are conducting a personality interview. "
@@ -43,11 +38,14 @@ class PsychologyEngine:
     MAX_QUESTIONS = 20
     MAX_DEPTH     = 2
 
+    # ✅ FIX: score spread threshold raised from 25 → 40
+    # Was stopping at Q10 the moment ANY trait diverged by 25 points.
+    # Now requires a clearer signal before early stopping.
+    EARLY_STOP_SPREAD = 40
+
     def __init__(self):
         self.llm    = get_llm_engine()
         self.traits = list(PSYCHOLOGICAL_TRAITS.keys())
-
-    # ── Session ───────────────────────────────────────────────────────────────
 
     def start_assessment(self):
         return {
@@ -61,8 +59,6 @@ class PsychologyEngine:
             "current_trait":    None,
             "depth_on_trait":   0,
         }
-
-    # ── Core: get next question ───────────────────────────────────────────────
 
     def get_next_question(self, session):
         if self.should_stop(session):
@@ -90,8 +86,6 @@ class PsychologyEngine:
         session.setdefault("questions_asked", []).append(question)
         return question
 
-    # ── Multi-strategy generation ─────────────────────────────────────────────
-
     def _generate_with_retries(self, trait, q_no, session, mode, last):
         strategies = [
             (self._build_prompt(trait, session, mode, last, level=0), _SYS_FULL,    80),
@@ -104,20 +98,15 @@ class PsychologyEngine:
                 raw      = self.llm.generate(prompt, max_tokens=max_tok, system_prompt=sys_prompt)
                 question = self._clean_and_fix(raw)
                 self._validate(question, session)
-
                 session["asked_hashes"].append(self._hash(question))
                 print(f"   ✅ [{mode}/s{attempt}] Q{q_no} ({trait}): {question[:70]}...")
                 return _make_q(q_no, trait, question)
-
             except Exception as e:
                 print(f"   ↩  [{mode}/s{attempt}] Q{q_no}: {str(e)[:80]} — trying next")
                 continue
 
-        # All LLM strategies failed → use static fallback
         print(f"   📋 [fallback] Q{q_no} ({trait}): using static pool")
         return self._static_fallback(trait, q_no, session)
-
-    # ── Prompt builders ───────────────────────────────────────────────────────
 
     def _build_prompt(self, trait, session, mode, last, level):
         theme = _TRAIT_THEMES[trait]
@@ -140,7 +129,6 @@ class PsychologyEngine:
             context = f'They last said: "{recent}"\n\n' if recent else ""
             return f"{context}Ask one open-ended question about {theme}. Use 'you'."
 
-        # Level 0 — full context with example
         if mode == "followup" and last:
             answer_snippet = last["answer"][:200]
             return (
@@ -163,8 +151,6 @@ class PsychologyEngine:
             f"Use 'you' or 'your'. Output the question only — no preamble."
         )
 
-    # ── Validation ────────────────────────────────────────────────────────────
-
     def _validate(self, question, session):
         if not question or len(question) < 15:
             raise ValueError(f"Too short: '{question}'")
@@ -174,33 +160,19 @@ class PsychologyEngine:
 
         q_lower = question.lower()
 
-        # ── META-RESPONSE detection (the main bug) ────────────────────────────
-        # Small models often output a description of the question instead of
-        # the question itself. Catch all known patterns.
         meta_patterns = [
-            "one example of",
-            "here is an example",
-            "here's an example",
-            "an example of",
-            "example of a question",
-            "example question",
-            "open-ended question based on",
-            "a question about",
-            "question to ask",
-            "here is a question",
-            "here's a question",
-            "one open-ended",
-            "a follow-up question",
-            "one follow-up",
-            "based on your answer",
-            "based on their answer",
+            "one example of", "here is an example", "here's an example",
+            "an example of", "example of a question", "example question",
+            "open-ended question based on", "a question about",
+            "question to ask", "here is a question", "here's a question",
+            "one open-ended", "a follow-up question", "one follow-up",
+            "based on your answer", "based on their answer",
             "the following question",
         ]
         for pattern in meta_patterns:
             if pattern in q_lower:
-                raise ValueError(f"Meta-response detected '{pattern}': '{question[:60]}'")
+                raise ValueError(f"Meta-response '{pattern}': '{question[:60]}'")
 
-        # ── Apology / filler detection ─────────────────────────────────────────
         bad_starts = (
             "i'm sorry", "i am sorry", "i apologize", "i apologise",
             "apologies", "sorry for", "my apologies",
@@ -212,7 +184,6 @@ class PsychologyEngine:
             if q_lower.startswith(b):
                 raise ValueError(f"Bad opener '{b}': '{question[:50]}'")
 
-        # ── Third-person leakage ───────────────────────────────────────────────
         third_person = [
             "this person", "the person", "the individual",
             "the respondent", "he said", "she said",
@@ -221,16 +192,12 @@ class PsychologyEngine:
             if tp in q_lower:
                 raise ValueError(f"Third-person: '{question[:60]}'")
 
-        # ── Must address the user ──────────────────────────────────────────────
         if "you" not in q_lower and "your" not in q_lower:
             raise ValueError(f"No second-person pronoun: '{question[:60]}'")
 
-        # ── Deduplicate ────────────────────────────────────────────────────────
         q_hash = self._hash(question)
         if q_hash in session.get("asked_hashes", []):
             raise ValueError("Duplicate question")
-
-    # ── Clean + second-person correction ─────────────────────────────────────
 
     def _clean_and_fix(self, text):
         if not text:
@@ -238,12 +205,10 @@ class PsychologyEngine:
 
         t = text.strip()
 
-        # Strip surrounding quotes
         if (t.startswith('"') and t.endswith('"')) or \
            (t.startswith("'") and t.endswith("'")):
             t = t[1:-1].strip()
 
-        # Strip preamble prefixes
         prefixes = (
             "question:", "q:", "follow-up:", "here's a question:",
             "sure!", "great!", "of course,", "certainly,", "absolutely,",
@@ -257,15 +222,12 @@ class PsychologyEngine:
                 t = t[len(p):].lstrip(" ,:.!\n")
                 break
 
-        # Take first line only
         lines = [l.strip() for l in t.split("\n") if l.strip()]
         t = lines[0] if lines else t
 
-        # Trim to first question mark
         if "?" in t:
             t = t[:t.index("?") + 1]
 
-        # Second-person corrections (possessives first)
         replacements = [
             (r"\bthis person's\b",    "your",      re.IGNORECASE),
             (r"\bthe person's\b",     "your",      re.IGNORECASE),
@@ -286,21 +248,17 @@ class PsychologyEngine:
         for pattern, repl, flags in replacements:
             t = re.sub(pattern, repl, t, flags=flags)
 
-        # Fix grammar artifacts
         t = re.sub(r"\byou's\b",    "your",    t, flags=re.IGNORECASE)
         t = re.sub(r"\bdoes you\b", "do you",  t, flags=re.IGNORECASE)
         t = re.sub(r"\bis you\b",   "are you", t, flags=re.IGNORECASE)
         t = re.sub(r"\bwas you\b",  "were you",t, flags=re.IGNORECASE)
 
-        # Final cleanup
         t = re.sub(r"\s+", " ", t).strip()
         if t:
             t = t[0].upper() + t[1:]
 
         t = t.rstrip("?.,! ") + "?"
         return t
-
-    # ── Static fallback ───────────────────────────────────────────────────────
 
     def _static_fallback(self, trait, q_no, session):
         has_context = bool(session.get("responses"))
@@ -314,8 +272,6 @@ class PsychologyEngine:
 
         session["asked_hashes"].append(self._hash(text))
         return _make_q(q_no, trait, text)
-
-    # ── Answer submission + scoring ───────────────────────────────────────────
 
     def submit_answer(self, session, answer):
         if not session.get("questions_asked"):
@@ -351,17 +307,25 @@ class PsychologyEngine:
         except Exception:
             return 50
 
-    # ── Stopping logic ────────────────────────────────────────────────────────
-
     def should_stop(self, session):
-        if session["current_question"] < self.MIN_QUESTIONS:
-            return False
-        if session["current_question"] >= session["max_questions"]:
-            return True
-        scores = list(session["scores"].values())
-        return max(scores) - min(scores) >= 25
+        q_count = session["current_question"]
 
-    # ── Trait selection ───────────────────────────────────────────────────────
+        # ✅ FIX: never stop before MIN_QUESTIONS regardless of scores
+        if q_count < self.MIN_QUESTIONS:
+            return False
+
+        # ✅ FIX: always stop at max_questions
+        if q_count >= session["max_questions"]:
+            return True
+
+        # ✅ FIX: only early-stop if we have enough data AND spread is significant
+        # Raised from 25 → 40 to prevent stopping at exactly Q10
+        if q_count >= 14:  # only consider early stop after Q14
+            scores = list(session["scores"].values())
+            if max(scores) - min(scores) >= self.EARLY_STOP_SPREAD:
+                return True
+
+        return False
 
     def _pick_trait(self, session):
         counts = {t: 0 for t in self.traits}
@@ -377,13 +341,9 @@ class PsychologyEngine:
         candidates = [t for t, c in counts.items() if c == min_count]
         return random.choice(candidates)
 
-    # ── Helpers ───────────────────────────────────────────────────────────────
-
     def _hash(self, text):
         return hashlib.sha256(text.encode()).hexdigest()[:16]
 
-
-# ── Utility ───────────────────────────────────────────────────────────────────
 
 def _make_q(q_no, trait, question):
     return {
@@ -395,8 +355,6 @@ def _make_q(q_no, trait, question):
     }
 
 
-# ── Trait themes ──────────────────────────────────────────────────────────────
-
 _TRAIT_THEMES = {
     "openness":          "their curiosity and how they engage with new ideas or experiences",
     "conscientiousness": "how they plan, organise, and follow through on things they care about",
@@ -404,9 +362,6 @@ _TRAIT_THEMES = {
     "agreeableness":     "how they handle disagreement and support people around them",
     "neuroticism":       "how they respond to stress, uncertainty, and difficult situations",
 }
-
-
-# ── Static fallback pools ─────────────────────────────────────────────────────
 
 _OPENING_FALLBACKS = {
     "openness": [

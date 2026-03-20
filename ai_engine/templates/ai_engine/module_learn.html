@@ -264,10 +264,15 @@
 
         <div class="ex-footer" id="ex-footer-{{ forloop.counter0 }}">
           <span class="ex-cc" id="cc-{{ forloop.counter0 }}">0 characters</span>
-          <form method="POST" action="{% url 'ai_engine:complete_exercise' module.id forloop.counter0 %}">
+          <form method="POST" action="{% url 'ai_engine:complete_exercise' module.id forloop.counter0 %}"
+                onsubmit="return validateExercise({{ forloop.counter0 }}, this)">
             {% csrf_token %}
-            <button type="submit" class="btn btn-secondary btn-sm">✓ Mark Complete</button>
+            <button type="submit" class="btn btn-secondary btn-sm" id="ex-btn-{{ forloop.counter0 }}">✓ Mark Complete</button>
           </form>
+        </div>
+        <div class="ex-warning" id="ex-warn-{{ forloop.counter0 }}"
+             style="display:none;padding:.6rem 1.4rem;color:#e3a800;font-size:.82rem;border-top:1px solid var(--border);background:rgba(227,168,0,.06);">
+          ⚠️ Please write at least 30 characters in the workspace before marking complete.
         </div>
       </div>
     </div>
@@ -321,6 +326,22 @@ function showTab(name, btn) {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   document.getElementById(name + '-tab').classList.add('active');
   btn.classList.add('active');
+}
+
+// ── Validate exercise has content before marking complete
+function validateExercise(i, form) {
+  const ta   = document.getElementById('ws-' + i);
+  const warn = document.getElementById('ex-warn-' + i);
+  const MIN  = 30;
+  if (!ta || ta.value.trim().length >= MIN) {
+    if (warn) warn.style.display = 'none';
+    return true;
+  }
+  if (warn) warn.style.display = 'block';
+  ta.focus();
+  ta.style.borderColor = '#e3a800';
+  setTimeout(function() { ta.style.borderColor = ''; }, 2000);
+  return false;
 }
 
 function toggleEx(i) {
